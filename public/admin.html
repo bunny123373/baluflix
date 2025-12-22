@@ -2,14 +2,36 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Admin Upload (Cloudinary FINAL)</title>
+  <title>Admin Upload</title>
   <style>
-    body{background:#000;color:#fff;font-family:Arial;padding:40px}
+    body{
+      background:#000;
+      color:#fff;
+      font-family:Arial;
+      padding:20px
+    }
     h1{color:#e50914}
-    form{max-width:520px;background:#141414;padding:25px;border-radius:8px}
-    input,select,button{width:100%;padding:12px;margin:10px 0;background:#222;border:1px solid #333;color:#fff}
-    button{background:#e50914;border:none;font-size:16px;cursor:pointer}
-    .status{margin-top:10px;color:#00ff88}
+    form{
+      max-width:520px;
+      background:#141414;
+      padding:20px;
+      border-radius:8px
+    }
+    input,select,button{
+      width:100%;
+      padding:12px;
+      margin:10px 0;
+      background:#222;
+      border:1px solid #333;
+      color:#fff
+    }
+    button{
+      background:#e50914;
+      border:none;
+      cursor:pointer;
+      font-size:16px
+    }
+    .status{color:#0f0}
   </style>
 </head>
 <body>
@@ -41,6 +63,13 @@
 </form>
 
 <script>
+/* ===== ADMIN PASSWORD PROTECT ===== */
+const pass = prompt("Enter Admin Password");
+if(pass !== "12345"){
+  alert("Access Denied");
+  location.href = "/";
+}
+
 /* ===== CLOUDINARY CONFIG ===== */
 const CLOUD_NAME = "dchekxdof";
 const UPLOAD_PRESET = "ibomma_clone";
@@ -52,7 +81,6 @@ async function uploadImage(file){
   const fd = new FormData();
   fd.append("file", file);
   fd.append("upload_preset", UPLOAD_PRESET);
-
   const r = await fetch(
     `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,
     { method:"POST", body: fd }
@@ -64,7 +92,6 @@ async function uploadVideo(file){
   const fd = new FormData();
   fd.append("file", file);
   fd.append("upload_preset", UPLOAD_PRESET);
-
   const r = await fetch(
     `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/video/upload`,
     { method:"POST", body: fd }
@@ -74,7 +101,7 @@ async function uploadVideo(file){
 
 f.onsubmit = async (e)=>{
   e.preventDefault();
-  s.innerText = "Uploading... please wait";
+  s.innerText = "Uploading...";
 
   try{
     const posterRes = await uploadImage(poster.files[0]);
@@ -95,9 +122,7 @@ f.onsubmit = async (e)=>{
 
     s.innerText = "✅ Upload SUCCESS";
     f.reset();
-
-  }catch(err){
-    console.error(err);
+  }catch{
     s.innerText = "❌ Upload FAILED";
   }
 };

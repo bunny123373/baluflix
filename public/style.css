@@ -101,3 +101,22 @@ body{
   font-size:26px;
   cursor:pointer;
 }
+/* MOBILE RESPONSIVE */
+@media (max-width: 600px){
+  .filters{
+    flex-direction:column;
+  }
+
+  .grid{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .poster{
+    height:180px;
+  }
+
+  .modal video{
+    width:95%;
+    max-height:70%;
+  }
+}
