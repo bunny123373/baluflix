@@ -1,30 +1,27 @@
 const express = require("express");
 const path = require("path");
 const fs = require("fs");
-const multer = require("multer");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+/* =========================
+   MIDDLEWARE
+   ========================= */
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
-// =========================
-// STATIC FILES
-// =========================
 app.use(express.static(path.join(__dirname, "public")));
-app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
-// =========================
-// HOME PAGE
-// =========================
+/* =========================
+   HOME PAGE
+   ========================= */
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
-// =========================
-// VIDEOS LIST API  ✅ (FIX FOR "cannot get videos")
-// =========================
+/* =========================
+   GET VIDEOS (FOR HOME PAGE)
+   ========================= */
 app.get("/videos", (req, res) => {
   const dbPath = path.join(__dirname, "db", "videos.json");
 
@@ -33,84 +30,55 @@ app.get("/videos", (req, res) => {
   }
 
   try {
-    const data = JSON.parse(fs.readFileSync(dbPath, "utf-8"));
-    res.json(data);
+    const videos = JSON.parse(fs.readFileSync(dbPath, "utf-8"));
+    res.json(videos);
   } catch (err) {
     res.json([]);
   }
 });
 
-// =========================
-// ADMIN LOGIN API
-// =========================
-app.post("/admin/login", (req, res) => {
-  const { username, password } = req.body;
+/* =========================
+   SAVE VIDEO DATA (CLOUDINARY)
+   ========================= */
+app.post("/videos/save", (req, res) => {
+  const dbPath = path.join(__dirname, "db", "videos.json");
 
-  if (username === "admin" && password === "12345") {
-    return res.json({ ok: true });
-  }
-  res.status(401).json({ ok: false });
-});
-
-// =========================
-// UPLOAD (LOCAL DEMO ONLY – Render lo slow/issue)
-// =========================
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    const dir =
-      file.fieldname === "poster"
-        ? "uploads/posters"
-        : "uploads/videos";
-    fs.mkdirSync(dir, { recursive: true });
-    cb(null, dir);
-  },
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + "-" + file.originalname);
-  }
-});
-
-const upload = multer({ storage });
-
-app.post(
-  "/upload",
-  upload.fields([{ name: "poster" }, { name: "video" }]),
-  (req, res) => {
-
-    const dbPath = path.join(__dirname, "db", "videos.json");
-
-    let videos = [];
-    if (fs.existsSync(dbPath)) {
-      try {
-        videos = JSON.parse(fs.readFileSync(dbPath, "utf-8"));
-      } catch {
-        videos = [];
-      }
+  let videos = [];
+  if (fs.existsSync(dbPath)) {
+    try {
+      videos = JSON.parse(fs.readFileSync(dbPath, "utf-8"));
+    } catch {
+      videos = [];
     }
-
-    const movie = {
-      id: Date.now(),
-      title: req.body.title,
-      language: req.body.language,
-      year: req.body.year,
-      category: req.body.category,
-      poster: req.files.poster[0].filename,
-      video: req.files.video[0].filename
-    };
-
-    videos.push(movie);
-    fs.writeFileSync(dbPath, JSON.stringify(videos, null, 2));
-
-    res.send("Upload OK");
   }
-);
 
-// =========================
-// HEALTH CHECK
-// =========================
+  const movie = {
+    id: Date.now(),
+    title: req.body.title,
+    language: req.body.language,
+    year: req.body.year,
+    category: req.body.category,
+    posterUrl: req.body.posterUrl,
+    videoUrl: req.body.videoUrl,
+    createdAt: new Date().toISOString()
+  };
+
+  videos.push(movie);
+  fs.writeFileSync(dbPath, JSON.stringify(videos, null, 2));
+
+  res.json({ ok: true });
+});
+
+/* =========================
+   HEALTH CHECK
+   ========================= */
 app.get("/health", (req, res) => {
   res.send("OK");
 });
 
+/* =========================
+   START SERVER
+   ========================= */
 app.listen(PORT, () => {
   console.log("Server running on port", PORT);
 });
