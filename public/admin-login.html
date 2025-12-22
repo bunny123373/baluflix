@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Login</title>
+</head>
+<body style="background:#111;color:#fff;font-family:Arial;padding:40px">
+  <h2>Admin Login</h2>
+  <input id="u" placeholder="username"><br><br>
+  <input id="p" type="password" placeholder="password"><br><br>
+  <button onclick="login()">Login</button>
+
+  <script>
+    function login(){
+      fetch("/admin/login",{
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({
+          username: u.value,
+          password: p.value
+        })
+      }).then(r=>{
+        if(r.ok) location.href="admin.html";
+        else alert("Wrong login");
+      })
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>iBOMMA Admin Panel</title>
+  <style>
+    body{
+      background:#0f0f0f;
+      color:#fff;
+      font-family: Arial, sans-serif;
+      padding:40px;
+    }
+    h1{
+      color:#e50914;
+      margin-bottom:20px;
+    }
+    form{
+      background:#181818;
+      padding:25px;
+      max-width:500px;
+      border-radius:8px;
+    }
+    label{
+      display:block;
+      margin-top:15px;
+      font-size:14px;
+      color:#ccc;
+    }
+    input, select{
+      width:100%;
+      padding:10px;
+      margin-top:6px;
+      background:#222;
+      border:none;
+      color:#fff;
+      border-radius:4px;
+    }
+    button{
+      margin-top:20px;
+      width:100%;
+      padding:12px;
+      background:#e50914;
+      border:none;
+      color:#fff;
+      font-size:16px;
+      cursor:pointer;
+      border-radius:4px;
+    }
+    button:hover{
+      background:#f6121d;
+    }
+    <style>
+body{
+  background:#0b0b0b;
+  color:#fff;
+  font-family:Arial;
+  padding:40px;
+}
+h1{
+  color:#e50914;
+  margin-bottom:20px;
+}
+form{
+  max-width:520px;
+  background:#141414;
+  padding:30px;
+  border-radius:10px;
+  box-shadow:0 10px 30px rgba(0,0,0,.6);
+}
+label{
+  margin-top:14px;
+  display:block;
+  color:#bbb;
+  font-size:14px;
+}
+input,select{
+  width:100%;
+  margin-top:6px;
+  padding:10px;
+  background:#1f1f1f;
+  border:1px solid #333;
+  color:#fff;
+  border-radius:5px;
+}
+button{
+  margin-top:25px;
+  width:100%;
+  padding:12px;
+  background:#e50914;
+  border:none;
+  color:#fff;
+  font-size:16px;
+  border-radius:5px;
+  cursor:pointer;
+}
+button:hover{
+  background:#f6121d;
+}
+</style>
+
+  </style>
+</head>
+<body>
+
+  <h1>🎬 Admin Upload Panel</h1>
+
+  <form
+    action="http://localhost:3000/upload?key=BALU_SECRET_123"
+    method="post"
+    enctype="multipart/form-data">
+
+    <label>Movie Title</label>
+    <input type="text" name="title" placeholder="Movie name" required>
+
+    <label>Language</label>
+    <select name="language" required>
+      <option value="">Select language</option>
+      <option>Telugu</option>
+      <option>Hindi</option>
+      <option>Tamil</option>
+      <option>Malayalam</option>
+      <option>Kannada</option>
+      <option>English</option>
+    </select>
+
+    <label>Release Year</label>
+    <input type="number" name="year" placeholder="2024" required>
+
+    <label>Category</label>
+    <select name="category" required>
+      <option value="">Select category</option>
+      <option>Action</option>
+      <option>Drama</option>
+      <option>Comedy</option>
+      <option>Romance</option>
+      <option>Thriller</option>
+      <option>Horror</option>
+    </select>
+
+    <label>Poster Image (JPG / PNG)</label>
+    <input type="file" name="poster" accept="image/*" required>
+
+    <label>Movie Video (MP4)</label>
+    <input type="file" name="video" accept="video/mp4" required>
+
+    <button type="submit">🚀 Upload Movie</button>
+  </form>
+
+</body>
+</html>
