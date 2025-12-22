@@ -6,13 +6,13 @@ const closeBtn = document.getElementById("close");
 function loadMovies(){
   fetch("/videos")
     .then(r => r.json())
-    .then(render)
+    .then(renderMovies)
     .catch(()=>{
       grid.innerHTML = "<p>Cannot get videos</p>";
     });
 }
 
-function render(list){
+function renderMovies(list){
   grid.innerHTML = "";
 
   if(list.length === 0){
@@ -20,17 +20,17 @@ function render(list){
     return;
   }
 
-  list.forEach(m=>{
+  list.forEach(movie=>{
     const card = document.createElement("div");
     card.className = "card";
 
     card.innerHTML = `
-      <div class="poster" style="background-image:url('${m.posterUrl}')"></div>
-      <div class="title">${m.title}</div>
+      <div class="poster" style="background-image:url('${movie.posterUrl}')"></div>
+      <div class="title">${movie.title}</div>
     `;
 
     card.onclick = ()=>{
-      player.src = m.videoUrl;
+      player.src = movie.videoUrl;
       modal.style.display = "flex";
       player.play();
     };

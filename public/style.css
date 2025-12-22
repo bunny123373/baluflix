@@ -10,18 +10,33 @@ body{
   color:#fff;
 }
 
+/* HEADER */
 .top{
-  padding:15px 20px;
+  padding:16px 20px;
   border-bottom:1px solid #222;
+}
+
+.brand{
+  display:flex;
+  flex-direction:column;
 }
 
 .logo{
   color:#e50914;
-  font-size:28px;
-  margin-bottom:10px;
+  font-size:30px;
+  font-weight:bold;
 }
 
+.sublogo{
+  font-size:12px;
+  color:#aaa;
+  letter-spacing:2px;
+  margin-top:-4px;
+}
+
+/* FILTERS */
 .filters{
+  margin-top:12px;
   display:flex;
   gap:10px;
 }
@@ -32,8 +47,10 @@ body{
   background:#111;
   border:1px solid #333;
   color:#fff;
+  border-radius:4px;
 }
 
+/* GRID */
 .grid{
   padding:20px;
   display:grid;
@@ -51,14 +68,16 @@ body{
   background-size:cover;
   background-position:center;
   border-radius:6px;
+  box-shadow:0 6px 18px rgba(0,0,0,.6);
 }
 
 .title{
   margin-top:6px;
   font-size:14px;
+  text-align:center;
 }
 
-/* MODAL */
+/* VIDEO MODAL */
 .modal{
   display:none;
   position:fixed;
@@ -72,12 +91,13 @@ body{
 .modal video{
   width:80%;
   max-height:80%;
+  background:#000;
 }
 
 #close{
   position:absolute;
   top:20px;
   right:30px;
-  font-size:24px;
+  font-size:26px;
   cursor:pointer;
 }
