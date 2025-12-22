@@ -1,12 +1,15 @@
 const grid = document.getElementById("grid");
-const playModal = document.getElementById("playModal");
-const playVideo = document.getElementById("playVideo");
-const playClose = document.getElementById("playClose");
+const modal = document.getElementById("videoModal");
+const player = document.getElementById("videoPlayer");
+const closeBtn = document.getElementById("videoClose");
 
 function loadMovies(){
   fetch("/videos")
     .then(r=>r.json())
-    .then(render);
+    .then(render)
+    .catch(()=>{
+      grid.innerHTML = "<p>Cannot get videos</p>";
+    });
 }
 
 function render(list){
@@ -18,34 +21,30 @@ function render(list){
 
     card.innerHTML = `
       <div class="poster" style="background-image:url('${m.posterUrl}')"></div>
-
-      <div class="overlay">
-        <button onclick="playMovie('${m.videoUrl}')">▶ Play</button>
-        <button onclick='showInfo(${JSON.stringify(m)})'>ℹ Info</button>
+      <div class="play-overlay">
+        <div class="play-btn" data-video="${m.videoUrl}">▶</div>
       </div>
-
-      <div class="title">${m.title}</div>
     `;
+
+    card.querySelector(".play-btn").onclick = ()=>{
+      playVideo(m.videoUrl);
+    };
 
     grid.appendChild(card);
   });
 }
 
-function playMovie(url){
-  playVideo.src = url;
-  playModal.style.display = "flex";
-  playVideo.play();
+function playVideo(url){
+  player.src = url;
+  modal.style.display = "flex";
+  player.play();
 }
 
-playClose.onclick = ()=>{
-  playVideo.pause();
-  playModal.style.display = "none";
+/* Close popup */
+closeBtn.onclick = ()=>{
+  player.pause();
+  player.src = "";
+  modal.style.display = "none";
 };
-
-function showInfo(m){
-  alert(
-    `${m.title}\n\nYear: ${m.year}\nLanguage: ${m.language}\nCategory: ${m.category}`
-  );
-}
 
 loadMovies();

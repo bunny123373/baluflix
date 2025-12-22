@@ -2,7 +2,7 @@
   box-sizing:border-box;
   margin:0;
   padding:0;
-  font-family:Arial, sans-serif;
+  font-family:Arial,sans-serif;
 }
 
 body{
@@ -24,7 +24,6 @@ body{
 .logo{
   color:#e50914;
   font-size:30px;
-  font-weight:bold;
 }
 
 .sublogo{
@@ -58,8 +57,9 @@ body{
   gap:18px;
 }
 
+/* POSTER CARD */
 .card{
-  cursor:pointer;
+  position:relative;
 }
 
 .poster{
@@ -68,91 +68,39 @@ body{
   background-size:cover;
   background-position:center;
   border-radius:6px;
-  box-shadow:0 6px 18px rgba(0,0,0,.6);
 }
 
-.title{
-  margin-top:6px;
-  font-size:14px;
-  text-align:center;
-}
-
-/* VIDEO MODAL */
-.modal{
-  display:none;
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.9);
-  z-index:1000;
-  align-items:center;
-  justify-content:center;
-}
-
-.modal video{
-  width:80%;
-  max-height:80%;
-  background:#000;
-}
-
-#close{
-  position:absolute;
-  top:20px;
-  right:30px;
-  font-size:26px;
-  cursor:pointer;
-}
-/* MOBILE RESPONSIVE */
-@media (max-width: 600px){
-  .filters{
-    flex-direction:column;
-  }
-
-  .grid{
-    grid-template-columns:repeat(2,1fr);
-  }
-
-  .poster{
-    height:180px;
-  }
-
-  .modal video{
-    width:95%;
-    max-height:70%;
-  }
-/* POSTER OVERLAY */
-.card{
-  position:relative;
-}
-
-.overlay{
+/* PLAY OVERLAY */
+.play-overlay{
   position:absolute;
   inset:0;
-  background:rgba(0,0,0,.7);
   display:flex;
   align-items:center;
   justify-content:center;
-  gap:20px;
+  background:rgba(0,0,0,.6);
   opacity:0;
   transition:.3s;
   border-radius:6px;
 }
 
-.card:hover .overlay{
+.card:hover .play-overlay{
   opacity:1;
 }
 
-.overlay button{
+.play-btn{
+  width:60px;
+  height:60px;
+  border-radius:50%;
   background:#e50914;
-  border:none;
-  color:#fff;
-  padding:10px 14px;
-  font-size:14px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:26px;
   cursor:pointer;
-  border-radius:4px;
 }
 
-/* PLAY MODAL */
-#playModal{
+/* VIDEO MODAL */
+.video-modal{
   display:none;
   position:fixed;
   inset:0;
@@ -162,12 +110,13 @@ body{
   justify-content:center;
 }
 
-#playModal video{
+.video-modal video{
   width:85%;
-  max-height:80%;
+  max-height:85%;
+  background:#000;
 }
 
-#playClose{
+#videoClose{
   position:absolute;
   top:20px;
   right:30px;
@@ -175,3 +124,12 @@ body{
   cursor:pointer;
 }
 
+/* MOBILE */
+@media(max-width:600px){
+  .grid{
+    grid-template-columns:repeat(2,1fr);
+  }
+  .poster{
+    height:180px;
+  }
+}
