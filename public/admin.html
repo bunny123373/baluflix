@@ -1,68 +1,35 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Admin Upload</title>
-  <style>
-    body{
-      background:#0b0b0b;
-      color:#fff;
-      font-family:Arial;
-      padding:40px;
-    }
-    h1{color:#e50914}
-    form{
-      max-width:500px;
-      background:#141414;
-      padding:25px;
-      border-radius:8px;
-    }
-    input,select{
-      width:100%;
-      padding:10px;
-      margin:10px 0;
-      background:#222;
-      border:1px solid #333;
-      color:#fff;
-    }
-    button{
-      background:#e50914;
-      color:#fff;
-      padding:12px;
-      width:100%;
-      border:none;
-      cursor:pointer;
-    }
-  </style>
+<title>Admin Upload</title>
+<style>
+body{background:#000;color:#fff;font-family:Arial;padding:30px}
+h1{color:#e50914}
+form{max-width:500px;background:#141414;padding:20px;border-radius:8px}
+input,select,button{width:100%;padding:10px;margin:10px 0;background:#222;border:1px solid #333;color:#fff}
+button{background:#e50914;border:none;cursor:pointer}
+</style>
 </head>
 <body>
 
 <h1>Admin Upload</h1>
 
-<form
-  action="/upload?key=BALU_SECRET_123"
-  method="post"
-  enctype="multipart/form-data">
-
-  <input name="title" placeholder="Movie title" required>
-
-  <select name="language">
-    <option>Telugu</option>
-    <option>Hindi</option>
-    <option>English</option>
-  </select>
-
-  <input name="year" placeholder="Year">
-
-  <select name="category">
-    <option>Action</option>
-    <option>Drama</option>
-    <option>Comedy</option>
-  </select>
-
-  <input type="file" name="poster" accept="image/*" required>
-  <input type="file" name="video" accept="video/mp4" required>
-
-  <button type="submit">Upload</button>
+<form action="/upload" method="post" enctype="multipart/form-data">
+<input name="title" placeholder="Movie title" required>
+<select name="language">
+<option>Telugu</option>
+<option>Hindi</option>
+<option>English</option>
+</select>
+<input name="year" placeholder="Year">
+<select name="category">
+<option>Action</option>
+<option>Drama</option>
+<option>Comedy</option>
+</select>
+<input type="file" name="poster" accept="image/*" required>
+<input type="file" name="video" accept="video/mp4" required>
+<button type="submit">Upload</button>
 </form>
 
 </body>
