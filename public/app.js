@@ -1,37 +1,51 @@
 const grid = document.getElementById("grid");
+const playModal = document.getElementById("playModal");
+const playVideo = document.getElementById("playVideo");
+const playClose = document.getElementById("playClose");
 
 function loadMovies(){
   fetch("/videos")
-    .then(r => r.json())
-    .then(render)
-    .catch(()=>{
-      grid.innerHTML = "<p>Cannot get videos</p>";
-    });
+    .then(r=>r.json())
+    .then(render);
 }
 
 function render(list){
   grid.innerHTML = "";
 
-  if(list.length === 0){
-    grid.innerHTML = "<p>No movies uploaded</p>";
-    return;
-  }
-
-  list.forEach(movie=>{
+  list.forEach(m=>{
     const card = document.createElement("div");
     card.className = "card";
 
     card.innerHTML = `
-      <div class="poster" style="background-image:url('${movie.posterUrl}')"></div>
-      <div class="title">${movie.title}</div>
-    `;
+      <div class="poster" style="background-image:url('${m.posterUrl}')"></div>
 
-    card.onclick = ()=>{
-      location.href = "movie.html?id=" + movie.id;
-    };
+      <div class="overlay">
+        <button onclick="playMovie('${m.videoUrl}')">▶ Play</button>
+        <button onclick='showInfo(${JSON.stringify(m)})'>ℹ Info</button>
+      </div>
+
+      <div class="title">${m.title}</div>
+    `;
 
     grid.appendChild(card);
   });
+}
+
+function playMovie(url){
+  playVideo.src = url;
+  playModal.style.display = "flex";
+  playVideo.play();
+}
+
+playClose.onclick = ()=>{
+  playVideo.pause();
+  playModal.style.display = "none";
+};
+
+function showInfo(m){
+  alert(
+    `${m.title}\n\nYear: ${m.year}\nLanguage: ${m.language}\nCategory: ${m.category}`
+  );
 }
 
 loadMovies();

@@ -119,4 +119,59 @@ body{
     width:95%;
     max-height:70%;
   }
+/* POSTER OVERLAY */
+.card{
+  position:relative;
 }
+
+.overlay{
+  position:absolute;
+  inset:0;
+  background:rgba(0,0,0,.7);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:20px;
+  opacity:0;
+  transition:.3s;
+  border-radius:6px;
+}
+
+.card:hover .overlay{
+  opacity:1;
+}
+
+.overlay button{
+  background:#e50914;
+  border:none;
+  color:#fff;
+  padding:10px 14px;
+  font-size:14px;
+  cursor:pointer;
+  border-radius:4px;
+}
+
+/* PLAY MODAL */
+#playModal{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.9);
+  z-index:2000;
+  align-items:center;
+  justify-content:center;
+}
+
+#playModal video{
+  width:85%;
+  max-height:80%;
+}
+
+#playClose{
+  position:absolute;
+  top:20px;
+  right:30px;
+  font-size:26px;
+  cursor:pointer;
+}
+
