@@ -2,46 +2,21 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Admin Upload (Cloudinary)</title>
+  <title>Admin Upload (Cloudinary FINAL)</title>
   <style>
-    body{
-      background:#000;
-      color:#fff;
-      font-family:Arial;
-      padding:40px
-    }
+    body{background:#000;color:#fff;font-family:Arial;padding:40px}
     h1{color:#e50914}
-    form{
-      max-width:520px;
-      background:#141414;
-      padding:25px;
-      border-radius:8px
-    }
-    input,select,button{
-      width:100%;
-      padding:12px;
-      margin:10px 0;
-      background:#222;
-      border:1px solid #333;
-      color:#fff
-    }
-    button{
-      background:#e50914;
-      border:none;
-      cursor:pointer;
-      font-size:16px
-    }
-    .status{
-      margin-top:10px;
-      color:#00ff88
-    }
+    form{max-width:520px;background:#141414;padding:25px;border-radius:8px}
+    input,select,button{width:100%;padding:12px;margin:10px 0;background:#222;border:1px solid #333;color:#fff}
+    button{background:#e50914;border:none;font-size:16px;cursor:pointer}
+    .status{margin-top:10px;color:#00ff88}
   </style>
 </head>
 <body>
 
 <h1>Admin Upload</h1>
 
-<form id="uploadForm">
+<form id="f">
   <input id="title" placeholder="Movie title" required>
 
   <select id="language">
@@ -50,7 +25,7 @@
     <option>English</option>
   </select>
 
-  <input id="year" placeholder="Release Year">
+  <input id="year" placeholder="Year">
 
   <select id="category">
     <option>Action</option>
@@ -59,49 +34,51 @@
   </select>
 
   <input id="poster" type="file" accept="image/*" required>
-  <input id="video" type="file" accept="video/*" required>
+  <input id="video" type="file" accept="video/mp4" required>
 
   <button type="submit">Upload</button>
-  <div class="status" id="status"></div>
+  <div class="status" id="s"></div>
 </form>
 
 <script>
-/* ================================
-   CLOUDINARY FINAL CONFIG
-   ================================ */
-const CLOUD_NAME = "dchekxdof";     // ❌ change cheyyakudadhu
-const UPLOAD_PRESET = "ibomma_clone"; // ✅ nuvvu pettina name
+/* ===== CLOUDINARY CONFIG ===== */
+const CLOUD_NAME = "dchekxdof";
+const UPLOAD_PRESET = "ibomma_clone";
 
-const form = document.getElementById("uploadForm");
-const statusBox = document.getElementById("status");
+const f = document.getElementById("f");
+const s = document.getElementById("s");
 
-async function uploadToCloudinary(file, folder){
+async function uploadImage(file){
   const fd = new FormData();
   fd.append("file", file);
   fd.append("upload_preset", UPLOAD_PRESET);
-  fd.append("folder", folder);
 
-  const res = await fetch(
-    `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/auto/upload`,
-    { method: "POST", body: fd }
+  const r = await fetch(
+    `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,
+    { method:"POST", body: fd }
   );
-  return res.json();
+  return r.json();
 }
 
-form.onsubmit = async (e)=>{
+async function uploadVideo(file){
+  const fd = new FormData();
+  fd.append("file", file);
+  fd.append("upload_preset", UPLOAD_PRESET);
+
+  const r = await fetch(
+    `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/video/upload`,
+    { method:"POST", body: fd }
+  );
+  return r.json();
+}
+
+f.onsubmit = async (e)=>{
   e.preventDefault();
-  statusBox.innerText = "Uploading... please wait";
+  s.innerText = "Uploading... please wait";
 
   try{
-    const posterRes = await uploadToCloudinary(
-      poster.files[0],
-      "ibomma_clone/posters"
-    );
-
-    const videoRes = await uploadToCloudinary(
-      video.files[0],
-      "ibomma_clone/videos"
-    );
+    const posterRes = await uploadImage(poster.files[0]);
+    const videoRes  = await uploadVideo(video.files[0]);
 
     await fetch("/videos/save",{
       method:"POST",
@@ -116,11 +93,12 @@ form.onsubmit = async (e)=>{
       })
     });
 
-    statusBox.innerText = "✅ Upload SUCCESS";
-    form.reset();
+    s.innerText = "✅ Upload SUCCESS";
+    f.reset();
 
   }catch(err){
-    statusBox.innerText = "❌ Upload FAILED";
+    console.error(err);
+    s.innerText = "❌ Upload FAILED";
   }
 };
 </script>
