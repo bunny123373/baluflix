@@ -1,150 +1,69 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <title>iBOMMA Admin Panel</title>
+  <title>Admin Upload</title>
   <style>
     body{
-      background:#0f0f0f;
+      background:#0b0b0b;
       color:#fff;
-      font-family: Arial, sans-serif;
+      font-family:Arial;
       padding:40px;
     }
-    h1{
-      color:#e50914;
-      margin-bottom:20px;
-    }
+    h1{color:#e50914}
     form{
-      background:#181818;
-      padding:25px;
       max-width:500px;
+      background:#141414;
+      padding:25px;
       border-radius:8px;
     }
-    label{
-      display:block;
-      margin-top:15px;
-      font-size:14px;
-      color:#ccc;
-    }
-    input, select{
+    input,select{
       width:100%;
       padding:10px;
-      margin-top:6px;
+      margin:10px 0;
       background:#222;
-      border:none;
+      border:1px solid #333;
       color:#fff;
-      border-radius:4px;
     }
     button{
-      margin-top:20px;
-      width:100%;
-      padding:12px;
       background:#e50914;
-      border:none;
       color:#fff;
-      font-size:16px;
+      padding:12px;
+      width:100%;
+      border:none;
       cursor:pointer;
-      border-radius:4px;
     }
-    button:hover{
-      background:#f6121d;
-    }
-    <style>
-body{
-  background:#0b0b0b;
-  color:#fff;
-  font-family:Arial;
-  padding:40px;
-}
-h1{
-  color:#e50914;
-  margin-bottom:20px;
-}
-form{
-  max-width:520px;
-  background:#141414;
-  padding:30px;
-  border-radius:10px;
-  box-shadow:0 10px 30px rgba(0,0,0,.6);
-}
-label{
-  margin-top:14px;
-  display:block;
-  color:#bbb;
-  font-size:14px;
-}
-input,select{
-  width:100%;
-  margin-top:6px;
-  padding:10px;
-  background:#1f1f1f;
-  border:1px solid #333;
-  color:#fff;
-  border-radius:5px;
-}
-button{
-  margin-top:25px;
-  width:100%;
-  padding:12px;
-  background:#e50914;
-  border:none;
-  color:#fff;
-  font-size:16px;
-  border-radius:5px;
-  cursor:pointer;
-}
-button:hover{
-  background:#f6121d;
-}
-</style>
-
   </style>
 </head>
 <body>
 
-  <h1>🎬 Admin Upload Panel</h1>
+<h1>Admin Upload</h1>
 
-  <form
-    action="http://localhost:3000/upload?key=BALU_SECRET_123"
-    method="post"
-    enctype="multipart/form-data">
+<form
+  action="/upload?key=BALU_SECRET_123"
+  method="post"
+  enctype="multipart/form-data">
 
-    <label>Movie Title</label>
-    <input type="text" name="title" placeholder="Movie name" required>
+  <input name="title" placeholder="Movie title" required>
 
-    <label>Language</label>
-    <select name="language" required>
-      <option value="">Select language</option>
-      <option>Telugu</option>
-      <option>Hindi</option>
-      <option>Tamil</option>
-      <option>Malayalam</option>
-      <option>Kannada</option>
-      <option>English</option>
-    </select>
+  <select name="language">
+    <option>Telugu</option>
+    <option>Hindi</option>
+    <option>English</option>
+  </select>
 
-    <label>Release Year</label>
-    <input type="number" name="year" placeholder="2024" required>
+  <input name="year" placeholder="Year">
 
-    <label>Category</label>
-    <select name="category" required>
-      <option value="">Select category</option>
-      <option>Action</option>
-      <option>Drama</option>
-      <option>Comedy</option>
-      <option>Romance</option>
-      <option>Thriller</option>
-      <option>Horror</option>
-    </select>
+  <select name="category">
+    <option>Action</option>
+    <option>Drama</option>
+    <option>Comedy</option>
+  </select>
 
-    <label>Poster Image (JPG / PNG)</label>
-    <input type="file" name="poster" accept="image/*" required>
+  <input type="file" name="poster" accept="image/*" required>
+  <input type="file" name="video" accept="video/mp4" required>
 
-    <label>Movie Video (MP4)</label>
-    <input type="file" name="video" accept="video/mp4" required>
-
-    <button type="submit">🚀 Upload Movie</button>
-  </form>
+  <button type="submit">Upload</button>
+</form>
 
 </body>
 </html>
