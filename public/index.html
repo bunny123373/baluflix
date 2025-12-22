@@ -1,55 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>iBOMMA</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-  <!-- TOP BAR -->
-  <header class="topbar">
-    <h1>iBOMMA</h1>
+<header class="top">
+  <h1 class="logo">iBOMMA</h1>
 
-    <!-- SEARCH & FILTERS -->
-    <div class="filter-bar">
-      <input
-        type="text"
-        id="search"
-        placeholder="Search movie"
-      >
-
-      <select id="language">
-        <option value="">All Languages</option>
-        <option value="Telugu">Telugu</option>
-        <option value="Hindi">Hindi</option>
-        <option value="Tamil">Tamil</option>
-        <option value="English">English</option>
-      </select>
-
-      <select id="category">
-        <option value="">All Categories</option>
-        <option value="Action">Action</option>
-        <option value="Drama">Drama</option>
-        <option value="Comedy">Comedy</option>
-        <option value="Romance">Romance</option>
-        <option value="Thriller">Thriller</option>
-      </select>
-    </div>
-  </header>
-
-  <!-- MOVIE GRID -->
-  <main>
-    <div id="grid" class="grid"></div>
-  </main>
-
-  <!-- VIDEO PLAYER MODAL -->
-  <div id="playerModal" class="modal">
-    <span id="close">✖</span>
-    <video id="player" controls autoplay></video>
+  <div class="filters">
+    <input id="search" placeholder="Search movie" />
+    <select id="lang">
+      <option value="">All Languages</option>
+      <option>Telugu</option>
+      <option>Hindi</option>
+      <option>English</option>
+    </select>
+    <select id="cat">
+      <option value="">All Categories</option>
+      <option>Action</option>
+      <option>Drama</option>
+      <option>Comedy</option>
+    </select>
   </div>
+</header>
 
-  <script src="app.js"></script>
+<main>
+  <div id="grid" class="grid"></div>
+</main>
+
+<!-- PLAYER MODAL -->
+<div id="playerModal" class="modal">
+  <span id="close">✖</span>
+  <video id="player" controls></video>
+</div>
+
+<script src="app.js"></script>
 </body>
 </html>

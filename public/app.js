@@ -6,21 +6,21 @@ const closeBtn = document.getElementById("close");
 function loadMovies(){
   fetch("/videos")
     .then(r => r.json())
-    .then(showMovies)
-    .catch(()=> {
-      grid.innerHTML = "<p style='color:white'>Cannot get videos</p>";
+    .then(render)
+    .catch(()=>{
+      grid.innerHTML = "<p>Cannot get videos</p>";
     });
 }
 
-function showMovies(list){
+function render(list){
   grid.innerHTML = "";
 
   if(list.length === 0){
-    grid.innerHTML = "<p style='color:white'>No movies uploaded</p>";
+    grid.innerHTML = "<p>No movies uploaded</p>";
     return;
   }
 
-  list.forEach(m => {
+  list.forEach(m=>{
     const card = document.createElement("div");
     card.className = "card";
 
@@ -29,18 +29,17 @@ function showMovies(list){
       <div class="title">${m.title}</div>
     `;
 
-    card.onclick = () => playMovie(m.videoUrl);
+    card.onclick = ()=>{
+      player.src = m.videoUrl;
+      modal.style.display = "flex";
+      player.play();
+    };
+
     grid.appendChild(card);
   });
 }
 
-function playMovie(url){
-  player.src = url;
-  modal.style.display = "block";
-  player.play();
-}
-
-closeBtn.onclick = () => {
+closeBtn.onclick = ()=>{
   player.pause();
   modal.style.display = "none";
 };
