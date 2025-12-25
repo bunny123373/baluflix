@@ -1,132 +1,262 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Admin Upload</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IBOMMA Admin</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
-    body{
-      background:#000;
-      color:#fff;
-      font-family:Arial;
-      padding:20px
-    }
-    h1{color:#e50914}
-    form{
-      max-width:520px;
-      background:#141414;
-      padding:20px;
-      border-radius:8px
-    }
-    input,select,button{
-      width:100%;
-      padding:12px;
-      margin:10px 0;
-      background:#222;
-      border:1px solid #333;
-      color:#fff
-    }
-    button{
-      background:#e50914;
-      border:none;
-      cursor:pointer;
-      font-size:16px
-    }
-    .status{color:#0f0}
+    :root { --primary:#e50914; --secondary:#ff6b00; --bg:#0f0f0f; --card:rgba(20,20,20,.95); --text:#fff; --muted:#b3b3b3; }
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:Poppins,sans-serif;background:var(--bg);color:var(--text);
+      background-image:radial-gradient(circle at 10% 20%, rgba(229,9,20,.15) 0%, transparent 20%),
+                       radial-gradient(circle at 90% 80%, rgba(255,107,0,.15) 0%, transparent 20%);}
+    .layout{display:flex;min-height:100vh}
+    .sidebar{width:270px;background:var(--card);border-right:1px solid rgba(255,255,255,.1);padding:26px 18px;position:fixed;inset:0 auto 0 0}
+    .brand{font-size:2rem;font-weight:900;letter-spacing:2px;text-align:center;margin-bottom:22px;
+      background:linear-gradient(135deg,var(--primary),var(--secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+    .nav a{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:12px;text-decoration:none;color:var(--muted);font-weight:600;margin-bottom:10px;transition:.25s}
+    .nav a:hover,.nav a.active{background:linear-gradient(135deg,var(--primary),var(--secondary));color:#fff;box-shadow:0 10px 25px rgba(229,9,20,.25)}
+    .main{margin-left:270px;flex:1;padding:24px}
+    .top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:18px}
+    .title{font-size:2.2rem;font-weight:800}
+    .back{color:#fff;text-decoration:none;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.12);
+      padding:10px 16px;border-radius:999px}
+    .back:hover{background:var(--primary)}
+    .grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin:18px 0}
+    .stat{background:var(--card);border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:16px;display:flex;gap:12px;align-items:center}
+    .stat i{font-size:2rem;color:var(--secondary)}
+    .stat .n{font-size:2rem;font-weight:800}
+    .stat .l{color:var(--muted);font-size:.95rem}
+    .section{display:none}
+    .section.active{display:block}
+    .card{background:var(--card);border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:18px;margin-top:14px}
+    .card h2{font-size:1.25rem;margin-bottom:12px}
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .fg{margin-bottom:10px}
+    label{display:block;font-weight:600;margin-bottom:6px}
+    input,textarea,select{width:100%;padding:12px 12px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06);color:#fff;outline:none}
+    textarea{resize:vertical}
+    .checks{display:flex;gap:14px;flex-wrap:wrap;margin:8px 0}
+    .checks label{display:flex;gap:8px;align-items:center;font-weight:600;color:#ddd;margin:0}
+    .btn{border:none;cursor:pointer;border-radius:12px;padding:12px 14px;font-weight:800}
+    .btn.primary{width:100%;background:linear-gradient(135deg,var(--primary),var(--secondary));color:#fff}
+    .btn.primary:hover{filter:brightness(1.05)}
+    table{width:100%;border-collapse:collapse}
+    th,td{padding:12px;border-bottom:1px solid rgba(255,255,255,.1);text-align:left}
+    th{color:var(--muted);font-weight:700}
+    .poster{width:52px;height:78px;object-fit:cover;border-radius:8px;border:1px solid rgba(255,255,255,.12)}
+    .actions button{background:transparent;border:none;color:#ddd;cursor:pointer;font-size:1.05rem;margin-right:10px}
+    .actions button:hover{color:var(--secondary)}
+    .actions .danger:hover{color:var(--primary)}
+    /* Upload progress modal */
+    .pmodal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:3000;align-items:center;justify-content:center;padding:14px}
+    .pmodal.active{display:flex}
+    .pbox{width:min(520px,96vw);background:#141414;border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:18px;text-align:center}
+    .bar{height:10px;background:rgba(255,255,255,.1);border-radius:999px;overflow:hidden;margin:12px 0}
+    .fill{height:100%;width:0%;background:linear-gradient(90deg,var(--primary),var(--secondary))}
+    .small{color:var(--muted);font-size:.9rem}
+    /* Edit modal */
+    .emodal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:4000;align-items:center;justify-content:center;padding:14px}
+    .emodal.active{display:flex}
+    .ebox{width:min(640px,96vw);background:#141414;border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:18px}
+    .etop{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+    .close{width:38px;height:38px;border-radius:999px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06);color:#fff;cursor:pointer}
+    .toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:#1f1f1f;border:1px solid rgba(255,255,255,.14);
+      padding:10px 14px;border-radius:999px;display:none;z-index:5000}
+    .toast.show{display:block}
+    @media (max-width:1000px){ .grid3{grid-template-columns:1fr} .row{grid-template-columns:1fr} }
   </style>
 </head>
 <body>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="brand">IBOMMA</div>
+    <nav class="nav">
+      <a href="#" class="navlink active" data-target="sec-dashboard"><i class="fa-solid fa-gauge-high"></i> Dashboard</a>
+      <a href="#" class="navlink" data-target="sec-upload"><i class="fa-solid fa-cloud-arrow-up"></i> Upload</a>
+      <a href="#" class="navlink" data-target="sec-movies"><i class="fa-solid fa-film"></i> Movies</a>
+      <a href="#" class="navlink" data-target="sec-users"><i class="fa-solid fa-users"></i> Users</a>
+      <a href="#" class="navlink" data-target="sec-settings"><i class="fa-solid fa-gear"></i> Settings</a>
+    </nav>
+  </aside>
 
-<h1>Admin Upload</h1>
+  <main class="main">
+    <div class="top">
+      <div class="title" id="pageTitle">Dashboard</div>
+      <a class="back" href="index.html"><i class="fa-solid fa-arrow-left"></i> Back</a>
+    </div>
 
-<form id="f">
-  <input id="title" placeholder="Movie title" required>
+    <!-- Dashboard -->
+    <section class="section active" id="sec-dashboard">
+      <div class="grid3" id="stats"></div>
+      <div class="card">
+        <h2>Quick Tips</h2>
+        <div class="small">If videos don’t play in browser, ensure MP4 is H.264 + AAC (HEVC/H.265 can fail on some browsers).</div>
+      </div>
+    </section>
 
-  <select id="language">
-    <option>Telugu</option>
-    <option>Hindi</option>
-    <option>English</option>
-  </select>
+    <!-- Upload -->
+    <section class="section" id="sec-upload">
+      <div class="card">
+        <h2>Upload New Movie</h2>
+        <form id="uploadForm">
+          <div class="row">
+            <div class="fg">
+              <label>Title *</label>
+              <input name="title" required />
+            </div>
+            <div class="fg">
+              <label>Language</label>
+              <select name="language">
+                <option>Telugu</option>
+                <option>Tamil</option>
+                <option>Hindi</option>
+                <option>English</option>
+              </select>
+            </div>
+          </div>
 
-  <input id="year" placeholder="Year">
+          <div class="fg">
+            <label>Description</label>
+            <textarea name="description" rows="3"></textarea>
+          </div>
 
-  <select id="category">
-    <option>Action</option>
-    <option>Drama</option>
-    <option>Comedy</option>
-  </select>
+          <div class="row">
+            <div class="fg">
+              <label>Poster Upload (optional)</label>
+              <input type="file" name="poster" accept="image/*" />
+            </div>
+            <div class="fg">
+              <label>Thumbnail URL (optional)</label>
+              <input name="thumbnail" placeholder="https://..." />
+            </div>
+          </div>
 
-  <input id="poster" type="file" accept="image/*" required>
-  <input id="video" type="file" accept="video/mp4" required>
+          <div class="fg">
+            <label>Video File (MP4) *</label>
+            <input type="file" name="video" accept="video/mp4,video/*" required />
+          </div>
 
-  <button type="submit">Upload</button>
-  <div class="status" id="s"></div>
-</form>
+          <div class="checks">
+            <label><input type="checkbox" name="isLatest" /> Latest</label>
+            <label><input type="checkbox" name="isTrending" /> Trending</label>
+          </div>
 
-<script>
-/* ===== ADMIN PASSWORD PROTECT ===== */
-const pass = prompt("Enter Admin Password");
-if(pass !== "12345"){
-  alert("Access Denied");
-  location.href = "/";
-}
+          <button class="btn primary" type="submit"><i class="fa-solid fa-upload"></i> Upload</button>
+        </form>
+      </div>
+    </section>
 
-/* ===== CLOUDINARY CONFIG ===== */
-const CLOUD_NAME = "dchekxdof";
-const UPLOAD_PRESET = "ibomma_clone";
+    <!-- Movies -->
+    <section class="section" id="sec-movies">
+      <div class="card">
+        <h2>Movies Library</h2>
+        <div style="overflow:auto">
+          <table>
+            <thead>
+              <tr>
+                <th>Poster</th><th>Title</th><th>Lang</th><th>Views</th><th>Video</th><th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="movieBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
 
-const f = document.getElementById("f");
-const s = document.getElementById("s");
+    <!-- Users (placeholder) -->
+    <section class="section" id="sec-users">
+      <div class="card">
+        <h2>Users</h2>
+        <div class="small">User system not implemented yet (optional). You can add login/accounts later.</div>
+      </div>
+    </section>
 
-async function uploadImage(file){
-  const fd = new FormData();
-  fd.append("file", file);
-  fd.append("upload_preset", UPLOAD_PRESET);
-  const r = await fetch(
-    `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,
-    { method:"POST", body: fd }
-  );
-  return r.json();
-}
+    <!-- Settings -->
+    <section class="section" id="sec-settings">
+      <div class="card">
+        <h2>Settings</h2>
+        <div class="small">Basic settings demo (localStorage). This does not affect server yet.</div>
+        <div class="row" style="margin-top:10px">
+          <div class="fg">
+            <label>Site Title</label>
+            <input id="setTitle" placeholder="IBOMMA" />
+          </div>
+          <div class="fg">
+            <label>Default Language</label>
+            <select id="setLang">
+              <option>Telugu</option><option>Tamil</option><option>Hindi</option><option>English</option>
+            </select>
+          </div>
+        </div>
+        <button class="btn primary" type="button" onclick="saveSettings()"><i class="fa-solid fa-floppy-disk"></i> Save Settings</button>
+      </div>
+    </section>
+  </main>
+</div>
 
-async function uploadVideo(file){
-  const fd = new FormData();
-  fd.append("file", file);
-  fd.append("upload_preset", UPLOAD_PRESET);
-  const r = await fetch(
-    `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/video/upload`,
-    { method:"POST", body: fd }
-  );
-  return r.json();
-}
+<!-- Upload progress modal -->
+<div class="pmodal" id="pmodal">
+  <div class="pbox">
+    <div style="font-weight:800;font-size:1.2rem" id="ptext">Uploading 0%</div>
+    <div class="bar"><div class="fill" id="pfill"></div></div>
+    <div class="small" id="pdetails">Starting...</div>
+  </div>
+</div>
 
-f.onsubmit = async (e)=>{
-  e.preventDefault();
-  s.innerText = "Uploading...";
+<!-- Edit modal -->
+<div class="emodal" id="emodal" onclick="editOutside(event)">
+  <div class="ebox">
+    <div class="etop">
+      <div style="font-weight:800;font-size:1.2rem">Edit Movie</div>
+      <button class="close" onclick="closeEdit()"><i class="fa-solid fa-xmark"></i></button>
+    </div>
 
-  try{
-    const posterRes = await uploadImage(poster.files[0]);
-    const videoRes  = await uploadVideo(video.files[0]);
+    <form id="editForm">
+      <input type="hidden" name="id" id="eid" />
+      <div class="row">
+        <div class="fg">
+          <label>Title *</label>
+          <input name="title" id="etitle" required />
+        </div>
+        <div class="fg">
+          <label>Language</label>
+          <select name="language" id="elang">
+            <option>Telugu</option><option>Tamil</option><option>Hindi</option><option>English</option>
+          </select>
+        </div>
+      </div>
 
-    await fetch("/videos/save",{
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body: JSON.stringify({
-        title: title.value,
-        language: language.value,
-        year: year.value,
-        category: category.value,
-        posterUrl: posterRes.secure_url,
-        videoUrl: videoRes.secure_url
-      })
-    });
+      <div class="fg">
+        <label>Description</label>
+        <textarea name="description" id="edesc" rows="3"></textarea>
+      </div>
 
-    s.innerText = "✅ Upload SUCCESS";
-    f.reset();
-  }catch{
-    s.innerText = "❌ Upload FAILED";
-  }
-};
-</script>
+      <div class="row">
+        <div class="fg">
+          <label>Thumbnail URL</label>
+          <input name="thumbnail" id="ethumb" />
+        </div>
+        <div class="fg">
+          <label>New Poster Upload (optional)</label>
+          <input type="file" name="newPoster" accept="image/*" />
+        </div>
+      </div>
 
+      <div class="checks">
+        <label><input type="checkbox" name="isLatest" id="elatest" /> Latest</label>
+        <label><input type="checkbox" name="isTrending" id="etrending" /> Trending</label>
+      </div>
+
+      <button class="btn primary" type="submit"><i class="fa-solid fa-save"></i> Save Changes</button>
+    </form>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="admin.js"></script>
 </body>
 </html>
