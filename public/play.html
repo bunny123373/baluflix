@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="te">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Watch Movie - IBOMMA</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #e50914;
+            --primary-dark: #b80710;
+            --secondary: #ff6b00;
+            --bg: #0f0f0f;
+            --card: rgba(20, 20, 20, 0.95);
+            --text: #ffffff;
+            --text-light: #b3b3b3;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(229,9,20,0.1) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(255,107,0,0.1) 0%, transparent 20%);
+        }
+
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.9) 0%, transparent 100%);
+            backdrop-filter: blur(10px);
+            padding: 15px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.4s;
+        }
+        header.scrolled {
+            background: rgba(10,10,10,0.98);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+        }
+        .logo {
+            font-size: 2rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            cursor: pointer;
+            letter-spacing: 2px;
+        }
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+        .nav-links a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 500;
+            transition: 0.3s;
+        }
+        .nav-links a:hover { color: var(--primary); }
+        .back-btn {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255,255,255,0.1);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .back-btn:hover {
+            background: var(--primary);
+            box-shadow: 0 5px 15px rgba(229,9,20,0.4);
+        }
+
+        /* Video Player Section */
+        .video-section {
+            padding-top: 80px;
+            background: #000;
+        }
+        .video-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        .video-wrapper {
+            position: relative;
+            width: 100%;
+            padding-top: 56.25%; /* 16:9 Aspect Ratio */
+            background: #000;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+        }
+        .video-wrapper video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        .video-info-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .video-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #fff, var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .video-stats {
+            display: flex;
+            gap: 25px;
+        }
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-light);
+            font-size: 0.95rem;
+        }
+        .stat-item i { color: var(--primary); }
+        .views-count { color: #ffd700 !important; font-weight: 600; }
+
+        /* Movie Details Section */
+        .details-section {
+            max-width: 1400px;
+            margin: 40px auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 40px;
+        }
+        .main-details {
+            background: var(--card);
+            padding: 30px;
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .main-details h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+        .main-details p {
+            color: var(--text-light);
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+        .meta-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .tag {
+            background: rgba(255,255,255,0.1);
+            padding: 8px 15px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+        .tag.primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+        }
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .action-btn {
+            padding: 12px 25px;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s;
+        }
+        .btn-share {
+            background: rgba(255,255,255,0.1);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .btn-share:hover { background: rgba(255,255,255,0.2); }
+        .btn-report {
+            background: rgba(255,0,0,0.1);
+            color: #ff4444;
+            border: 1px solid rgba(255,0,0,0.2);
+        }
+        .btn-report:hover { background: rgba(255,0,0,0.2); }
+
+        /* Sidebar Details */
+        .sidebar-details {
+            background: var(--card);
+            padding: 30px;
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+            height: fit-content;
+        }
+        .sidebar-details h3 {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            color: var(--secondary);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 10px;
+        }
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .info-label { color: var(--text-light); }
+        .info-value { font-weight: 500; }
+
+        /* Related Movies Section */
+        .related-section {
+            max-width: 1400px;
+            margin: 50px auto;
+            padding: 0 20px 50px;
+        }
+        .related-section h2 {
+            font-size: 1.8rem;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .related-section h2 i { color: var(--primary); }
+        .movie-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 25px;
+        }
+        .movie-card {
+            background: var(--card);
+            border-radius: 15px;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            cursor: pointer;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        .movie-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 15px 30px rgba(229,9,20,0.3);
+        }
+        .movie-poster {
+            width: 100%;
+            height: 280px;
+            object-fit: cover;
+            transition: 0.4s;
+        }
+        .movie-card:hover .movie-poster { transform: scale(1.1); }
+        .movie-info { padding: 15px; }
+        .movie-title {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .movie-meta {
+            color: var(--text-light);
+            font-size: 0.85rem;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        /* Loading State */
+        .loading {
+            text-align: center;
+            padding: 50px;
+        }
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(255,255,255,0.1);
+            border-top: 4px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        /* Error State */
+        .error-state {
+            text-align: center;
+            padding: 100px 20px;
+            color: var(--text-light);
+        }
+        .error-state i {
+            font-size: 5rem;
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+        .error-state h2 { font-size: 2rem; margin-bottom: 15px; }
+        .retry-btn {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 15px 30px;
+            border-radius: 50px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: 0.3s;
+        }
+        .retry-btn:hover {
+            box-shadow: 0 10px 25px rgba(229,9,20,0.4);
+            transform: translateY(-3px);
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .details-section { grid-template-columns: 1fr; }
+            .video-title { font-size: 1.4rem; }
+            .video-stats { gap: 15px; }
+        }
+        @media (max-width: 768px) {
+            header { padding: 15px 20px; }
+            .nav-links { display: none; }
+            .video-info-bar { flex-direction: column; align-items: flex-start; gap: 15px; }
+            .action-buttons { flex-direction: column; }
+            .action-btn { justify-content: center; }
+            .movie-grid { grid-template-columns: repeat(2, 1fr); gap: 15px; }
+            .movie-poster { height: 220px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header id="header">
+        <div class="logo" onclick="goHome()">IBOMMA</div>
+        <nav class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="index.html">Movies</a>
+            <a href="index.html">Latest</a>
+            <a href="index.html">Trending</a>
+        </nav>
+        <a href="index.html" class="back-btn">
+            <i class="fas fa-arrow-left"></i> Back
+        </a>
+    </header>
+
+    <!-- Video Player Section -->
+    <section class="video-section" id="video-section">
+        <div class="video-container">
+            <div class="video-wrapper">
+                <video id="video-player" controls autoplay playsinline disablepictureinpicture controlslist="nodownload">
+                    Your browser does not support HTML5 video.
+                </video>
+            </div>
+        </div>
+        <div class="video-info-bar">
+            <h1 class="video-title" id="video-title">Loading...</h1>
+            <div class="video-stats">
+                <div class="stat-item views-count">
+                    <i class="fas fa-eye"></i>
+                    <span id="video-views">0</span> views
+                </div>
+                <div class="stat-item">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span id="video-year">2025</span>
+                </div>
+                <div class="stat-item">
+                    <i class="fas fa-globe"></i>
+                    <span id="video-lang">Telugu</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Movie Details Section -->
+    <div class="details-section" id="details-section">
+        <div class="main-details">
+            <h3><i class="fas fa-info-circle"></i> About Movie</h3>
+            <p id="movie-desc">Loading description...</p>
+            <div class="meta-tags">
+                <span class="tag primary" id="tag-category">Movie</span>
+                <span class="tag" id="tag-quality">HD</span>
+                <span class="tag" id="tag-latest">Latest</span>
+            </div>
+            <div class="action-buttons">
+                <button class="action-btn btn-share" onclick="shareMovie()">
+                    <i class="fas fa-share-alt"></i> Share
+                </button>
+                <button class="action-btn btn-report" onclick="reportMovie()">
+                    <i class="fas fa-flag"></i> Report
+                </button>
+            </div>
+        </div>
+        <div class="sidebar-details">
+            <h3><i class="fas fa-list"></i> Details</h3>
+            <div class="info-row">
+                <span class="info-label">Title</span>
+                <span class="info-value" id="info-title">-</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Language</span>
+                <span class="info-value" id="info-lang">-</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Category</span>
+                <span class="info-value" id="info-cat">Movie</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Release</span>
+                <span class="info-value" id="info-year">2025</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Views</span>
+                <span class="info-value" id="info-views">0</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Related Movies Section -->
+    <section class="related-section">
+        <h2><i class="fas fa-film"></i> Related Movies</h2>
+        <div class="movie-grid" id="related-movies">
+            <div class="loading">
+                <div class="spinner"></div>
+                <p>Loading related movies...</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer style="background: #0a0a0a; padding: 40px 20px; text-align: center; border-top: 1px solid rgba(255,255,255,0.1); margin-top: 50px;">
+        <p style="color: var(--text-light);">&copy; 2025 IBOMMA. Watch Telugu Movies Online in HD</p>
+    </footer>
+
+    <script>
+        let allMovies = [];
+        let currentMovie = null;
+        const urlParams = new URLSearchParams(window.location.search);
+        const movieId = parseInt(urlParams.get('id'));
+
+        // Header scroll effect
+        window.addEventListener('scroll', () => {
+            const header = document.getElementById('header');
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        // Load movie and related content
+        document.addEventListener('DOMContentLoaded', async () => {
+            if (!movieId) {
+                showError('Movie ID not found!');
+                return;
+            }
+
+            await loadAllMovies();
+            loadMovieDetails();
+            loadRelatedMovies();
+        });
+
+        async function loadAllMovies() {
+            try {
+                const response = await fetch('/api/movies');
+                allMovies = await response.json();
+            } catch (error) {
+                console.error('Error loading movies:', error);
+            }
+        }
+
+        function loadMovieDetails() {
+            currentMovie = allMovies.find(m => m.id === movieId);
+
+            if (!currentMovie) {
+                showError('Movie not found!');
+                return;
+            }
+
+            // Increment view count
+            fetch(`/api/movies/${movieId}/view`, { method: 'POST' }).catch(() => {});
+
+            // Update page title
+            document.title = `${currentMovie.title} - IBOMMA`;
+
+            // Update video player
+            const player = document.getElementById('video-player');
+            player.src = currentMovie.videoUrl;
+            
+            // Handle video errors
+            player.onerror = () => {
+                showError('Video playback error. The file might be corrupted or unsupported.');
+            };
+
+            // Update video info
+            document.getElementById('video-title').textContent = currentMovie.title;
+            document.getElementById('video-views').textContent = (currentMovie.views || 0).toLocaleString();
+            document.getElementById('video-year').textContent = '2025'; // Default year
+            document.getElementById('video-lang').textContent = currentMovie.language || 'Telugu';
+
+            // Update main details
+            document.getElementById('movie-desc').textContent = currentMovie.description || 'No description available.';
+            document.getElementById('tag-category').textContent = currentMovie.language || 'Movie';
+            document.getElementById('tag-quality').textContent = 'HD';
+
+            if (currentMovie.isLatest) {
+                document.getElementById('tag-latest').style.display = 'inline-block';
+            } else {
+                document.getElementById('tag-latest').style.display = 'none';
+            }
+
+            // Update sidebar details
+            document.getElementById('info-title').textContent = currentMovie.title;
+            document.getElementById('info-lang').textContent = currentMovie.language || 'Telugu';
+            document.getElementById('info-cat').textContent = 'Movie';
+            document.getElementById('info-year').textContent = '2025';
+            document.getElementById('info-views').textContent = (currentMovie.views || 0).toLocaleString();
+        }
+
+        function loadRelatedMovies() {
+            const grid = document.getElementById('related-movies');
+            
+            // Filter out current movie and show others
+            const related = allMovies.filter(m => m.id !== movieId).slice(0, 8);
+
+            if (related.length === 0) {
+                grid.innerHTML = `
+                    <div style="grid-column: 1/-1; text-align: center; padding: 30px; color: var(--text-light);">
+                        <i class="fas fa-film" style="font-size: 3rem; opacity: 0.3; margin-bottom: 10px;"></i>
+                        <p>No related movies found.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            grid.innerHTML = '';
+            related.forEach(movie => {
+                const card = document.createElement('div');
+                card.className = 'movie-card';
+                card.innerHTML = `
+                    <img src="${movie.thumbnail}" class="movie-poster" onerror="this.src='https://via.placeholder.com/300x450/111/fff?text=IBOMMA'">
+                    <div class="movie-info">
+                        <div class="movie-title">${movie.title}</div>
+                        <div class="movie-meta">
+                            <span>${movie.language || 'Telugu'}</span>
+                            <span><i class="fas fa-eye"></i> ${movie.views || 0}</span>
+                        </div>
+                    </div>
+                `;
+                card.onclick = () => {
+                    window.location.href = `play.html?id=${movie.id}`;
+                };
+                grid.appendChild(card);
+            });
+        }
+
+        function showError(message) {
+            document.getElementById('video-section').innerHTML = `
+                <div class="error-state">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <h2>Oops!</h2>
+                    <p>${message}</p>
+                    <button class="retry-btn" onclick="goHome()">
+                        <i class="fas fa-home"></i> Go to Home
+                    </button>
+                </div>
+            `;
+            document.getElementById('details-section').style.display = 'none';
+            document.getElementById('related-section').style.display = 'none';
+        }
+
+        function goHome() {
+            window.location.href = 'index.html';
+        }
+
+        function shareMovie() {
+            const url = window.location.href;
+            if (navigator.share) {
+                navigator.share({
+                    title: currentMovie.title,
+                    text: `Watch ${currentMovie.title} on IBOMMA!`,
+                    url: url
+                }).catch(() => {
+                    copyToClipboard(url);
+                });
+            } else {
+                copyToClipboard(url);
+            }
+        }
+
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                alert('Link copied to clipboard!');
+            }).catch(() => {
+                prompt('Copy this link:', text);
+            });
+        }
+
+        function reportMovie() {
+            const reason = prompt('Please describe the issue with this movie:');
+            if (reason) {
+                alert('Thank you for your feedback! We will review this movie.');
+            }
+        }
+
+        // Handle video ended
+        document.getElementById('video-player').addEventListener('ended', () => {
+            // Optional: Auto-play next related movie
+            const related = allMovies.find(m => m.id !== movieId);
+            if (related) {
+                if (confirm('Watch another movie?')) {
+                    window.location.href = `play.html?id=${related.id}`;
+                }
+            }
+        });
+    </script>
+</body>
+</html>
