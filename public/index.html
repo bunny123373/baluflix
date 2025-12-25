@@ -1,305 +1,766 @@
-<html lang="en">
-
+<!DOCTYPE html>
+<html lang="te">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
-    <link
-        href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&family=Sen:wght@400;700;800&display=swap"
-        rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css">
-    <title>Movie Design</title>
+    <title>IBOMMA - Watch Telugu Movies Online HD</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #e50914;
+            --primary-dark: #b80710;
+            --secondary: #ff6b00;
+            --bg: #0f0f0f;
+            --card: rgba(20,20,20,0.95);
+            --text: #ffffff;
+            --text-light: #b3b3b3;
+        }
+
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(229,9,20,0.15) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(255,107,0,0.15) 0%, transparent 20%),
+                radial-gradient(circle at 50% 50%, rgba(255,255,255,0.03) 0%, transparent 50%);
+        }
+
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.9) 0%, transparent 100%);
+            backdrop-filter: blur(10px);
+            padding: 15px 40px;
+            transition: all 0.4s;
+        }
+        header.scrolled {
+            background: rgba(10,10,10,0.98);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-size: 2.2rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #e50914, #ff6b00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 2px;
+            cursor: pointer;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 35px;
+            align-items: center;
+        }
+
+        .nav-menu a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1rem;
+            position: relative;
+            transition: 0.3s;
+        }
+
+        .nav-menu a:hover, .nav-menu a.active {
+            color: var(--primary);
+        }
+
+        .nav-menu a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 3px;
+            bottom: -8px;
+            left: 50%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transition: 0.4s;
+            border-radius: 2px;
+        }
+
+        .nav-menu a:hover::after, .nav-menu a.active::after {
+            width: 100%;
+            left: 0;
+        }
+
+        .search-box {
+            background: rgba(255,255,255,0.1);
+            border-radius: 30px;
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: 0.3s;
+        }
+
+        .search-box:hover {
+            background: rgba(255,255,255,0.2);
+            box-shadow: 0 0 20px rgba(229,9,20,0.3);
+        }
+
+        .search-box input {
+            background: none;
+            border: none;
+            outline: none;
+            color: #fff;
+            width: 220px;
+            font-size: 0.95rem;
+        }
+
+        .search-box input::placeholder {
+            color: #aaa;
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 90vh;
+            background: linear-gradient(to right, rgba(0,0,0,0.8), rgba(0,0,0,0.4)), url('https://image.tmdb.org/t/p/original/8cdWjvZQUExUUTzyp4t6EDMUBi4.jpg') center/cover no-repeat; /* Replace with a dynamic image or a good default */
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+        .hero::before { /* Add a subtle gradient overlay to the hero section */
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(to top, var(--bg) 0%, transparent 50%);
+        }
+
+
+        .hero-content {
+            max-width: 800px;
+            margin-left: 80px;
+            z-index: 2;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #ff6b00, #e50914);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(229,9,20,0.4);
+        }
+
+        .hero-title {
+            font-size: 5rem;
+            font-weight: 900;
+            line-height: 1;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #fff, #ff6b00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-desc {
+            font-size: 1.3rem;
+            color: #ddd;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 20px;
+        }
+
+        .btn-play {
+            background: var(--primary);
+            color: white;
+            padding: 16px 40px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 10px 30px rgba(229,9,20,0.4);
+            transition: 0.4s;
+        }
+
+        .btn-play:hover {
+            background: #c20710;
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(229,9,20,0.6);
+        }
+
+        .btn-info {
+            background: rgba(255,255,255,0.15);
+            color: white;
+            padding: 16px 40px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border: 1px solid rgba(255,255,255,0.2);
+            backdrop-filter: blur(10px);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: 0.4s;
+        }
+
+        .btn-info:hover {
+            background: rgba(255,255,255,0.25);
+            transform: translateY(-5px);
+        }
+
+        /* Categories */
+        .categories {
+            padding: 80px 40px 40px;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 30px;
+            color: #fff;
+        }
+
+        .category-tabs {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: 0.4s;
+            backdrop-filter: blur(10px);
+            text-shadow: 0 0 5px rgba(0,0,0,0.5);
+        }
+
+        .tab-btn.active, .tab-btn:hover {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            box-shadow: 0 10px 30px rgba(229,9,20,0.4);
+            transform: translateY(-3px);
+        }
+
+        /* Movie Grid */
+        .movie-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 25px;
+        }
+
+        .movie-card {
+            background: var(--card);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            position: relative;
+            cursor: pointer;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .movie-card:hover {
+            transform: translateY(-15px) scale(1.05);
+            box-shadow: 0 20px 50px rgba(229,9,20,0.5);
+            z-index: 10;
+        }
+
+        .movie-poster {
+            width: 100%;
+            height: 330px;
+            object-fit: cover;
+            transition: 0.4s;
+        }
+
+        .movie-card:hover .movie-poster {
+            transform: scale(1.1);
+        }
+
+        .movie-info {
+            padding: 15px;
+        }
+
+        .movie-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .movie-meta {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .play-overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: 0.4s;
+        }
+
+        .movie-card:hover .play-overlay {
+            opacity: 1;
+        }
+
+        .play-btn-large {
+            width: 80px;
+            height: 80px;
+            background: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            box-shadow: 0 0 40px rgba(229,9,20,0.8);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(229,9,20,0.7); }
+            70% { box-shadow: 0 0 0 20px rgba(229,9,20,0); }
+            100% { box-shadow: 0 0 0 0 rgba(229,9,20,0); }
+        }
+
+        /* Video Modal */
+        .video-modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.95);
+            backdrop-filter: blur(10px);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+        .video-modal.active { display: flex; }
+        .video-modal-content {
+            background: #1a1a1a;
+            border-radius: 20px;
+            overflow: hidden;
+            width: 90%;
+            max-width: 1200px;
+            box-shadow: 0 0 50px rgba(229,9,20,0.2);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .video-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 25px;
+            background: #222;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .video-modal-header h3 {
+            font-size: 1.5rem;
+            color: #fff;
+        }
+        .video-modal-close {
+            background: var(--primary);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .video-modal-close:hover {
+            transform: rotate(90deg);
+        }
+        .video-wrapper {
+            position: relative;
+            padding-top: 56.25%; /* 16:9 Aspect Ratio */
+            background: #000;
+        }
+        .video-wrapper video {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+        }
+        .video-modal-body {
+            padding: 25px;
+        }
+        .video-modal-body p {
+            color: var(--text-light);
+            line-height: 1.6;
+            margin-top: 10px;
+        }
+
+
+        /* Empty State */
+        .empty-state {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 50px;
+            color: var(--text-light);
+        }
+        .empty-state i {
+            font-size: 4rem;
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+        .empty-state h3 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+
+
+        /* Footer */
+        footer {
+            background: #0a0a0a;
+            padding: 60px 40px 30px;
+            text-align: center;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            header { padding: 15px 20px; }
+            .hero-title { font-size: 3rem; }
+            .hero-content { margin-left: 20px; }
+            .nav-menu { display: none; }
+            .search-box { width: 100%; justify-content: center; }
+            .movie-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+            .movie-poster { height: 220px; }
+            .categories { padding: 50px 20px; }
+            .hero-buttons { flex-direction: column; }
+            .btn-play, .btn-info { width: 100%; justify-content: center; padding: 12px 20px; }
+            .logo { font-size: 1.8rem; }
+        }
+    </style>
 </head>
-
 <body>
-    <div class="navbar">
-        <div class="navbar-container">
-            <div class="logo-container">
-                <h1 class="logo">flakes</h1>
-            </div>
-            <div class="menu-container">
-                <ul class="menu-list">
-                    <li class="menu-list-item active">Home</li>
-                    <li class="menu-list-item">Movies</li>
-                    <li class="menu-list-item">Series</li>
-                    <li class="menu-list-item">Popular</li>
-                    <li class="menu-list-item">Trends</li>
 
-                </ul>
+    <!-- Header -->
+    <header id="header">
+        <div class="nav-container">
+            <div class="logo" onclick="filterCategory('all', this)">IBOMMA</div>
+            <div class="nav-menu">
+                <a href="#" class="active" onclick="filterCategory('all', this)">Home</a>
+                <a href="#" onclick="filterCategory('latest', this)">Latest</a>
+                <a href="#" onclick="filterCategory('trending', this)">Trending</a>
+                <a href="#" onclick="filterCategory('telugu', this)">Telugu</a>
+                <!-- You can uncomment these if you add more categories in backend -->
+                <!-- <a href="#" onclick="filterCategory('dubbed', this)">Dubbed</a> -->
+                <!-- <a href="#" onclick="filterCategory('hollywood', this)">Hollywood</a> -->
             </div>
-            <div class="profile-container">
-                <img class="profile-picture" src="img/profile.jpg" alt="">
-                <div class="profile-text-container">
-                    <span class="profile-text">Profile</span>
-                    <i class="fas fa-caret-down"></i>
-                </div>
-                <div class="toggle">
-                    <i class="fas fa-moon toggle-icon"></i>
-                    <i class="fas fa-sun toggle-icon"></i>
-                    <div class="toggle-ball"></div>
-                </div>
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" id="search-input" placeholder="Search movies, actors...">
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="hero-section">
+        <div class="hero-content">
+            <div class="hero-badge" id="hero-badge">NEW RELEASE</div>
+            <h1 class="hero-title" id="hero-title">Loading...</h1>
+            <p class="hero-desc" id="hero-desc">Loading movie description...</p>
+            <div class="hero-buttons">
+                <button class="btn-play" id="hero-play-btn">
+                    <i class="fas fa-play"></i> Play Now
+                </button>
+                <button class="btn-info" id="hero-info-btn">
+                    <i class="fas fa-info-circle"></i> More Info
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Categories & Movies -->
+    <div class="categories">
+        <div class="section-title" id="current-section-title">All Movies</div>
+        <div class="category-tabs">
+            <button class="tab-btn active" onclick="filterCategory('all', this)">All Movies</button>
+            <button class="tab-btn" onclick="filterCategory('latest', this)">Latest Releases</button>
+            <button class="tab-btn" onclick="filterCategory('trending', this)">Trending Now</button>
+            <button class="tab-btn" onclick="filterCategory('telugu', this)">Telugu</button>
+            <!-- <button class="tab-btn" onclick="filterCategory('dubbed', this)">Dubbed</button> -->
+            <!-- <button class="tab-btn" onclick="filterCategory('hollywood', this)">Hollywood</button> -->
+        </div>
+
+        <div class="movie-grid" id="movie-grid">
+            <div class="empty-state">
+                <i class="fas fa-spinner fa-spin"></i>
+                <h3>Loading Movies...</h3>
+                <p>Please wait while we fetch content.</p>
             </div>
         </div>
     </div>
-    <div class="sidebar">
-        <i class="left-menu-icon fas fa-search"></i>
-        <i class="left-menu-icon fas fa-home"></i>
-        <i class="left-menu-icon fas fa-users"></i>
-        <i class="left-menu-icon fas fa-bookmark"></i>
-        <i class="left-menu-icon fas fa-tv"></i>
-        <i class="left-menu-icon fas fa-hourglass-start"></i>
-        <i class="left-menu-icon fas fa-shopping-cart"></i>
-    </div>
-    <div class="container">
-        <div class="content-container">
-            <div class="featured-content"
-                style="background: linear-gradient(to bottom, rgba(0,0,0,0), #151515), url('img/f-1.jpg');">
-                <img class="featured-title" src="img/f-t-1.png" alt="">
-                <p class="featured-desc">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Iusto illo dolor
-                    deserunt nam assumenda ipsa eligendi dolore, ipsum id fugiat quo enim impedit, laboriosam omnis
-                    minima voluptatibus incidunt. Accusamus, provident.</p>
-                <button class="featured-button">WATCH</button>
+
+    <!-- Video Modal -->
+    <div class="video-modal" id="video-modal">
+        <div class="video-modal-content">
+            <div class="video-modal-header">
+                <h3 id="modal-movie-title">Movie Title</h3>
+                <button class="video-modal-close" onclick="closeVideoModal()"><i class="fas fa-times"></i></button>
             </div>
-            <div class="movie-list-container">
-                <h1 class="movie-list-title">NEW RELEASES</h1>
-                <div class="movie-list-wrapper">
-                    <div class="movie-list">
-                        <div class="movie-list-item">
-                            <img class="movie-list-item-img" src="img/1.jpeg" alt="">
-                            <span class="movie-list-item-title">Her</span>
-                            <p class="movie-list-item-desc">Lorem ipsum dolor sit amet consectetur adipisicing elit. At
-                                hic fugit similique accusantium.</p>
-                            <button class="movie-list-item-button">Watch</button>
-                        </div>
-                        <div class="movie-list-item">
-                            <img class="movie-list-item-img" src="img/2.jpeg" alt="">
-                            <span class="movie-list-item-title">Star Wars</span>
-                            <p class="movie-list-item-desc">Lorem ipsum dolor sit amet consectetur adipisicing elit. At
-                                hic fugit similique accusantium.</p>
-                            <button class="movie-list-item-button">Watch</button>
-                        </div>
-                        <div class="movie-list-item">
-                            <img class="movie-list-item-img" src="img/3.jpg" alt="">
-                            <span class="movie-list-item-title">Storm</span>
-                            <p class="movie-list-item-desc">Lorem ipsum dolor sit amet consectetur adipisicing elit. At
-                                hic fugit similique accusantium.</p>
-                            <button class="movie-list-item-button">Watch</button>
-                        </div>
-                        <div class="movie-list-item">
-                            <img class="movie-list-item-img" src="img/4.jpg" alt="">
-                            <span class="movie-list-item-title">1917</span>
-                            <p class="movie-list-item-desc">Lorem ipsum dolor sit amet consectetur adipisicing elit. At
-                                hic fugit similique accusantium.</p>
-                            <button class="movie-list-item-button">Watch</button>
-                        </div>
-                        <div class="movie-list-item">
-                            <img class="movie-list-item-img" src="img/5.jpg" alt="">
-                            <span class="movie-list-item-title">Avengers</span>
-                            <p class="movie-list-item-desc">Lorem ipsum dolor sit amet consectetur adipisicing elit. At
-                                hic fugit similique accusantium.</p>
-                            <button class="movie-list-item-button">Watch</button>
-                        </div>
-                        <div class="movie-list-item">
-                            <img class="movie-list-item-img" src="img/6.jpg" alt="">
-                            <span class="movie-list-item-title">Her</span>
-                            <p class="movie-list-item-desc">Lorem ipsum dolor sit amet consectetur adipisicing elit. At
-                                hic fugit similique accusantium.</p>
-                            <button class="movie-list-item-button">Watch</button>
-                        </div>
-                        <div class="movie-list-item">
-                            <img class="movie-list-item-img" src="img/7.jpg" alt="">
-                            <span class="movie-list-item-title">Her</span>
-                            <p class="movie-list-item-desc">Lorem ipsum dolor sit amet consectetur adipisicing elit. At
-                                hic fugit similique accusantium.</p>
-                            <button class="movie-list-item-button">Watch</button>
-                        </div>
-                    </div>
-                    <i class="fas fa-chevron-right arrow"></i>
-                </div>
+            <div class="video-wrapper">
+                <video id="video-player" controls autoplay playsinline disablepictureinpicture controlslist="nodownload">
+                    Your browser does not support HTML5 video.
+                </video>
             </div>
-            <div class="movie-list-container">
-                <h1 class="movie-list-title">NEW RELEASES</h1>
-                <div class="movie-list-wrapper">
-                    <div class="movie-list">
-                        <div class="movie-list-item">
-                            <img class="movie-list-item-img" src="img/8.jpg" alt="">
-                            <span class="movie-list-item-title">Her</span>
-                            <p class="movie-list-item-desc">Lorem ipsum dolor sit amet consectetur adipisicing elit. At
-                                hic fugit similique accusantium.</p>
-                            <button class="movie-list-item-button">Watch</button>
-                        </div>
-                        <div class="movie-list-item">
-                            <img class="movie-list-item-img" src="img/9.jpg" alt="">
-                            <span class="movie-list-item-title">Her</span>
-                            <p class="movie-list-item-desc">Lorem ipsum dolor sit amet consectetur adipisicing elit. At
-                                hic fugit similique accusantium.</p>
-                            <button class="movie-list-item-button">Watch</button>
-                        </div>
-                        <div class="movie-list-item">
-                            <img class="movie-list-item-img" src="img/10.jpg" alt="">
-                            <span class="movie-list-item-title">Her</span>
-                            <p class="movie-list-item-desc">Lorem ipsum dolor sit amet consectetur adipisicing elit. At
-                                hic fugit similique accusantium.</p>
-                            <button class="movie-list-item-button">Watch</button>
-                        </div>
-                        <div class="movie-list-item">
-                            <img class="movie-list-item-img" src="img/11.jpg" alt="">
-                            <span class="movie-list-item-title">Her</span>
-                            <p class="movie-list-item-desc">Lorem ipsum dolor sit amet consectetur adipisicing elit. At
-                                hic fugit similique accusantium.</p>
-                            <button class="movie-list-item-button">Watch</button>
-                        </div>
-                        <div class="movie-list-item">
-                            <img class="movie-list-item-img" src="img/12.jpg" alt="">
-                            <span class="movie-list-item-title">Her</span>
-                            <p class="movie-list-item-desc">Lorem ipsum dolor sit amet consectetur adipisicing elit. At
-                                hic fugit similique accusantium.</p>
-                            <button class="movie-list-item-button">Watch</button>
-                        </div>
-                        <div class="movie-list-item">
-                            <img class="movie-list-item-img" src="img/1.jpg" alt="">
-                            <span class="movie-list-item-title">Her</span>
-                            <p class="movie-list-item-desc">Lorem ipsum dolor sit amet consectetur adipisicing elit. At
-                                hic fugit similique accusantium.</p>
-                            <button class="movie-list-item-button">Watch</button>
-                        </div>
-                        <div class="movie-list-item">
-                            <img class="movie-list-item-img" src="img/1.jpg" alt="">
-                            <span class="movie-list-item-title">Her</span>
-                            <p class="movie-list-item-desc">Lorem ipsum dolor sit amet consectetur adipisicing elit. At
-                                hic fugit similique accusantium.</p>
-                            <button class="movie-list-item-button">Watch</button>
-                        </div>
-                    </div>
-                    <i class="fas fa-chevron-right arrow"></i>
-                </div>
-            </div>
-            <div class="featured-content"
-                style="background: linear-gradient(to bottom, rgba(0,0,0,0), #151515), url('img/f-2.jpg');">
-                <img class="featured-title" src="img/f-t-2.png" alt="">
-                <p class="featured-desc">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Iusto illo dolor
-                    deserunt nam assumenda ipsa eligendi dolore, ipsum id fugiat quo enim impedit, laboriosam omnis
-                    minima voluptatibus incidunt. Accusamus, provident.</p>
-                <button class="featured-button">WATCH</button>
-            </div>
-            <div class="movie-list-container">
-                <h1 class="movie-list-title">NEW RELEASES</h1>
-                <div class="movie-list-wrapper">
-                    <div class="movie-list">
-                        <div class="movie-list-item">
-                            <img class="movie-list-item-img" src="img/1.jpeg" alt="">
-                            <span class="movie-list-item-title">Her</span>
-                            <p class="movie-list-item-desc">Lorem ipsum dolor sit amet consectetur adipisicing elit. At
-                                hic fugit similique accusantium.</p>
-                            <button class="movie-list-item-button">Watch</button>
-                        </div>
-                        <div class="movie-list-item">
-                            <img class="movie-list-item-img" src="img/2.jpeg" alt="">
-                            <span class="movie-list-item-title">Her</span>
-                            <p class="movie-list-item-desc">Lorem ipsum dolor sit amet consectetur adipisicing elit. At
-                                hic fugit similique accusantium.</p>
-                            <button class="movie-list-item-button">Watch</button>
-                        </div>
-                        <div class="movie-list-item">
-                            <img class="movie-list-item-img" src="img/15.jpg" alt="">
-                            <span class="movie-list-item-title">Her</span>
-                            <p class="movie-list-item-desc">Lorem ipsum dolor sit amet consectetur adipisicing elit. At
-                                hic fugit similique accusantium.</p>
-                            <button class="movie-list-item-button">Watch</button>
-                        </div>
-                        <div class="movie-list-item">
-                            <img class="movie-list-item-img" src="img/3.jpg" alt="">
-                            <span class="movie-list-item-title">Her</span>
-                            <p class="movie-list-item-desc">Lorem ipsum dolor sit amet consectetur adipisicing elit. At
-                                hic fugit similique accusantium.</p>
-                            <button class="movie-list-item-button">Watch</button>
-                        </div>
-                        <div class="movie-list-item">
-                            <img class="movie-list-item-img" src="img/4.jpg" alt="">
-                            <span class="movie-list-item-title">Her</span>
-                            <p class="movie-list-item-desc">Lorem ipsum dolor sit amet consectetur adipisicing elit. At
-                                hic fugit similique accusantium.</p>
-                            <button class="movie-list-item-button">Watch</button>
-                        </div>
-                        <div class="movie-list-item">
-                            <img class="movie-list-item-img" src="img/5.jpg" alt="">
-                            <span class="movie-list-item-title">Her</span>
-                            <p class="movie-list-item-desc">Lorem ipsum dolor sit amet consectetur adipisicing elit. At
-                                hic fugit similique accusantium.</p>
-                            <button class="movie-list-item-button">Watch</button>
-                        </div>
-                        <div class="movie-list-item">
-                            <img class="movie-list-item-img" src="img/1.jpg" alt="">
-                            <span class="movie-list-item-title">Her</span>
-                            <p class="movie-list-item-desc">Lorem ipsum dolor sit amet consectetur adipisicing elit. At
-                                hic fugit similique accusantium.</p>
-                            <button class="movie-list-item-button">Watch</button>
-                        </div>
-                    </div>
-                    <i class="fas fa-chevron-right arrow"></i>
-                </div>
-            </div>
-            <div class="movie-list-container">
-                <h1 class="movie-list-title">NEW RELEASES</h1>
-                <div class="movie-list-wrapper">
-                    <div class="movie-list">
-                        <div class="movie-list-item">
-                            <img class="movie-list-item-img" src="img/17.jpg" alt="">
-                            <span class="movie-list-item-title">Her</span>
-                            <p class="movie-list-item-desc">Lorem ipsum dolor sit amet consectetur adipisicing elit. At
-                                hic fugit similique accusantium.</p>
-                            <button class="movie-list-item-button">Watch</button>
-                        </div>
-                        <div class="movie-list-item">
-                            <img class="movie-list-item-img" src="img/18.jpg" alt="">
-                            <span class="movie-list-item-title">Her</span>
-                            <p class="movie-list-item-desc">Lorem ipsum dolor sit amet consectetur adipisicing elit. At
-                                hic fugit similique accusantium.</p>
-                            <button class="movie-list-item-button">Watch</button>
-                        </div>
-                        <div class="movie-list-item">
-                            <img class="movie-list-item-img" src="img/19.jpg" alt="">
-                            <span class="movie-list-item-title">Her</span>
-                            <p class="movie-list-item-desc">Lorem ipsum dolor sit amet consectetur adipisicing elit. At
-                                hic fugit similique accusantium.</p>
-                            <button class="movie-list-item-button">Watch</button>
-                        </div>
-                        <div class="movie-list-item">
-                            <img class="movie-list-item-img" src="img/7.jpg" alt="">
-                            <span class="movie-list-item-title">Her</span>
-                            <p class="movie-list-item-desc">Lorem ipsum dolor sit amet consectetur adipisicing elit. At
-                                hic fugit similique accusantium.</p>
-                            <button class="movie-list-item-button">Watch</button>
-                        </div>
-                        <div class="movie-list-item">
-                            <img class="movie-list-item-img" src="img/1.jpg" alt="">
-                            <span class="movie-list-item-title">Her</span>
-                            <p class="movie-list-item-desc">Lorem ipsum dolor sit amet consectetur adipisicing elit. At
-                                hic fugit similique accusantium.</p>
-                            <button class="movie-list-item-button">Watch</button>
-                        </div>
-                        <div class="movie-list-item">
-                            <img class="movie-list-item-img" src="img/1.jpg" alt="">
-                            <span class="movie-list-item-title">Her</span>
-                            <p class="movie-list-item-desc">Lorem ipsum dolor sit amet consectetur adipisicing elit. At
-                                hic fugit similique accusantium.</p>
-                            <button class="movie-list-item-button">Watch</button>
-                        </div>
-                        <div class="movie-list-item">
-                            <img class="movie-list-item-img" src="img/1.jpg" alt="">
-                            <span class="movie-list-item-title">Her</span>
-                            <p class="movie-list-item-desc">Lorem ipsum dolor sit amet consectetur adipisicing elit. At
-                                hic fugit similique accusantium.</p>
-                            <button class="movie-list-item-button">Watch</button>
-                        </div>
-                    </div>
-                    <i class="fas fa-chevron-right arrow"></i>
-                </div>
+            <div class="video-modal-body">
+                <p id="modal-movie-desc">Movie description will appear here.</p>
+                <p style="font-size:0.9rem; color:#888; margin-top: 15px;">Views: <span id="modal-movie-views">0</span></p>
             </div>
         </div>
     </div>
-    <script src="app.js"></script>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-links">
+            <a href="#">About Us</a>
+            <a href="#">Contact</a>
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms of Use</a>
+            <a href="#">DMCA</a>
+        </div>
+        <p>&copy; 2025 IBOMMA. Watch Telugu Movies Online in HD</p>
+    </footer>
+
+    <script>
+        let allMovies = [];
+        let featuredMovie = null; // To hold the movie displayed in the hero section
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadAllMoviesData();
+            // Header scroll effect
+            window.addEventListener('scroll', () => {
+                const header = document.getElementById('header');
+                if (window.scrollY > 100) {
+                    header.classList.add('scrolled');
+                } else {
+                    header.classList.remove('scrolled');
+                }
+            });
+
+            // Search functionality
+            document.getElementById('search-input').addEventListener('input', (e) => {
+                const term = e.target.value.toLowerCase().trim();
+                let filtered = allMovies;
+                if (term) {
+                    filtered = allMovies.filter(m => 
+                        m.title.toLowerCase().includes(term) || m.description.toLowerCase().includes(term)
+                    );
+                    document.getElementById('current-section-title').textContent = `Search Results for "${e.target.value}"`;
+                } else {
+                    // If search box is empty, revert to 'All Movies' filter
+                    filterCategory('all', document.querySelector('.category-tabs .tab-btn.active') || document.querySelector('.category-tabs .tab-btn'));
+                    return;
+                }
+                displayMovies(filtered);
+            });
+        });
+
+        async function loadAllMoviesData() {
+            try {
+                const response = await fetch('/api/movies');
+                const data = await response.json();
+                allMovies = data;
+                displayMovies(allMovies);
+                setHeroSection(); // Set up the hero section after movies are loaded
+            } catch (error) {
+                console.error('Error loading movies:', error);
+                document.getElementById('movie-grid').innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <h3>Failed to Load Movies</h3>
+                        <p>Please check your server connection.</p>
+                    </div>
+                `;
+            }
+        }
+
+        function setHeroSection() {
+            if (allMovies.length > 0) {
+                // Try to find a trending or latest movie for hero, otherwise pick the first one
+                featuredMovie = allMovies.find(m => m.isTrending) || allMovies.find(m => m.isLatest) || allMovies[0];
+                
+                document.getElementById('hero-section').style.backgroundImage = `linear-gradient(to right, rgba(0,0,0,0.8), rgba(0,0,0,0.4)), url('${featuredMovie.thumbnail}')`;
+                document.getElementById('hero-title').textContent = featuredMovie.title;
+                document.getElementById('hero-desc').textContent = featuredMovie.description.substring(0, 200) + (featuredMovie.description.length > 200 ? '...' : ''); // Truncate description
+                document.getElementById('hero-badge').textContent = featuredMovie.isLatest ? 'LATEST RELEASE' : featuredMovie.isTrending ? 'TRENDING NOW' : 'FEATURED MOVIE';
+                
+                document.getElementById('hero-play-btn').onclick = () => playMovie(featuredMovie.id);
+                document.getElementById('hero-info-btn').onclick = () => alert(`More info for: ${featuredMovie.title}`); // Placeholder for more info
+            } else {
+                document.getElementById('hero-title').textContent = "No Movies Available";
+                document.getElementById('hero-desc').textContent = "Please add movies from the admin panel.";
+                document.getElementById('hero-play-btn').style.display = 'none';
+                document.getElementById('hero-info-btn').style.display = 'none';
+            }
+        }
+
+        function displayMovies(movies) {
+            const grid = document.getElementById('movie-grid');
+            grid.innerHTML = ''; // Clear previous movies
+
+            if (movies.length === 0) {
+                grid.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-film"></i>
+                        <h3>No Movies Found</h3>
+                        <p>Try a different filter or search term.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            movies.forEach(movie => {
+                const card = document.createElement('div');
+                card.className = 'movie-card';
+                card.innerHTML = `
+                    <img src="${movie.thumbnail}" class="movie-poster" onerror="this.src='https://via.placeholder.com/300x450/111/fff?text=IBOMMA'">
+                    <div class="play-overlay" onclick="playMovie(${movie.id})">
+                        <div class="play-btn-large">
+                            <i class="fas fa-play"></i>
+                        </div>
+                    </div>
+                    <div class="movie-info">
+                        <div class="movie-title">${movie.title}</div>
+                        <div class="movie-meta">
+                            <span>${movie.language || 'Telugu'}</span>
+                            <span><i class="fas fa-eye"></i> ${movie.views || 0}</span>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function filterCategory(category, clickedElement) {
+            let filtered = allMovies;
+
+            if (category === 'latest') filtered = allMovies.filter(m => m.isLatest);
+            else if (category === 'trending') filtered = allMovies.filter(m => m.isTrending);
+            else if (category === 'telugu') filtered = allMovies.filter(m => m.language === 'Telugu');
+            // Add more filters here as needed for 'dubbed', 'hollywood', etc.
+
+            displayMovies(filtered);
+
+            // Update active tab buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.nav-menu a').forEach(link => link.classList.remove('active'));
+            if (clickedElement) {
+                clickedElement.classList.add('active');
+            }
+            // Update section title
+            const titles = { 'all': 'All Movies', 'latest': 'Latest Releases', 'trending': 'Trending Now', 'telugu': 'Telugu Hits' };
+            document.getElementById('current-section-title').textContent = titles[category] || 'Movies';
+        }
+
+        async function playMovie(id) {
+            const movie = allMovies.find(m => m.id === id);
+            if (!movie) {
+                console.error('Movie not found for ID:', id);
+                return;
+            }
+
+            // Increment View Count via API
+            try {
+                const response = await fetch(`/api/movies/${id}/view`, { method: 'POST' });
+                const data = await response.json();
+                if (data.success) {
+                    // Update views in local data and UI
+                    movie.views = data.views;
+                    document.getElementById('modal-movie-views').textContent = data.views;
+                    displayMovies(allMovies); // Re-render to show updated views
+                }
+            } catch (error) {
+                console.error('Error incrementing view count:', error);
+            }
+
+            // Populate and show video modal
+            document.getElementById('modal-movie-title').textContent = movie.title;
+            document.getElementById('modal-movie-desc').textContent = movie.description;
+            document.getElementById('modal-movie-views').textContent = movie.views; // Display updated views
+            
+            const player = document.getElementById('video-player');
+            player.src = movie.videoUrl;
+            
+            document.getElementById('video-modal').classList.add('active');
+            player.play();
+        }
+
+        function closeVideoModal() {
+            const modal = document.getElementById('video-modal');
+            const player = document.getElementById('video-player');
+            
+            modal.classList.remove('active');
+            player.pause();
+            player.src = ''; // Clear source to stop buffering
+        }
+
+        // Close modal on outside click
+        document.getElementById('video-modal').addEventListener('click', (e) => {
+            if (e.target === document.getElementById('video-modal')) { // Only close if clicked on the backdrop
+                closeVideoModal();
+            }
+        });
+
+        // Close on Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && document.getElementById('video-modal').classList.contains('active')) {
+                closeVideoModal();
+            }
+        });
+    </script>
 </body>
-
 </html>
