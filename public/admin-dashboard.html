@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ibomma Admin Dashboard</title>
+    <link rel="stylesheet" href="admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h2><i class="fas fa-film"></i> IBOMMA</h2>
+            <p>Admin Dashboard</p>
+        </div>
+        
+        <nav class="sidebar-nav">
+            <ul>
+                <li class="active"><a href="#dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                <li><a href="#upload"><i class="fas fa-upload"></i> Upload Movie</a></li>
+                <li><a href="#movies"><i class="fas fa-video"></i> All Movies</a></li>
+                <li><a href="#categories"><i class="fas fa-list"></i> Categories</a></li>
+                <li><a href="#users"><i class="fas fa-users"></i> Users</a></li>
+                <li><a href="#settings"><i class="fas fa-cog"></i> Settings</a></li>
+            </ul>
+        </nav>
+        
+        <div class="sidebar-footer">
+            <button id="logoutBtn" class="btn-logout">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Top Bar -->
+        <header class="topbar">
+            <div class="topbar-left">
+                <button class="menu-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1>Admin Dashboard</h1>
+            </div>
+            
+            <div class="topbar-right">
+                <div class="user-info">
+                    <span id="adminUsername">Admin</span>
+                    <div class="user-avatar">
+                        <i class="fas fa-user-circle"></i>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Content Area -->
+        <div class="content-area">
+            <!-- Dashboard Section -->
+            <section id="dashboard" class="content-section active">
+                <div class="section-header">
+                    <h2><i class="fas fa-tachometer-alt"></i> Dashboard Overview</h2>
+                </div>
+                
+                <div class="stats-cards">
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: #4CAF50;">
+                            <i class="fas fa-film"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="totalMovies">0</h3>
+                            <p>Total Movies</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: #2196F3;">
+                            <i class="fas fa-eye"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="totalViews">0</h3>
+                            <p>Total Views</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: #FF9800;">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>1</h3>
+                            <p>Active Admins</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: #9C27B0;">
+                            <i class="fas fa-database"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>3</h3>
+                            <p>Categories</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="dashboard-charts">
+                    <div class="chart-container">
+                        <h3>Movies by Category</h3>
+                        <div id="categoryChart" class="chart-placeholder">
+                            <!-- Chart will be generated here -->
+                        </div>
+                    </div>
+                    
+                    <div class="chart-container">
+                        <h3>Recent Uploads</h3>
+                        <div class="recent-uploads">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Movie</th>
+                                        <th>Category</th>
+                                        <th>Upload Date</th>
+                                        <th>Views</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="recentMovies">
+                                    <!-- Recent movies will be loaded here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Upload Movie Section -->
+            <section id="upload" class="content-section">
+                <div class="section-header">
+                    <h2><i class="fas fa-upload"></i> Upload New Movie</h2>
+                </div>
+                
+                <form id="uploadForm" class="upload-form" enctype="multipart/form-data">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="movieTitle"><i class="fas fa-heading"></i> Movie Title *</label>
+                            <input type="text" id="movieTitle" name="title" placeholder="Enter movie title" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="movieYear"><i class="fas fa-calendar"></i> Release Year</label>
+                            <input type="text" id="movieYear" name="year" placeholder="2024" value="2024">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="movieGenre"><i class="fas fa-tags"></i> Genre</label>
+                            <input type="text" id="movieGenre" name="genre" placeholder="Action, Drama, Comedy">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="movieRating"><i class="fas fa-star"></i> Rating</label>
+                            <input type="text" id="movieRating" name="rating" placeholder="8.0" value="8.0">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="movieCategory"><i class="fas fa-list"></i> Category *</label>
+                        <select id="movieCategory" name="category" required>
+                            <option value="">Select Category</option>
+                            <option value="trending">Trending</option>
+                            <option value="latest">Latest Releases</option>
+                            <option value="telugu">Telugu Movies</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="movieDescription"><i class="fas fa-align-left"></i> Description</label>
+                        <textarea id="movieDescription" name="description" rows="4" placeholder="Enter movie description..."></textarea>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="moviePoster"><i class="fas fa-image"></i> Movie Poster *</label>
+                            <div class="file-upload">
+                                <input type="file" id="moviePoster" name="poster" accept="image/*" required>
+                                <label for="moviePoster" class="file-label">
+                                    <i class="fas fa-cloud-upload-alt"></i>
+                                    <span>Choose Poster Image</span>
+                                </label>
+                                <div class="file-info" id="posterInfo">No file chosen</div>
+                            </div>
+                            <small>Recommended: 300x450 pixels, JPG/PNG format</small>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="movieVideo"><i class="fas fa-video"></i> Movie Video *</label>
+                            <div class="file-upload">
+                                <input type="file" id="movieVideo" name="video" accept="video/*" required>
+                                <label for="movieVideo" class="file-label">
+                                    <i class="fas fa-cloud-upload-alt"></i>
+                                    <span>Choose Video File</span>
+                                </label>
+                                <div class="file-info" id="videoInfo">No file chosen</div>
+                            </div>
+                            <small>Max 100MB, MP4/MKV/AVI format</small>
+                        </div>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="submit" class="btn-submit">
+                            <i class="fas fa-upload"></i> Upload Movie
+                        </button>
+                        <button type="reset" class="btn-reset">
+                            <i class="fas fa-redo"></i> Reset Form
+                        </button>
+                    </div>
+                    
+                    <div id="uploadStatus" class="status-message"></div>
+                </form>
+            </section>
+
+            <!-- All Movies Section -->
+            <section id="movies" class="content-section">
+                <div class="section-header">
+                    <h2><i class="fas fa-video"></i> All Movies</h2>
+                    <div class="search-box">
+                        <input type="text" id="movieSearch" placeholder="Search movies...">
+                        <i class="fas fa-search"></i>
+                    </div>
+                </div>
+                
+                <div class="movies-table-container">
+                    <table class="movies-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Poster</th>
+                                <th>Title</th>
+                                <th>Category</th>
+                                <th>Year</th>
+                                <th>Rating</th>
+                                <th>Views</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="moviesTableBody">
+                            <!-- Movies will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="pagination">
+                    <button class="btn-prev"><i class="fas fa-chevron-left"></i> Previous</button>
+                    <span class="page-info">Page 1 of 1</span>
+                    <button class="btn-next">Next <i class="fas fa-chevron-right"></i></button>
+                </div>
+            </section>
+
+            <!-- Categories Section -->
+            <section id="categories" class="content-section">
+                <div class="section-header">
+                    <h2><i class="fas fa-list"></i> Categories Management</h2>
+                    <button class="btn-add-category">
+                        <i class="fas fa-plus"></i> Add Category
+                    </button>
+                </div>
+                
+                <div class="categories-grid">
+                    <div class="category-card">
+                        <div class="category-header">
+                            <h3>Trending</h3>
+                            <span class="movie-count" id="trendingCount">1 movies</span>
+                        </div>
+                        <p>Most popular and trending movies</p>
+                        <div class="category-actions">
+                            <button class="btn-edit"><i class="fas fa-edit"></i> Edit</button>
+                            <button class="btn-view"><i class="fas fa-eye"></i> View</button>
+                        </div>
+                    </div>
+                    
+                    <div class="category-card">
+                        <div class="category-header">
+                            <h3>Latest Releases</h3>
+                            <span class="movie-count" id="latestCount">0 movies</span>
+                        </div>
+                        <p>Recently released movies</p>
+                        <div class="category-actions">
+                            <button class="btn-edit"><i class="fas fa-edit"></i> Edit</button>
+                            <button class="btn-view"><i class="fas fa-eye"></i> View</button>
+                        </div>
+                    </div>
+                    
+                    <div class="category-card">
+                        <div class="category-header">
+                            <h3>Telugu Movies</h3>
+                            <span class="movie-count" id="teluguCount">0 movies</span>
+                        </div>
+                        <p>Telugu language movies collection</p>
+                        <div class="category-actions">
+                            <button class="btn-edit"><i class="fas fa-edit"></i> Edit</button>
+                            <button class="btn-view"><i class="fas fa-eye"></i> View</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Settings Section -->
+            <section id="settings" class="content-section">
+                <div class="section-header">
+                    <h2><i class="fas fa-cog"></i> Settings</h2>
+                </div>
+                
+                <div class="settings-tabs">
+                    <div class="tab-buttons">
+                        <button class="tab-btn active" data-tab="general">General</button>
+                        <button class="tab-btn" data-tab="security">Security</button>
+                        <button class="tab-btn" data-tab="storage">Storage</button>
+                    </div>
+                    
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="general">
+                            <form class="settings-form">
+                                <div class="form-group">
+                                    <label>Site Title</label>
+                                    <input type="text" value="Ibomma - Telugu Movies" placeholder="Site title">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label>Site Description</label>
+                                    <textarea rows="3" placeholder="Site description">Watch Latest Telugu Movies Online in HD Quality</textarea>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label>Max Upload Size (MB)</label>
+                                    <input type="number" value="100" min="10" max="500">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label>Allowed Video Formats</label>
+                                    <input type="text" value="mp4, mkv, avi, mov" placeholder="Comma separated formats">
+                                </div>
+                                
+                                <button type="submit" class="btn-save">
+                                    <i class="fas fa-save"></i> Save Settings
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- Edit Movie Modal -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Edit Movie</h2>
+            <form id="editForm">
+                <input type="hidden" id="editMovieId">
+                <div class="form-group">
+                    <label>Title</label>
+                    <input type="text" id="editTitle" required>
+                </div>
+                <div class="form-group">
+                    <label>Category</label>
+                    <select id="editCategory">
+                        <option value="trending">Trending</option>
+                        <option value="latest">Latest</option>
+                        <option value="telugu">Telugu</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Rating</label>
+                    <input type="text" id="editRating">
+                </div>
+                <button type="submit" class="btn-save">Save Changes</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="admin-dashboard.js"></script>
+</body>
+</html>
