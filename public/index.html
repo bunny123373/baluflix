@@ -1,765 +1,330 @@
 <!DOCTYPE html>
-<html lang="te">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IBOMMA - Watch Telugu Movies Online HD</title>
+    <title>iBOMMA - Where Quality & Clarity Matters</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --primary: #e50914;
-            --primary-dark: #b80710;
-            --secondary: #ff6b00;
-            --bg: #0f0f0f;
-            --card: rgba(20,20,20,0.95);
-            --text: #ffffff;
-            --text-light: #b3b3b3;
+        /* --- RESET & BASIC SETUP --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
-        * { margin:0; padding:0; box-sizing:border-box; }
         body {
-            font-family: 'Poppins', sans-serif;
-            background: var(--bg);
-            color: var(--text);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #121212; /* Exact dark background */
+            color: #ffffff;
             overflow-x: hidden;
-            background-image: 
-                radial-gradient(circle at 10% 20%, rgba(229,9,20,0.15) 0%, transparent 20%),
-                radial-gradient(circle at 90% 80%, rgba(255,107,0,0.15) 0%, transparent 20%),
-                radial-gradient(circle at 50% 50%, rgba(255,255,255,0.03) 0%, transparent 50%);
         }
 
-        /* Header */
+        a { text-decoration: none; color: inherit; }
+        ul { list-style: none; }
+
+        /* --- HEADER --- */
         header {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            z-index: 1000;
-            background: linear-gradient(to bottom, rgba(0,0,0,0.9) 0%, transparent 100%);
-            backdrop-filter: blur(10px);
-            padding: 15px 40px;
-            transition: all 0.4s;
-        }
-        header.scrolled {
-            background: rgba(10,10,10,0.98);
-            box-shadow: 0 8px 32px rgba(0,0,0,0.6);
-        }
-
-        .nav-container {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            max-width: 1600px;
-            margin: 0 auto;
-        }
-
-        .logo {
-            font-size: 2.2rem;
-            font-weight: 900;
-            background: linear-gradient(135deg, #e50914, #ff6b00);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            letter-spacing: 2px;
-            cursor: pointer;
-        }
-
-        .nav-menu {
-            display: flex;
-            gap: 35px;
-            align-items: center;
-        }
-
-        .nav-menu a {
-            color: #fff;
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 1rem;
-            position: relative;
-            transition: 0.3s;
-        }
-
-        .nav-menu a:hover, .nav-menu a.active {
-            color: var(--primary);
-        }
-
-        .nav-menu a::after {
-            content: '';
-            position: absolute;
-            width: 0;
-            height: 3px;
-            bottom: -8px;
-            left: 50%;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-            transition: 0.4s;
-            border-radius: 2px;
-        }
-
-        .nav-menu a:hover::after, .nav-menu a.active::after {
-            width: 100%;
-            left: 0;
-        }
-
-        .search-box {
-            background: rgba(255,255,255,0.1);
-            border-radius: 30px;
-            padding: 10px 20px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.1);
-            transition: 0.3s;
-        }
-
-        .search-box:hover {
-            background: rgba(255,255,255,0.2);
-            box-shadow: 0 0 20px rgba(229,9,20,0.3);
-        }
-
-        .search-box input {
-            background: none;
-            border: none;
-            outline: none;
-            color: #fff;
-            width: 220px;
-            font-size: 0.95rem;
-        }
-
-        .search-box input::placeholder {
-            color: #aaa;
-        }
-
-        /* Hero Section */
-        .hero {
-            height: 90vh;
-            background: linear-gradient(to right, rgba(0,0,0,0.8), rgba(0,0,0,0.4)), url('https://image.tmdb.org/t/p/original/8cdWjvZQUExUUTzyp4t6EDMUBi4.jpg') center/cover no-repeat; /* Replace with a dynamic image or a good default */
-            display: flex;
-            align-items: center;
-            position: relative;
-        }
-        .hero::before { /* Add a subtle gradient overlay to the hero section */
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: linear-gradient(to top, var(--bg) 0%, transparent 50%);
-        }
-
-
-        .hero-content {
-            max-width: 800px;
-            margin-left: 80px;
-            z-index: 2;
-        }
-
-        .hero-badge {
-            display: inline-block;
-            background: linear-gradient(135deg, #ff6b00, #e50914);
-            color: white;
-            padding: 8px 20px;
-            border-radius: 50px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            margin-bottom: 20px;
-            box-shadow: 0 5px 15px rgba(229,9,20,0.4);
-        }
-
-        .hero-title {
-            font-size: 5rem;
-            font-weight: 900;
-            line-height: 1;
-            margin-bottom: 20px;
-            background: linear-gradient(135deg, #fff, #ff6b00);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .hero-desc {
-            font-size: 1.3rem;
-            color: #ddd;
-            margin-bottom: 30px;
-            line-height: 1.6;
-        }
-
-        .hero-buttons {
-            display: flex;
+            padding: 15px 40px;
+            background-color: #121212;
+            border-bottom: 1px solid #222;
+            flex-wrap: wrap;
             gap: 20px;
         }
 
-        .btn-play {
-            background: var(--primary);
-            color: white;
-            padding: 16px 40px;
-            border-radius: 50px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            border: none;
-            cursor: pointer;
+        /* Logo Style */
+        .logo {
+            font-size: 32px;
+            font-weight: 800;
+            color: #6cbd45; /* iBOMMA Green */
+            letter-spacing: 1px;
             display: flex;
             align-items: center;
-            gap: 12px;
-            box-shadow: 0 10px 30px rgba(229,9,20,0.4);
-            transition: 0.4s;
-        }
-
-        .btn-play:hover {
-            background: #c20710;
-            transform: translateY(-5px);
-            box-shadow: 0 15px 40px rgba(229,9,20,0.6);
-        }
-
-        .btn-info {
-            background: rgba(255,255,255,0.15);
-            color: white;
-            padding: 16px 40px;
-            border-radius: 50px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            border: 1px solid rgba(255,255,255,0.2);
-            backdrop-filter: blur(10px);
             cursor: pointer;
+        }
+        
+        .logo span { color: #ddd; }
+        .logo i { margin-right: 5px; font-size: 24px; }
+
+        /* Nav Menu (Right Side) */
+        .nav-right {
             display: flex;
             align-items: center;
-            gap: 12px;
-            transition: 0.4s;
+            gap: 30px;
+            flex-grow: 1;
+            justify-content: flex-end;
         }
 
-        .btn-info:hover {
-            background: rgba(255,255,255,0.25);
-            transform: translateY(-5px);
-        }
-
-        /* Categories */
-        .categories {
-            padding: 80px 40px 40px;
-            max-width: 1600px;
-            margin: 0 auto;
-        }
-
-        .section-title {
-            font-size: 2rem;
-            font-weight: 700;
-            margin-bottom: 30px;
-            color: #fff;
-        }
-
-        .category-tabs {
+        .menu-links {
             display: flex;
-            gap: 15px;
-            margin-bottom: 40px;
-            flex-wrap: wrap;
-        }
-
-        .tab-btn {
-            background: rgba(255,255,255,0.1);
-            color: #fff;
-            border: none;
-            padding: 12px 30px;
-            border-radius: 50px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: 0.4s;
-            backdrop-filter: blur(10px);
-            text-shadow: 0 0 5px rgba(0,0,0,0.5);
-        }
-
-        .tab-btn.active, .tab-btn:hover {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            box-shadow: 0 10px 30px rgba(229,9,20,0.4);
-            transform: translateY(-3px);
-        }
-
-        /* Movie Grid */
-        .movie-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
             gap: 25px;
         }
 
-        .movie-card {
-            background: var(--card);
-            border-radius: 16px;
-            overflow: hidden;
-            transition: all 0.4s ease;
-            position: relative;
-            cursor: pointer;
-            border: 1px solid rgba(255,255,255,0.05);
+        .menu-links a {
+            font-size: 14px;
+            font-weight: 600;
+            color: #ccc;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: color 0.3s;
         }
 
-        .movie-card:hover {
-            transform: translateY(-15px) scale(1.05);
-            box-shadow: 0 20px 50px rgba(229,9,20,0.5);
-            z-index: 10;
+        .menu-links a:hover { color: #fff; }
+        .menu-links i { color: #6cbd45; font-size: 16px; }
+
+        /* Search Bar */
+        .search-container { display: flex; align-items: center; }
+        .search-form { display: flex; }
+
+        .search-input {
+            background-color: #1f1f1f;
+            border: 1px solid #333;
+            color: #fff;
+            padding: 10px 15px;
+            border-radius: 20px 0 0 20px;
+            outline: none;
+            width: 250px;
+            font-size: 14px;
+        }
+
+        .search-btn {
+            background-color: #5cb85c;
+            border: none;
+            color: #fff;
+            padding: 0 20px;
+            border-radius: 0 20px 20px 0;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.3s;
+        }
+
+        .search-btn:hover { background-color: #4cae4c; }
+
+        /* --- HERO SECTION (Text Only) --- */
+        .hero {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .hero h1 {
+            font-size: 36px;
+            font-weight: 500;
+            color: #fff;
+            margin-bottom: 20px;
+            letter-spacing: 0.5px;
+        }
+
+        .hero p {
+            color: #aaa;
+            font-size: 16px;
+            line-height: 1.6;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* --- MOVIE GRID --- */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px 40px 60px 40px;
+        }
+
+        .movie-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr); 
+            gap: 20px;
+        }
+
+        .movie-card {
+            background: transparent;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .movie-card:hover { transform: translateY(-5px); }
+
+        .poster-container {
+            width: 100%;
+            aspect-ratio: 2 / 3;
+            border-radius: 8px;
+            overflow: hidden;
+            background-color: #222;
+            position: relative;
         }
 
         .movie-poster {
             width: 100%;
-            height: 330px;
+            height: 100%;
             object-fit: cover;
-            transition: 0.4s;
-        }
-
-        .movie-card:hover .movie-poster {
-            transform: scale(1.1);
-        }
-
-        .movie-info {
-            padding: 15px;
-        }
-
-        .movie-title {
-            font-size: 1.1rem;
-            font-weight: 600;
-            margin-bottom: 8px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .movie-meta {
-            color: var(--text-light);
-            font-size: 0.9rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
         }
 
         .play-overlay {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.7);
+            background: rgba(0,0,0,0.3);
             display: flex;
             align-items: center;
             justify-content: center;
             opacity: 0;
-            transition: 0.4s;
+            transition: opacity 0.3s;
         }
 
-        .movie-card:hover .play-overlay {
-            opacity: 1;
-        }
+        .movie-card:hover .play-overlay { opacity: 1; }
 
-        .play-btn-large {
-            width: 80px;
-            height: 80px;
-            background: var(--primary);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2rem;
-            box-shadow: 0 0 40px rgba(229,9,20,0.8);
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(229,9,20,0.7); }
-            70% { box-shadow: 0 0 0 20px rgba(229,9,20,0); }
-            100% { box-shadow: 0 0 0 0 rgba(229,9,20,0); }
-        }
-
-        /* Video Modal */
-        .video-modal {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.95);
-            backdrop-filter: blur(10px);
-            z-index: 2000;
-            align-items: center;
-            justify-content: center;
-        }
-        .video-modal.active { display: flex; }
-        .video-modal-content {
-            background: #1a1a1a;
-            border-radius: 20px;
-            overflow: hidden;
-            width: 90%;
-            max-width: 1200px;
-            box-shadow: 0 0 50px rgba(229,9,20,0.2);
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-        .video-modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 25px;
-            background: #222;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-        }
-        .video-modal-header h3 {
-            font-size: 1.5rem;
-            color: #fff;
-        }
-        .video-modal-close {
-            background: var(--primary);
-            color: white;
-            border: none;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            font-size: 1.2rem;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-        .video-modal-close:hover {
-            transform: rotate(90deg);
-        }
-        .video-wrapper {
-            position: relative;
-            padding-top: 56.25%; /* 16:9 Aspect Ratio */
-            background: #000;
-        }
-        .video-wrapper video {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-        }
-        .video-modal-body {
-            padding: 25px;
-        }
-        .video-modal-body p {
-            color: var(--text-light);
-            line-height: 1.6;
+        .movie-title {
             margin-top: 10px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #ddd;
+            text-align: center;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
-
-        /* Empty State */
-        .empty-state {
+        /* --- LOADING & FOOTER --- */
+        .loading {
             grid-column: 1 / -1;
             text-align: center;
             padding: 50px;
-            color: var(--text-light);
-        }
-        .empty-state i {
-            font-size: 4rem;
-            color: var(--primary);
-            margin-bottom: 20px;
-        }
-        .empty-state h3 {
-            font-size: 1.8rem;
-            margin-bottom: 10px;
+            color: #666;
         }
 
-
-        /* Footer */
         footer {
-            background: #0a0a0a;
-            padding: 60px 40px 30px;
             text-align: center;
-            border-top: 1px solid rgba(255,255,255,0.1);
+            padding: 40px;
+            color: #666;
+            font-size: 14px;
+            border-top: 1px solid #222;
         }
 
-        .footer-links {
-            display: flex;
-            justify-content: center;
-            gap: 40px;
-            margin-bottom: 30px;
-            flex-wrap: wrap;
+        /* --- RESPONSIVE --- */
+        @media (max-width: 1024px) {
+            .movie-grid { grid-template-columns: repeat(4, 1fr); }
         }
 
-        .footer-links a {
-            color: var(--text-light);
-            text-decoration: none;
-            font-size: 0.9rem;
-            transition: 0.3s;
-        }
-
-        .footer-links a:hover {
-            color: var(--primary);
-        }
-
-        /* Responsive */
         @media (max-width: 768px) {
-            header { padding: 15px 20px; }
-            .hero-title { font-size: 3rem; }
-            .hero-content { margin-left: 20px; }
-            .nav-menu { display: none; }
-            .search-box { width: 100%; justify-content: center; }
-            .movie-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
-            .movie-poster { height: 220px; }
-            .categories { padding: 50px 20px; }
-            .hero-buttons { flex-direction: column; }
-            .btn-play, .btn-info { width: 100%; justify-content: center; padding: 12px 20px; }
-            .logo { font-size: 1.8rem; }
+            header { flex-direction: column; align-items: stretch; gap: 15px; padding: 15px 20px; }
+            .nav-right { flex-direction: column; width: 100%; gap: 15px; }
+            .menu-links { justify-content: center; width: 100%; }
+            .search-container { width: 100%; justify-content: center; }
+            .search-form { width: 100%; }
+            .search-input { width: 100%; }
+            .hero h1 { font-size: 26px; }
+            .hero p { font-size: 14px; }
+            .container { padding: 10px 20px; }
+            .movie-grid { grid-template-columns: repeat(2, 1fr); gap: 15px; }
         }
     </style>
 </head>
 <body>
 
     <!-- Header -->
-    <header id="header">
-        <div class="nav-container">
-            <div class="logo" onclick="filterCategory('all', this)">IBOMMA</div>
-            <div class="nav-menu">
-                <a href="#" class="active" onclick="filterCategory('all', this)">Home</a>
-                <a href="#" onclick="filterCategory('latest', this)">Latest</a>
-                <a href="#" onclick="filterCategory('trending', this)">Trending</a>
-                <a href="#" onclick="filterCategory('telugu', this)">Telugu</a>
-                <!-- You can uncomment these if you add more categories in backend -->
-                <!-- <a href="#" onclick="filterCategory('dubbed', this)">Dubbed</a> -->
-                <!-- <a href="#" onclick="filterCategory('hollywood', this)">Hollywood</a> -->
+    <header>
+        <div class="logo" onclick="window.location.href='/'">
+            <i class="fas fa-film" style="font-size: 20px; margin-right:8px;"></i>
+            iBOMMA
+        </div>
+
+        <div class="nav-right">
+            <!-- UPDATED LINKS WITH YOUR EMAIL -->
+            <div class="menu-links">
+                
+                <!-- About: Currently empty, you can add Telegram link here if needed -->
+                <a href="#" onclick="alert('About Page Coming Soon!')">
+                    <i class="fas fa-users"></i> About
+                </a>
+
+                <!-- Bug Report: Opens Email with Subject -->
+                <a href="mailto:korrasanhok@gmail.com?subject=Bug Report - iBOMMA Site">
+                    <i class="fas fa-bug"></i> Bug Report
+                </a>
+
+                <!-- Contact: Opens Email -->
+                <a href="mailto:korrasanhok@gmail.com">
+                    <i class="fas fa-envelope"></i> Contact
+                </a>
+
             </div>
-            <div class="search-box">
-                <i class="fas fa-search"></i>
-                <input type="text" id="search-input" placeholder="Search movies, actors...">
+
+            <div class="search-container">
+                <form class="search-form" onsubmit="return false;">
+                    <input type="text" id="search-input" class="search-input" placeholder="Search..">
+                    <button type="button" class="search-btn"><i class="fas fa-search"></i></button>
+                </form>
             </div>
         </div>
     </header>
 
-    <!-- Hero Section -->
-    <section class="hero" id="hero-section">
-        <div class="hero-content">
-            <div class="hero-badge" id="hero-badge">NEW RELEASE</div>
-            <h1 class="hero-title" id="hero-title">Loading...</h1>
-            <p class="hero-desc" id="hero-desc">Loading movie description...</p>
-            <div class="hero-buttons">
-                <button class="btn-play" id="hero-play-btn">
-                    <i class="fas fa-play"></i> Play Now
-                </button>
-                <button class="btn-info" id="hero-info-btn">
-                    <i class="fas fa-info-circle"></i> More Info
-                </button>
-            </div>
-        </div>
+    <!-- Hero Section (Text Only - Exact Copy) -->
+    <section class="hero">
+        <h1>Where Quality & Clarity Matters</h1>
+        <p>Watch Telugu movies in HD, exclusively available on iBOMMA.COM<br>Developed for smartphones, tablets and PCs.</p>
     </section>
 
-    <!-- Categories & Movies -->
-    <div class="categories">
-        <div class="section-title" id="current-section-title">All Movies</div>
-        <div class="category-tabs">
-            <button class="tab-btn active" onclick="filterCategory('all', this)">All Movies</button>
-            <button class="tab-btn" onclick="filterCategory('latest', this)">Latest Releases</button>
-            <button class="tab-btn" onclick="filterCategory('trending', this)">Trending Now</button>
-            <button class="tab-btn" onclick="filterCategory('telugu', this)">Telugu</button>
-            <!-- <button class="tab-btn" onclick="filterCategory('dubbed', this)">Dubbed</button> -->
-            <!-- <button class="tab-btn" onclick="filterCategory('hollywood', this)">Hollywood</button> -->
-        </div>
-
+    <!-- Movie Grid -->
+    <main class="container">
         <div class="movie-grid" id="movie-grid">
-            <div class="empty-state">
-                <i class="fas fa-spinner fa-spin"></i>
-                <h3>Loading Movies...</h3>
-                <p>Please wait while we fetch content.</p>
-            </div>
+            <div class="loading">Loading movies...</div>
         </div>
-    </div>
-
-    <!-- Video Modal -->
-    <div class="video-modal" id="video-modal">
-        <div class="video-modal-content">
-            <div class="video-modal-header">
-                <h3 id="modal-movie-title">Movie Title</h3>
-                <button class="video-modal-close" onclick="closeVideoModal()"><i class="fas fa-times"></i></button>
-            </div>
-            <div class="video-wrapper">
-                <video id="video-player" controls autoplay playsinline disablepictureinpicture controlslist="nodownload">
-                    Your browser does not support HTML5 video.
-                </video>
-            </div>
-            <div class="video-modal-body">
-                <p id="modal-movie-desc">Movie description will appear here.</p>
-                <p style="font-size:0.9rem; color:#888; margin-top: 15px;">Views: <span id="modal-movie-views">0</span></p>
-            </div>
-        </div>
-    </div>
+    </main>
 
     <!-- Footer -->
     <footer>
-        <div class="footer-links">
-            <a href="#">About Us</a>
-            <a href="#">Contact</a>
-            <a href="#">Privacy Policy</a>
-            <a href="#">Terms of Use</a>
-            <a href="#">DMCA</a>
-        </div>
-        <p>&copy; 2025 IBOMMA. Watch Telugu Movies Online in HD</p>
+        &copy; 2025 iBOMMA. All Rights Reserved.
     </footer>
 
+    <!-- Script to Load Movies -->
     <script>
-        let allMovies = [];
-        let featuredMovie = null; // To hold the movie displayed in the hero section
-
         document.addEventListener('DOMContentLoaded', () => {
-            loadAllMoviesData();
-            // Header scroll effect
-            window.addEventListener('scroll', () => {
-                const header = document.getElementById('header');
-                if (window.scrollY > 100) {
-                    header.classList.add('scrolled');
-                } else {
-                    header.classList.remove('scrolled');
-                }
-            });
+            fetch('/api/movies')
+                .then(res => res.json())
+                .then(movies => {
+                    const grid = document.getElementById('movie-grid');
+                    grid.innerHTML = ''; 
 
-            // Search functionality
+                    if(movies.length === 0) {
+                        grid.innerHTML = '<div class="loading">No movies found. Upload via Admin Panel.</div>';
+                        return;
+                    }
+
+                    movies.forEach(movie => {
+                        const card = document.createElement('div');
+                        card.className = 'movie-card';
+                        card.onclick = () => window.location.href = `play.html?id=${movie.id}`;
+
+                        card.innerHTML = `
+                            <div class="poster-container">
+                                <img src="${movie.thumbnail}" class="movie-poster" 
+                                     alt="${movie.title}"
+                                     onerror="this.src='https://via.placeholder.com/200x300/222/555?text=iBOMMA'">
+                                <div class="play-overlay">
+                                    <i class="fas fa-play" style="color:#fff; font-size:30px; opacity:0.8;"></i>
+                                </div>
+                            </div>
+                            <div class="movie-title">${movie.title}</div>
+                        `;
+                        grid.appendChild(card);
+                    });
+                })
+                .catch(err => {
+                    console.error(err);
+                    document.getElementById('movie-grid').innerHTML = '<div class="loading">Error loading movies.</div>';
+                });
+
+            // Search Logic
             document.getElementById('search-input').addEventListener('input', (e) => {
-                const term = e.target.value.toLowerCase().trim();
-                let filtered = allMovies;
-                if (term) {
-                    filtered = allMovies.filter(m => 
-                        m.title.toLowerCase().includes(term) || m.description.toLowerCase().includes(term)
-                    );
-                    document.getElementById('current-section-title').textContent = `Search Results for "${e.target.value}"`;
-                } else {
-                    // If search box is empty, revert to 'All Movies' filter
-                    filterCategory('all', document.querySelector('.category-tabs .tab-btn.active') || document.querySelector('.category-tabs .tab-btn'));
-                    return;
-                }
-                displayMovies(filtered);
+                const term = e.target.value.toLowerCase();
+                const cards = document.querySelectorAll('.movie-card');
+                cards.forEach(card => {
+                    const title = card.querySelector('.movie-title').textContent.toLowerCase();
+                    card.style.display = title.includes(term) ? 'block' : 'none';
+                });
             });
-        });
-
-        async function loadAllMoviesData() {
-            try {
-                const response = await fetch('/api/movies');
-                const data = await response.json();
-                allMovies = data;
-                displayMovies(allMovies);
-                setHeroSection(); // Set up the hero section after movies are loaded
-            } catch (error) {
-                console.error('Error loading movies:', error);
-                document.getElementById('movie-grid').innerHTML = `
-                    <div class="empty-state">
-                        <i class="fas fa-exclamation-triangle"></i>
-                        <h3>Failed to Load Movies</h3>
-                        <p>Please check your server connection.</p>
-                    </div>
-                `;
-            }
-        }
-
-        function setHeroSection() {
-            if (allMovies.length > 0) {
-                // Try to find a trending or latest movie for hero, otherwise pick the first one
-                featuredMovie = allMovies.find(m => m.isTrending) || allMovies.find(m => m.isLatest) || allMovies[0];
-                
-                document.getElementById('hero-section').style.backgroundImage = `linear-gradient(to right, rgba(0,0,0,0.8), rgba(0,0,0,0.4)), url('${featuredMovie.thumbnail}')`;
-                document.getElementById('hero-title').textContent = featuredMovie.title;
-                document.getElementById('hero-desc').textContent = featuredMovie.description.substring(0, 200) + (featuredMovie.description.length > 200 ? '...' : ''); // Truncate description
-                document.getElementById('hero-badge').textContent = featuredMovie.isLatest ? 'LATEST RELEASE' : featuredMovie.isTrending ? 'TRENDING NOW' : 'FEATURED MOVIE';
-                
-                document.getElementById('hero-play-btn').onclick = () => playMovie(featuredMovie.id);
-                document.getElementById('hero-info-btn').onclick = () => alert(`More info for: ${featuredMovie.title}`); // Placeholder for more info
-            } else {
-                document.getElementById('hero-title').textContent = "No Movies Available";
-                document.getElementById('hero-desc').textContent = "Please add movies from the admin panel.";
-                document.getElementById('hero-play-btn').style.display = 'none';
-                document.getElementById('hero-info-btn').style.display = 'none';
-            }
-        }
-
-        function displayMovies(movies) {
-            const grid = document.getElementById('movie-grid');
-            grid.innerHTML = ''; // Clear previous movies
-
-            if (movies.length === 0) {
-                grid.innerHTML = `
-                    <div class="empty-state">
-                        <i class="fas fa-film"></i>
-                        <h3>No Movies Found</h3>
-                        <p>Try a different filter or search term.</p>
-                    </div>
-                `;
-                return;
-            }
-
-            movies.forEach(movie => {
-                const card = document.createElement('div');
-                card.className = 'movie-card';
-                card.innerHTML = `
-                    <img src="${movie.thumbnail}" class="movie-poster" onerror="this.src='https://via.placeholder.com/300x450/111/fff?text=IBOMMA'">
-                    <div class="play-overlay" onclick="playMovie(${movie.id})">
-                        <div class="play-btn-large">
-                            <i class="fas fa-play"></i>
-                        </div>
-                    </div>
-                    <div class="movie-info">
-                        <div class="movie-title">${movie.title}</div>
-                        <div class="movie-meta">
-                            <span>${movie.language || 'Telugu'}</span>
-                            <span><i class="fas fa-eye"></i> ${movie.views || 0}</span>
-                        </div>
-                    </div>
-                `;
-                grid.appendChild(card);
-            });
-        }
-
-        function filterCategory(category, clickedElement) {
-            let filtered = allMovies;
-
-            if (category === 'latest') filtered = allMovies.filter(m => m.isLatest);
-            else if (category === 'trending') filtered = allMovies.filter(m => m.isTrending);
-            else if (category === 'telugu') filtered = allMovies.filter(m => m.language === 'Telugu');
-            // Add more filters here as needed for 'dubbed', 'hollywood', etc.
-
-            displayMovies(filtered);
-
-            // Update active tab buttons
-            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-            document.querySelectorAll('.nav-menu a').forEach(link => link.classList.remove('active'));
-            if (clickedElement) {
-                clickedElement.classList.add('active');
-            }
-            // Update section title
-            const titles = { 'all': 'All Movies', 'latest': 'Latest Releases', 'trending': 'Trending Now', 'telugu': 'Telugu Hits' };
-            document.getElementById('current-section-title').textContent = titles[category] || 'Movies';
-        }
-
-        async function playMovie(id) {
-            const movie = allMovies.find(m => m.id === id);
-            if (!movie) {
-                console.error('Movie not found for ID:', id);
-                return;
-            }
-
-            // Increment View Count via API
-            try {
-                const response = await fetch(`/api/movies/${id}/view`, { method: 'POST' });
-                const data = await response.json();
-                if (data.success) {
-                    // Update views in local data and UI
-                    movie.views = data.views;
-                    document.getElementById('modal-movie-views').textContent = data.views;
-                    displayMovies(allMovies); // Re-render to show updated views
-                }
-            } catch (error) {
-                console.error('Error incrementing view count:', error);
-            }
-
-            // Populate and show video modal
-            document.getElementById('modal-movie-title').textContent = movie.title;
-            document.getElementById('modal-movie-desc').textContent = movie.description;
-            document.getElementById('modal-movie-views').textContent = movie.views; // Display updated views
-            
-            const player = document.getElementById('video-player');
-            player.src = movie.videoUrl;
-            
-            document.getElementById('video-modal').classList.add('active');
-            player.play();
-        }
-
-        function closeVideoModal() {
-            const modal = document.getElementById('video-modal');
-            const player = document.getElementById('video-player');
-            
-            modal.classList.remove('active');
-            player.pause();
-            player.src = ''; // Clear source to stop buffering
-        }
-
-        // Close modal on outside click
-        document.getElementById('video-modal').addEventListener('click', (e) => {
-            if (e.target === document.getElementById('video-modal')) { // Only close if clicked on the backdrop
-                closeVideoModal();
-            }
-        });
-
-        // Close on Escape key
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && document.getElementById('video-modal').classList.contains('active')) {
-                closeVideoModal();
-            }
         });
     </script>
 </body>
