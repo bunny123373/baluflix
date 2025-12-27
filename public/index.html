@@ -1,331 +1,343 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>iBOMMA - Where Quality & Clarity Matters</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Baluflix – Where Quality & Clarity Matters</title>
+
+    <!-- COMBINED CSS (style.css content embedded here) -->
     <style>
-        /* --- RESET & BASIC SETUP --- */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+      /* RESET */
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        background: #050505;
+        color: #ffffff;
+      }
+
+      /* TOP NAVBAR */
+      .bf-nav {
+        position: sticky;
+        top: 0;
+        z-index: 50;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 14px 40px;
+        background: #050505;
+        border-bottom: 1px solid #111;
+      }
+
+      .bf-logo {
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+      }
+
+      .bf-logo-icon {
+        width: 30px;
+        height: 30px;
+        border-radius: 6px;
+        background: #5bbf3b;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        color: #050505;
+        margin-right: 8px;
+      }
+
+      .bf-logo-text {
+        font-size: 22px;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        color: #e9ffe4;
+      }
+
+      .bf-nav-links a {
+        margin: 0 10px;
+        font-size: 14px;
+        text-decoration: none;
+        color: #a9b7a5;
+        transition: color 0.18s;
+      }
+
+      .bf-nav-links a:hover {
+        color: #e9ffe4;
+      }
+
+      .bf-nav-right {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+
+      /* SEARCH BAR */
+      .bf-search {
+        display: flex;
+        align-items: center;
+        background: #111;
+        border-radius: 999px;
+        overflow: hidden;
+        border: 1px solid #1f1f1f;
+      }
+
+      .bf-search input {
+        background: transparent;
+        border: none;
+        outline: none;
+        padding: 6px 10px 6px 14px;
+        color: #f5f5f5;
+        width: 180px;
+        font-size: 13px;
+      }
+
+      .bf-search button {
+        border: none;
+        outline: none;
+        background: #5bbf3b;
+        color: #050505;
+        padding: 6px 12px;
+        cursor: pointer;
+        font-size: 13px;
+      }
+
+      .bf-search button:hover {
+        background: #6cd447;
+      }
+
+      /* HERO SECTION */
+      .bf-hero {
+        text-align: center;
+        padding: 40px 16px 10px;
+      }
+
+      .bf-hero h1 {
+        font-size: 34px;
+        font-weight: 600;
+        margin-bottom: 12px;
+      }
+
+      .bf-hero-sub1 {
+        font-size: 15px;
+        color: #d2d2d2;
+        margin-bottom: 4px;
+      }
+
+      .bf-hero-sub2 {
+        font-size: 14px;
+        color: #8f8f8f;
+      }
+
+      /* MOVIE STRIP */
+      .bf-main {
+        padding: 24px 32px 40px;
+      }
+
+      .bf-strip-title {
+        font-size: 18px;
+        margin-bottom: 14px;
+        color: #e9ffe4;
+      }
+
+      /* horizontal row */
+      .bf-movie-row {
+        display: flex;
+        gap: 14px;
+        overflow-x: auto;
+        padding-bottom: 6px;
+      }
+
+      .bf-movie-row::-webkit-scrollbar {
+        height: 6px;
+      }
+      .bf-movie-row::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      .bf-movie-row::-webkit-scrollbar-thumb {
+        background: #262626;
+        border-radius: 3px;
+      }
+
+      /* MOVIE CARD */
+      .movie-card {
+        min-width: 150px;
+        max-width: 150px;
+        background: #070707;
+        border-radius: 6px;
+        overflow: hidden;
+        cursor: pointer;
+        transition: transform 0.2s ease, box-shadow 0.2s ease, outline 0.2s;
+        outline: 1px solid #111;
+      }
+
+      .movie-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 10px 18px rgba(0, 0, 0, 0.75);
+        outline-color: #3f3f3f;
+      }
+
+      .movie-card img {
+        width: 100%;
+        height: 220px;
+        object-fit: cover;
+        display: block;
+      }
+
+      .movie-info {
+        padding: 8px;
+      }
+
+      .movie-title {
+        font-size: 13px;
+        font-weight: 500;
+        margin-bottom: 4px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .movie-meta {
+        font-size: 11px;
+        color: #9a9a9a;
+      }
+
+      /* INFO SECTIONS */
+      .bf-info-section {
+        padding: 24px 32px;
+        border-top: 1px solid #111;
+        background: #060606;
+      }
+
+      .bf-info-section h3 {
+        margin-bottom: 8px;
+        font-size: 16px;
+        color: #e9ffe4;
+      }
+
+      .bf-info-section p {
+        font-size: 13px;
+        color: #afafaf;
+        max-width: 700px;
+      }
+
+      /* FOOTER */
+      .bf-footer {
+        padding: 14px 32px 20px;
+        text-align: center;
+        font-size: 12px;
+        color: #7c7c7c;
+        border-top: 1px solid #111;
+      }
+
+      /* RESPONSIVE */
+      @media (max-width: 768px) {
+        .bf-nav {
+          padding: 10px 14px;
         }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #121212; /* Exact dark background */
-            color: #ffffff;
-            overflow-x: hidden;
+        .bf-nav-links {
+          display: none;
         }
 
-        a { text-decoration: none; color: inherit; }
-        ul { list-style: none; }
-
-        /* --- HEADER --- */
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 40px;
-            background-color: #121212;
-            border-bottom: 1px solid #222;
-            flex-wrap: wrap;
-            gap: 20px;
+        .bf-search input {
+          width: 120px;
         }
 
-        /* Logo Style */
-        .logo {
-            font-size: 32px;
-            font-weight: 800;
-            color: #6cbd45; /* iBOMMA Green */
-            letter-spacing: 1px;
-            display: flex;
-            align-items: center;
-            cursor: pointer;
-        }
-        
-        .logo span { color: #ddd; }
-        .logo i { margin-right: 5px; font-size: 24px; }
-
-        /* Nav Menu (Right Side) */
-        .nav-right {
-            display: flex;
-            align-items: center;
-            gap: 30px;
-            flex-grow: 1;
-            justify-content: flex-end;
+        .bf-main,
+        .bf-info-section,
+        .bf-footer {
+          padding-left: 16px;
+          padding-right: 16px;
         }
 
-        .menu-links {
-            display: flex;
-            gap: 25px;
+        .bf-hero {
+          padding-top: 28px;
         }
 
-        .menu-links a {
-            font-size: 14px;
-            font-weight: 600;
-            color: #ccc;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            transition: color 0.3s;
+        .bf-hero h1 {
+          font-size: 26px;
         }
-
-        .menu-links a:hover { color: #fff; }
-        .menu-links i { color: #6cbd45; font-size: 16px; }
-
-        /* Search Bar */
-        .search-container { display: flex; align-items: center; }
-        .search-form { display: flex; }
-
-        .search-input {
-            background-color: #1f1f1f;
-            border: 1px solid #333;
-            color: #fff;
-            padding: 10px 15px;
-            border-radius: 20px 0 0 20px;
-            outline: none;
-            width: 250px;
-            font-size: 14px;
-        }
-
-        .search-btn {
-            background-color: #5cb85c;
-            border: none;
-            color: #fff;
-            padding: 0 20px;
-            border-radius: 0 20px 20px 0;
-            cursor: pointer;
-            font-size: 14px;
-            transition: background 0.3s;
-        }
-
-        .search-btn:hover { background-color: #4cae4c; }
-
-        /* --- HERO SECTION (Text Only) --- */
-        .hero {
-            text-align: center;
-            padding: 60px 20px;
-        }
-
-        .hero h1 {
-            font-size: 36px;
-            font-weight: 500;
-            color: #fff;
-            margin-bottom: 20px;
-            letter-spacing: 0.5px;
-        }
-
-        .hero p {
-            color: #aaa;
-            font-size: 16px;
-            line-height: 1.6;
-            max-width: 700px;
-            margin: 0 auto;
-        }
-
-        /* --- MOVIE GRID --- */
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 20px 40px 60px 40px;
-        }
-
-        .movie-grid {
-            display: grid;
-            grid-template-columns: repeat(6, 1fr); 
-            gap: 20px;
-        }
-
-        .movie-card {
-            background: transparent;
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-
-        .movie-card:hover { transform: translateY(-5px); }
-
-        .poster-container {
-            width: 100%;
-            aspect-ratio: 2 / 3;
-            border-radius: 8px;
-            overflow: hidden;
-            background-color: #222;
-            position: relative;
-        }
-
-        .movie-poster {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .play-overlay {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.3);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-
-        .movie-card:hover .play-overlay { opacity: 1; }
-
-        .movie-title {
-            margin-top: 10px;
-            font-size: 14px;
-            font-weight: 500;
-            color: #ddd;
-            text-align: center;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        /* --- LOADING & FOOTER --- */
-        .loading {
-            grid-column: 1 / -1;
-            text-align: center;
-            padding: 50px;
-            color: #666;
-        }
-
-        footer {
-            text-align: center;
-            padding: 40px;
-            color: #666;
-            font-size: 14px;
-            border-top: 1px solid #222;
-        }
-
-        /* --- RESPONSIVE --- */
-        @media (max-width: 1024px) {
-            .movie-grid { grid-template-columns: repeat(4, 1fr); }
-        }
-
-        @media (max-width: 768px) {
-            header { flex-direction: column; align-items: stretch; gap: 15px; padding: 15px 20px; }
-            .nav-right { flex-direction: column; width: 100%; gap: 15px; }
-            .menu-links { justify-content: center; width: 100%; }
-            .search-container { width: 100%; justify-content: center; }
-            .search-form { width: 100%; }
-            .search-input { width: 100%; }
-            .hero h1 { font-size: 26px; }
-            .hero p { font-size: 14px; }
-            .container { padding: 10px 20px; }
-            .movie-grid { grid-template-columns: repeat(2, 1fr); gap: 15px; }
-        }
+      }
     </style>
-</head>
-<body>
+  </head>
 
-    <!-- Header -->
-    <header>
-        <div class="logo" onclick="window.location.href='/'">
-            <i class="fas fa-film" style="font-size: 20px; margin-right:8px;"></i>
-            iBOMMA
-        </div>
+  <body>
+    <!-- TOP NAV (No Admin option) -->
+    <header class="bf-nav">
+      <div class="bf-nav-left">
+        <a href="index.html" class="bf-logo">
+          <span class="bf-logo-icon">B</span>
+          <span class="bf-logo-text">Baluflix</span>
+        </a>
+      </div>
 
-        <div class="nav-right">
-            <!-- UPDATED LINKS WITH YOUR EMAIL -->
-            <div class="menu-links">
-                
-                <!-- About: Currently empty, you can add Telegram link here if needed -->
-                <a href="#" onclick="alert('About Page Coming Soon!')">
-                    <i class="fas fa-users"></i> About
-                </a>
+      <nav class="bf-nav-links">
+        <a href="#about">About</a>
+        <a href="#bug-report">Bug Report</a>
+        <a href="#contact">Contact</a>
+      </nav>
 
-                <!-- Bug Report: Opens Email with Subject -->
-                <a href="mailto:korrasanhok@gmail.com?subject=Bug Report - iBOMMA Site">
-                    <i class="fas fa-bug"></i> Bug Report
-                </a>
-
-                <!-- Contact: Opens Email -->
-                <a href="mailto:korrasanhok@gmail.com">
-                    <i class="fas fa-envelope"></i> Contact
-                </a>
-
-            </div>
-
-            <div class="search-container">
-                <form class="search-form" onsubmit="return false;">
-                    <input type="text" id="search-input" class="search-input" placeholder="Search..">
-                    <button type="button" class="search-btn"><i class="fas fa-search"></i></button>
-                </form>
-            </div>
-        </div>
+      <div class="bf-nav-right">
+        <form id="search-form" class="bf-search">
+          <input
+            type="text"
+            id="search-input"
+            placeholder="Search..."
+            autocomplete="off"
+          />
+          <button type="submit">🔍</button>
+        </form>
+      </div>
     </header>
 
-    <!-- Hero Section (Text Only - Exact Copy) -->
-    <section class="hero">
-        <h1>Where Quality & Clarity Matters</h1>
-        <p>Watch Telugu movies in HD, exclusively available on iBOMMA.COM<br>Developed for smartphones, tablets and PCs.</p>
+    <!-- HERO -->
+    <section class="bf-hero">
+      <h1>Where Quality &amp; Clarity Matters</h1>
+      <p class="bf-hero-sub1">
+        Watch movies in HD, exclusively available on Baluflix.
+      </p>
+      <p class="bf-hero-sub2">Developed for smartphones, tablets and PCs.</p>
     </section>
 
-    <!-- Movie Grid -->
-    <main class="container">
-        <div class="movie-grid" id="movie-grid">
-            <div class="loading">Loading movies...</div>
-        </div>
+    <!-- MOVIES -->
+    <main class="bf-main">
+      <section class="bf-movie-strip">
+        <h2 class="bf-strip-title">Latest Movies</h2>
+        <div id="movie-list" class="bf-movie-row"></div>
+      </section>
     </main>
 
-    <!-- Footer -->
-    <footer>
-        &copy; 2025 iBOMMA. All Rights Reserved.
+    <!-- INFO -->
+    <section id="about" class="bf-info-section">
+      <h3>About</h3>
+      <p>Baluflix is a demo streaming UI with a clean movie grid/row layout.</p>
+    </section>
+
+    <section id="bug-report" class="bf-info-section">
+      <h3>Bug Report</h3>
+      <p>Report issues to your-email@example.com</p>
+    </section>
+
+    <section id="contact" class="bf-info-section">
+      <h3>Contact</h3>
+      <p>Replace this with your contact details.</p>
+    </section>
+
+    <footer class="bf-footer">
+      <p>© <span id="year"></span> Baluflix. All rights reserved.</p>
     </footer>
 
-    <!-- Script to Load Movies -->
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            fetch('/api/movies')
-                .then(res => res.json())
-                .then(movies => {
-                    const grid = document.getElementById('movie-grid');
-                    grid.innerHTML = ''; 
-
-                    if(movies.length === 0) {
-                        grid.innerHTML = '<div class="loading">No movies found. Upload via Admin Panel.</div>';
-                        return;
-                    }
-
-                    movies.forEach(movie => {
-                        const card = document.createElement('div');
-                        card.className = 'movie-card';
-                        card.onclick = () => window.location.href = `play.html?id=${movie.id}`;
-
-                        card.innerHTML = `
-                            <div class="poster-container">
-                                <img src="${movie.thumbnail}" class="movie-poster" 
-                                     alt="${movie.title}"
-                                     onerror="this.src='https://via.placeholder.com/200x300/222/555?text=iBOMMA'">
-                                <div class="play-overlay">
-                                    <i class="fas fa-play" style="color:#fff; font-size:30px; opacity:0.8;"></i>
-                                </div>
-                            </div>
-                            <div class="movie-title">${movie.title}</div>
-                        `;
-                        grid.appendChild(card);
-                    });
-                })
-                .catch(err => {
-                    console.error(err);
-                    document.getElementById('movie-grid').innerHTML = '<div class="loading">Error loading movies.</div>';
-                });
-
-            // Search Logic
-            document.getElementById('search-input').addEventListener('input', (e) => {
-                const term = e.target.value.toLowerCase();
-                const cards = document.querySelectorAll('.movie-card');
-                cards.forEach(card => {
-                    const title = card.querySelector('.movie-title').textContent.toLowerCase();
-                    card.style.display = title.includes(term) ? 'block' : 'none';
-                });
-            });
-        });
+      document.getElementById("year").textContent = new Date().getFullYear();
     </script>
-</body>
+
+    <!-- Keep your existing site.js for loading movies + search -->
+    <script src="site.js"></script>
+  </body>
 </html>
