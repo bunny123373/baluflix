@@ -1,641 +1,343 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Baluflix Admin Dashboard</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Baluflix – Where Quality & Clarity Matters</title>
+
+    <!-- COMBINED CSS (style.css content embedded here) -->
     <style>
-        :root {
-            --primary: #5bbf3b;
-            --dark: #1a1a1a;
-            --light: #f9f9f9;
-            --text: #333;
-            --danger: #ff6b6b;
-            --warning: #ffd166;
+      /* RESET */
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        background: #050505;
+        color: #ffffff;
+      }
+
+      /* TOP NAVBAR */
+      .bf-nav {
+        position: sticky;
+        top: 0;
+        z-index: 50;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 14px 40px;
+        background: #050505;
+        border-bottom: 1px solid #111;
+      }
+
+      .bf-logo {
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+      }
+
+      .bf-logo-icon {
+        width: 30px;
+        height: 30px;
+        border-radius: 6px;
+        background: #5bbf3b;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        color: #050505;
+        margin-right: 8px;
+      }
+
+      .bf-logo-text {
+        font-size: 22px;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        color: #e9ffe4;
+      }
+
+      .bf-nav-links a {
+        margin: 0 10px;
+        font-size: 14px;
+        text-decoration: none;
+        color: #a9b7a5;
+        transition: color 0.18s;
+      }
+
+      .bf-nav-links a:hover {
+        color: #e9ffe4;
+      }
+
+      .bf-nav-right {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+
+      /* SEARCH BAR */
+      .bf-search {
+        display: flex;
+        align-items: center;
+        background: #111;
+        border-radius: 999px;
+        overflow: hidden;
+        border: 1px solid #1f1f1f;
+      }
+
+      .bf-search input {
+        background: transparent;
+        border: none;
+        outline: none;
+        padding: 6px 10px 6px 14px;
+        color: #f5f5f5;
+        width: 180px;
+        font-size: 13px;
+      }
+
+      .bf-search button {
+        border: none;
+        outline: none;
+        background: #5bbf3b;
+        color: #050505;
+        padding: 6px 12px;
+        cursor: pointer;
+        font-size: 13px;
+      }
+
+      .bf-search button:hover {
+        background: #6cd447;
+      }
+
+      /* HERO SECTION */
+      .bf-hero {
+        text-align: center;
+        padding: 40px 16px 10px;
+      }
+
+      .bf-hero h1 {
+        font-size: 34px;
+        font-weight: 600;
+        margin-bottom: 12px;
+      }
+
+      .bf-hero-sub1 {
+        font-size: 15px;
+        color: #d2d2d2;
+        margin-bottom: 4px;
+      }
+
+      .bf-hero-sub2 {
+        font-size: 14px;
+        color: #8f8f8f;
+      }
+
+      /* MOVIE STRIP */
+      .bf-main {
+        padding: 24px 32px 40px;
+      }
+
+      .bf-strip-title {
+        font-size: 18px;
+        margin-bottom: 14px;
+        color: #e9ffe4;
+      }
+
+      /* horizontal row */
+      .bf-movie-row {
+        display: flex;
+        gap: 14px;
+        overflow-x: auto;
+        padding-bottom: 6px;
+      }
+
+      .bf-movie-row::-webkit-scrollbar {
+        height: 6px;
+      }
+      .bf-movie-row::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      .bf-movie-row::-webkit-scrollbar-thumb {
+        background: #262626;
+        border-radius: 3px;
+      }
+
+      /* MOVIE CARD */
+      .movie-card {
+        min-width: 150px;
+        max-width: 150px;
+        background: #070707;
+        border-radius: 6px;
+        overflow: hidden;
+        cursor: pointer;
+        transition: transform 0.2s ease, box-shadow 0.2s ease, outline 0.2s;
+        outline: 1px solid #111;
+      }
+
+      .movie-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 10px 18px rgba(0, 0, 0, 0.75);
+        outline-color: #3f3f3f;
+      }
+
+      .movie-card img {
+        width: 100%;
+        height: 220px;
+        object-fit: cover;
+        display: block;
+      }
+
+      .movie-info {
+        padding: 8px;
+      }
+
+      .movie-title {
+        font-size: 13px;
+        font-weight: 500;
+        margin-bottom: 4px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .movie-meta {
+        font-size: 11px;
+        color: #9a9a9a;
+      }
+
+      /* INFO SECTIONS */
+      .bf-info-section {
+        padding: 24px 32px;
+        border-top: 1px solid #111;
+        background: #060606;
+      }
+
+      .bf-info-section h3 {
+        margin-bottom: 8px;
+        font-size: 16px;
+        color: #e9ffe4;
+      }
+
+      .bf-info-section p {
+        font-size: 13px;
+        color: #afafaf;
+        max-width: 700px;
+      }
+
+      /* FOOTER */
+      .bf-footer {
+        padding: 14px 32px 20px;
+        text-align: center;
+        font-size: 12px;
+        color: #7c7c7c;
+        border-top: 1px solid #111;
+      }
+
+      /* RESPONSIVE */
+      @media (max-width: 768px) {
+        .bf-nav {
+          padding: 10px 14px;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', sans-serif;
+        .bf-nav-links {
+          display: none;
         }
 
-        body {
-            display: flex;
-            background: #f5f7fa;
-            min-height: 100vh;
+        .bf-search input {
+          width: 120px;
         }
 
-        /* Sidebar */
-        .sidebar {
-            width: 250px;
-            background: var(--dark);
-            color: white;
-            position: fixed;
-            height: 100vh;
-            padding: 20px 0;
+        .bf-main,
+        .bf-info-section,
+        .bf-footer {
+          padding-left: 16px;
+          padding-right: 16px;
         }
 
-        .logo {
-            padding: 0 20px 20px;
-            font-size: 20px;
-            font-weight: bold;
-            color: var(--primary);
-            border-bottom: 1px solid #333;
+        .bf-hero {
+          padding-top: 28px;
         }
 
-        .nav {
-            list-style: none;
-            padding: 20px 0;
+        .bf-hero h1 {
+          font-size: 26px;
         }
-
-        .nav li {
-            padding: 12px 20px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .nav li:hover, .nav li.active {
-            background: #2c2c2c;
-            color: var(--primary);
-        }
-
-        .nav i {
-            margin-right: 10px;
-        }
-
-        /* Main Content */
-        .main {
-            margin-left: 250px;
-            flex: 1;
-            background: white;
-        }
-
-        /* Header */
-        header {
-            padding: 15px 25px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid #eee;
-        }
-
-        .search-box {
-            position: relative;
-        }
-
-        .search-box input {
-            padding: 8px 15px 8px 35px;
-            border: 1px solid #ddd;
-            border-radius: 20px;
-            width: 250px;
-        }
-
-        .search-box i {
-            position: absolute;
-            left: 12px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #999;
-        }
-
-        /* Content Area */
-        .content {
-            padding: 25px;
-        }
-
-        /* Controls Bar */
-        .controls {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 20px;
-        }
-
-        .btn {
-            padding: 10px 20px;
-            background: var(--primary);
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: 500;
-        }
-
-        .btn:hover {
-            opacity: 0.9;
-        }
-
-        /* Table */
-        .table-container {
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            overflow: hidden;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        th, td {
-            padding: 15px;
-            text-align: left;
-            border-bottom: 1px solid #eee;
-        }
-
-        th {
-            background: #f9f9f9;
-            font-weight: 600;
-            color: #666;
-        }
-
-        .poster {
-            width: 50px;
-            height: 70px;
-            object-fit: cover;
-            border-radius: 4px;
-        }
-
-        .badge {
-            padding: 4px 8px;
-            border-radius: 12px;
-            font-size: 12px;
-            font-weight: 500;
-        }
-
-        .badge-category {
-            background: #e2e6ea;
-            color: #444;
-        }
-
-        .badge-views {
-            background: #d1e7dd;
-            color: #0f5132;
-        }
-
-        .actions {
-            display: flex;
-            gap: 8px;
-        }
-
-        .action-btn {
-            padding: 6px 10px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 12px;
-        }
-
-        .view-btn {
-            background: #e2e6ea;
-            color: #444;
-        }
-
-        .edit-btn {
-            background: var(--warning);
-            color: #000;
-        }
-
-        .delete-btn {
-            background: var(--danger);
-            color: white;
-        }
-
-        /* Modal Styles */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .modal-content {
-            background: white;
-            padding: 30px;
-            border-radius: 8px;
-            width: 500px;
-            max-width: 90%;
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .modal-title {
-            font-size: 18px;
-            font-weight: 600;
-        }
-
-        .close-btn {
-            background: none;
-            border: none;
-            font-size: 20px;
-            cursor: pointer;
-        }
-
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: 500;
-        }
-
-        .form-group input,
-        .form-group textarea {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-        }
-
-        .progress-container {
-            height: 6px;
-            background: #eee;
-            border-radius: 3px;
-            margin: 15px 0;
-            overflow: hidden;
-        }
-
-        .progress-bar {
-            height: 100%;
-            background: var(--primary);
-            width: 0%;
-            transition: width 0.3s;
-        }
-
-        @media (max-width: 768px) {
-            .sidebar {
-                width: 80px;
-            }
-
-            .nav li span {
-                display: none;
-            }
-
-            .main {
-                margin-left: 80px;
-            }
-        }
+      }
     </style>
-</head>
-<body>
-    <!-- Sidebar -->
-    <div class="sidebar">
-        <div class="logo">
-            <i class="fas fa-film"></i> BALUFLIX ADMIN
-        </div>
-        <ul class="nav">
-            <li class="active"><i class="fas fa-film"></i><span>Manage Movies</span></li>
-            <li><i class="fas fa-users"></i><span>Users</span></li>
-            <li><i class="fas fa-cog"></i><span>Settings</span></li>
-            <li onclick="logout()"><i class="fas fa-sign-out-alt"></i><span>Logout</span></li>
-        </ul>
-    </div>
+  </head>
 
-    <!-- Main Content -->
-    <div class="main">
-        <header>
-            <h2>Manage Movies</h2>
-            <div class="search-box">
-                <i class="fas fa-search"></i>
-                <input type="text" id="searchInput" placeholder="Search movies...">
-            </div>
-        </header>
+  <body>
+    <!-- TOP NAV (No Admin option) -->
+    <header class="bf-nav">
+      <div class="bf-nav-left">
+        <a href="index.html" class="bf-logo">
+          <span class="bf-logo-icon">B</span>
+          <span class="bf-logo-text">Baluflix</span>
+        </a>
+      </div>
 
-        <div class="content">
-            <div class="controls">
-                <button class="btn" onclick="openAddModal()">
-                    <i class="fas fa-plus"></i> ADD NEW MOVIE
-                </button>
-            </div>
+      <nav class="bf-nav-links">
+        <a href="#about">About</a>
+        <a href="#bug-report">Bug Report</a>
+        <a href="#contact">Contact</a>
+      </nav>
 
-            <div class="table-container">
-                <table id="moviesTable">
-                    <thead>
-                        <tr>
-                            <th>Poster</th>
-                            <th>Title</th>
-                            <th>Category</th>
-                            <th>Year</th>
-                            <th>Language</th>
-                            <th>Views</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody id="moviesTableBody">
-                        <!-- Movies will be loaded here -->
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
+      <div class="bf-nav-right">
+        <form id="search-form" class="bf-search">
+          <input
+            type="text"
+            id="search-input"
+            placeholder="Search..."
+            autocomplete="off"
+          />
+          <button type="submit">🔍</button>
+        </form>
+      </div>
+    </header>
 
-    <!-- Add Movie Modal -->
-    <div class="modal" id="addModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title">Add New Movie</h3>
-                <button class="close-btn" onclick="closeAddModal()">&times;</button>
-            </div>
-            <form id="addMovieForm">
-                <div class="form-group">
-                    <label>Title</label>
-                    <input type="text" name="title" required>
-                </div>
-                <div class="form-group">
-                    <label>Description</label>
-                    <textarea name="description" rows="3"></textarea>
-                </div>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-                    <div class="form-group">
-                        <label>Year</label>
-                        <input type="text" name="year">
-                    </div>
-                    <div class="form-group">
-                        <label>Language</label>
-                        <input type="text" name="language" value="Telugu">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>Category</label>
-                    <input type="text" name="category">
-                </div>
-                <div class="form-group">
-                    <label>Poster Image</label>
-                    <input type="file" name="poster" accept="image/*">
-                </div>
-                <div class="form-group">
-                    <label>Movie File (.mp4)</label>
-                    <input type="file" name="movieFile" accept="video/mp4" required>
-                </div>
-                <div class="progress-container">
-                    <div class="progress-bar" id="uploadProgress"></div>
-                </div>
-                <button type="submit" class="btn">UPLOAD MOVIE</button>
-            </form>
-        </div>
-    </div>
+    <!-- HERO -->
+    <section class="bf-hero">
+      <h1>Where Quality &amp; Clarity Matters</h1>
+      <p class="bf-hero-sub1">
+        Watch movies in HD, exclusively available on Baluflix.
+      </p>
+      <p class="bf-hero-sub2">Developed for smartphones, tablets and PCs.</p>
+    </section>
 
-    <!-- Edit Movie Modal -->
-    <div class="modal" id="editModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title">Edit Movie</h3>
-                <button class="close-btn" onclick="closeEditModal()">&times;</button>
-            </div>
-            <form id="editMovieForm">
-                <input type="hidden" name="id" id="editId">
-                <div class="form-group">
-                    <label>Title</label>
-                    <input type="text" name="title" id="editTitle" required>
-                </div>
-                <div class="form-group">
-                    <label>Description</label>
-                    <textarea name="description" id="editDescription" rows="3"></textarea>
-                </div>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-                    <div class="form-group">
-                        <label>Year</label>
-                        <input type="text" name="year" id="editYear">
-                    </div>
-                    <div class="form-group">
-                        <label>Language</label>
-                        <input type="text" name="language" id="editLanguage">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>Category</label>
-                    <input type="text" name="category" id="editCategory">
-                </div>
-                <button type="submit" class="btn">UPDATE MOVIE</button>
-            </form>
-        </div>
-    </div>
+    <!-- MOVIES -->
+    <main class="bf-main">
+      <section class="bf-movie-strip">
+        <h2 class="bf-strip-title">Latest Movies</h2>
+        <div id="movie-list" class="bf-movie-row"></div>
+      </section>
+    </main>
+
+    <!-- INFO -->
+    <section id="about" class="bf-info-section">
+      <h3>About</h3>
+      <p>Baluflix is a demo streaming UI with a clean movie grid/row layout.</p>
+    </section>
+
+    <section id="bug-report" class="bf-info-section">
+      <h3>Bug Report</h3>
+      <p>Report issues to your-email@example.com</p>
+    </section>
+
+    <section id="contact" class="bf-info-section">
+      <h3>Contact</h3>
+      <p>Replace this with your contact details.</p>
+    </section>
+
+    <footer class="bf-footer">
+      <p>© <span id="year"></span> Baluflix. All rights reserved.</p>
+    </footer>
 
     <script>
-        // Check if logged in
-        document.addEventListener('DOMContentLoaded', function() {
-            const token = localStorage.getItem('bf_admin_token');
-            if (!token) {
-                window.location.href = 'admin.html';
-            }
-        });
-
-        // Logout function
-        function logout() {
-            localStorage.removeItem('bf_admin_token');
-            window.location.href = 'admin.html';
-        }
-
-        // DOM Elements
-        const moviesTableBody = document.getElementById('moviesTableBody');
-        const searchInput = document.getElementById('searchInput');
-        const addMovieForm = document.getElementById('addMovieForm');
-        const editMovieForm = document.getElementById('editMovieForm');
-        const uploadProgress = document.getElementById('uploadProgress');
-
-        // Load movies
-        async function loadMovies() {
-            try {
-                const response = await fetch('/api/movies', {
-                    headers: {
-                        'x-admin-token': localStorage.getItem('bf_admin_token')
-                    }
-                });
-                const movies = await response.json();
-                renderMovies(movies);
-            } catch (error) {
-                console.error('Error loading movies:', error);
-            }
-        }
-
-        // Render movies in table
-        function renderMovies(movies) {
-            moviesTableBody.innerHTML = '';
-            movies.forEach(movie => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td><img src="${movie.poster || 'https://via.placeholder.com/50x70'}" class="poster"></td>
-                    <td>${movie.title}</td>
-                    <td><span class="badge badge-category">${movie.category || 'Uncategorized'}</span></td>
-                    <td>${movie.year || '-'}</td>
-                    <td>${movie.language || 'Telugu'}</td>
-                    <td><span class="badge badge-views">${movie.views || 0} views</span></td>
-                    <td class="actions">
-                        <button class="action-btn view-btn" onclick="viewMovie('${movie.id}')">
-                            <i class="fas fa-eye"></i>
-                        </button>
-                        <button class="action-btn edit-btn" onclick="openEditModal('${movie.id}')">
-                            <i class="fas fa-edit"></i>
-                        </button>
-                        <button class="action-btn delete-btn" onclick="deleteMovie('${movie.id}', '${movie.title}')">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </td>
-                `;
-                moviesTableBody.appendChild(row);
-            });
-        }
-
-        // Search functionality
-        searchInput.addEventListener('input', function() {
-            const searchTerm = this.value.toLowerCase();
-            document.querySelectorAll('#moviesTableBody tr').forEach(row => {
-                const title = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
-                row.style.display = title.includes(searchTerm) ? '' : 'none';
-            });
-        });
-
-        // Open add movie modal
-        function openAddModal() {
-            document.getElementById('addModal').style.display = 'flex';
-        }
-
-        // Close add movie modal
-        function closeAddModal() {
-            document.getElementById('addModal').style.display = 'none';
-            addMovieForm.reset();
-            uploadProgress.style.width = '0%';
-        }
-
-        // Add movie form submission
-        addMovieForm.addEventListener('submit', async function(e) {
-            e.preventDefault();
-            const formData = new FormData(this);
-
-            try {
-                const response = await fetch('/api/movies', {
-                    method: 'POST',
-                    headers: {
-                        'x-admin-token': localStorage.getItem('bf_admin_token')
-                    },
-                    body: formData
-                });
-
-                if (response.ok) {
-                    closeAddModal();
-                    loadMovies();
-                } else {
-                    const error = await response.json();
-                    alert(error.error || 'Failed to upload movie');
-                }
-            } catch (error) {
-                console.error('Upload error:', error);
-                alert('Network error. Please try again.');
-            }
-        });
-
-        // Open edit modal
-        async function openEditModal(movieId) {
-            try {
-                const response = await fetch(`/api/movies/${movieId}`, {
-                    headers: {
-                        'x-admin-token': localStorage.getItem('bf_admin_token')
-                    }
-                });
-                const movie = await response.json();
-
-                document.getElementById('editId').value = movie.id;
-                document.getElementById('editTitle').value = movie.title;
-                document.getElementById('editDescription').value = movie.description || '';
-                document.getElementById('editYear').value = movie.year || '';
-                document.getElementById('editLanguage').value = movie.language || 'Telugu';
-                document.getElementById('editCategory').value = movie.category || '';
-
-                document.getElementById('editModal').style.display = 'flex';
-            } catch (error) {
-                console.error('Error loading movie:', error);
-                alert('Failed to load movie details');
-            }
-        }
-
-        // Close edit modal
-        function closeEditModal() {
-            document.getElementById('editModal').style.display = 'none';
-        }
-
-        // Edit movie form submission
-        editMovieForm.addEventListener('submit', async function(e) {
-            e.preventDefault();
-            const movieId = document.getElementById('editId').value;
-            const updatedData = {
-                title: document.getElementById('editTitle').value,
-                description: document.getElementById('editDescription').value,
-                year: document.getElementById('editYear').value,
-                language: document.getElementById('editLanguage').value,
-                category: document.getElementById('editCategory').value
-            };
-
-            try {
-                const response = await fetch(`/api/movies/${movieId}`, {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'x-admin-token': localStorage.getItem('bf_admin_token')
-                    },
-                    body: JSON.stringify(updatedData)
-                });
-
-                if (response.ok) {
-                    closeEditModal();
-                    loadMovies();
-                } else {
-                    const error = await response.json();
-                    alert(error.error || 'Failed to update movie');
-                }
-            } catch (error) {
-                console.error('Update error:', error);
-                alert('Network error. Please try again.');
-            }
-        });
-
-        // Delete movie
-        function deleteMovie(movieId, movieTitle) {
-            if (confirm(`Are you sure you want to delete "${movieTitle}"?`)) {
-                fetch(`/api/movies/${movieId}`, {
-                    method: 'DELETE',
-                    headers: {
-                        'x-admin-token': localStorage.getItem('bf_admin_token')
-                    }
-                })
-                .then(response => {
-                    if (response.ok) {
-                        loadMovies();
-                    } else {
-                        return response.json().then(error => {
-                            alert(error.error || 'Failed to delete movie');
-                        });
-                    }
-                })
-                .catch(error => {
-                    console.error('Delete error:', error);
-                    alert('Network error. Please try again.');
-                });
-            }
-        }
-
-        // View movie
-        function viewMovie(movieId) {
-            window.open(`play.html?id=${movieId}`, '_blank');
-        }
-
-        // Load movies on page load
-        loadMovies();
+      document.getElementById("year").textContent = new Date().getFullYear();
     </script>
-</body>
+
+    <!-- Keep your existing site.js for loading movies + search -->
+    <script src="site.js"></script>
+  </body>
 </html>
