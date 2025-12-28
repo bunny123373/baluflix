@@ -1,385 +1,343 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ibomma Admin Dashboard</title>
-    <link rel="stylesheet" href="admin.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-</head>
-<body>
-    <!-- Sidebar -->
-    <div class="sidebar">
-        <div class="sidebar-header">
-            <h2><i class="fas fa-film"></i> IBOMMA</h2>
-            <p>Admin Dashboard</p>
-        </div>
-        
-        <nav class="sidebar-nav">
-            <ul>
-                <li class="active"><a href="#dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
-                <li><a href="#upload"><i class="fas fa-upload"></i> Upload Movie</a></li>
-                <li><a href="#movies"><i class="fas fa-video"></i> All Movies</a></li>
-                <li><a href="#categories"><i class="fas fa-list"></i> Categories</a></li>
-                <li><a href="#users"><i class="fas fa-users"></i> Users</a></li>
-                <li><a href="#settings"><i class="fas fa-cog"></i> Settings</a></li>
-            </ul>
-        </nav>
-        
-        <div class="sidebar-footer">
-            <button id="logoutBtn" class="btn-logout">
-                <i class="fas fa-sign-out-alt"></i> Logout
-            </button>
-        </div>
-    </div>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Baluflix – Where Quality & Clarity Matters</title>
 
-    <!-- Main Content -->
-    <div class="main-content">
-        <!-- Top Bar -->
-        <header class="topbar">
-            <div class="topbar-left">
-                <button class="menu-toggle">
-                    <i class="fas fa-bars"></i>
-                </button>
-                <h1>Admin Dashboard</h1>
-            </div>
-            
-            <div class="topbar-right">
-                <div class="user-info">
-                    <span id="adminUsername">Admin</span>
-                    <div class="user-avatar">
-                        <i class="fas fa-user-circle"></i>
-                    </div>
-                </div>
-            </div>
-        </header>
+    <!-- COMBINED CSS (style.css content embedded here) -->
+    <style>
+      /* RESET */
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
 
-        <!-- Content Area -->
-        <div class="content-area">
-            <!-- Dashboard Section -->
-            <section id="dashboard" class="content-section active">
-                <div class="section-header">
-                    <h2><i class="fas fa-tachometer-alt"></i> Dashboard Overview</h2>
-                </div>
-                
-                <div class="stats-cards">
-                    <div class="stat-card">
-                        <div class="stat-icon" style="background: #4CAF50;">
-                            <i class="fas fa-film"></i>
-                        </div>
-                        <div class="stat-info">
-                            <h3 id="totalMovies">0</h3>
-                            <p>Total Movies</p>
-                        </div>
-                    </div>
-                    
-                    <div class="stat-card">
-                        <div class="stat-icon" style="background: #2196F3;">
-                            <i class="fas fa-eye"></i>
-                        </div>
-                        <div class="stat-info">
-                            <h3 id="totalViews">0</h3>
-                            <p>Total Views</p>
-                        </div>
-                    </div>
-                    
-                    <div class="stat-card">
-                        <div class="stat-icon" style="background: #FF9800;">
-                            <i class="fas fa-users"></i>
-                        </div>
-                        <div class="stat-info">
-                            <h3>1</h3>
-                            <p>Active Admins</p>
-                        </div>
-                    </div>
-                    
-                    <div class="stat-card">
-                        <div class="stat-icon" style="background: #9C27B0;">
-                            <i class="fas fa-database"></i>
-                        </div>
-                        <div class="stat-info">
-                            <h3>3</h3>
-                            <p>Categories</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="dashboard-charts">
-                    <div class="chart-container">
-                        <h3>Movies by Category</h3>
-                        <div id="categoryChart" class="chart-placeholder">
-                            <!-- Chart will be generated here -->
-                        </div>
-                    </div>
-                    
-                    <div class="chart-container">
-                        <h3>Recent Uploads</h3>
-                        <div class="recent-uploads">
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>Movie</th>
-                                        <th>Category</th>
-                                        <th>Upload Date</th>
-                                        <th>Views</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="recentMovies">
-                                    <!-- Recent movies will be loaded here -->
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </section>
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        background: #050505;
+        color: #ffffff;
+      }
 
-            <!-- Upload Movie Section -->
-            <section id="upload" class="content-section">
-                <div class="section-header">
-                    <h2><i class="fas fa-upload"></i> Upload New Movie</h2>
-                </div>
-                
-                <form id="uploadForm" class="upload-form" enctype="multipart/form-data">
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="movieTitle"><i class="fas fa-heading"></i> Movie Title *</label>
-                            <input type="text" id="movieTitle" name="title" placeholder="Enter movie title" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="movieYear"><i class="fas fa-calendar"></i> Release Year</label>
-                            <input type="text" id="movieYear" name="year" placeholder="2024" value="2024">
-                        </div>
-                    </div>
-                    
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="movieGenre"><i class="fas fa-tags"></i> Genre</label>
-                            <input type="text" id="movieGenre" name="genre" placeholder="Action, Drama, Comedy">
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="movieRating"><i class="fas fa-star"></i> Rating</label>
-                            <input type="text" id="movieRating" name="rating" placeholder="8.0" value="8.0">
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="movieCategory"><i class="fas fa-list"></i> Category *</label>
-                        <select id="movieCategory" name="category" required>
-                            <option value="">Select Category</option>
-                            <option value="trending">Trending</option>
-                            <option value="latest">Latest Releases</option>
-                            <option value="telugu">Telugu Movies</option>
-                        </select>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="movieDescription"><i class="fas fa-align-left"></i> Description</label>
-                        <textarea id="movieDescription" name="description" rows="4" placeholder="Enter movie description..."></textarea>
-                    </div>
-                    
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="moviePoster"><i class="fas fa-image"></i> Movie Poster *</label>
-                            <div class="file-upload">
-                                <input type="file" id="moviePoster" name="poster" accept="image/*" required>
-                                <label for="moviePoster" class="file-label">
-                                    <i class="fas fa-cloud-upload-alt"></i>
-                                    <span>Choose Poster Image</span>
-                                </label>
-                                <div class="file-info" id="posterInfo">No file chosen</div>
-                            </div>
-                            <small>Recommended: 300x450 pixels, JPG/PNG format</small>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="movieVideo"><i class="fas fa-video"></i> Movie Video *</label>
-                            <div class="file-upload">
-                                <input type="file" id="movieVideo" name="video" accept="video/*" required>
-                                <label for="movieVideo" class="file-label">
-                                    <i class="fas fa-cloud-upload-alt"></i>
-                                    <span>Choose Video File</span>
-                                </label>
-                                <div class="file-info" id="videoInfo">No file chosen</div>
-                            </div>
-                            <small>Max 100MB, MP4/MKV/AVI format</small>
-                        </div>
-                    </div>
-                    
-                    <div class="form-actions">
-                        <button type="submit" class="btn-submit">
-                            <i class="fas fa-upload"></i> Upload Movie
-                        </button>
-                        <button type="reset" class="btn-reset">
-                            <i class="fas fa-redo"></i> Reset Form
-                        </button>
-                    </div>
-                    
-                    <div id="uploadStatus" class="status-message"></div>
-                </form>
-            </section>
+      /* TOP NAVBAR */
+      .bf-nav {
+        position: sticky;
+        top: 0;
+        z-index: 50;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 14px 40px;
+        background: #050505;
+        border-bottom: 1px solid #111;
+      }
 
-            <!-- All Movies Section -->
-            <section id="movies" class="content-section">
-                <div class="section-header">
-                    <h2><i class="fas fa-video"></i> All Movies</h2>
-                    <div class="search-box">
-                        <input type="text" id="movieSearch" placeholder="Search movies...">
-                        <i class="fas fa-search"></i>
-                    </div>
-                </div>
-                
-                <div class="movies-table-container">
-                    <table class="movies-table">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Poster</th>
-                                <th>Title</th>
-                                <th>Category</th>
-                                <th>Year</th>
-                                <th>Rating</th>
-                                <th>Views</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="moviesTableBody">
-                            <!-- Movies will be loaded here -->
-                        </tbody>
-                    </table>
-                </div>
-                
-                <div class="pagination">
-                    <button class="btn-prev"><i class="fas fa-chevron-left"></i> Previous</button>
-                    <span class="page-info">Page 1 of 1</span>
-                    <button class="btn-next">Next <i class="fas fa-chevron-right"></i></button>
-                </div>
-            </section>
+      .bf-logo {
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+      }
 
-            <!-- Categories Section -->
-            <section id="categories" class="content-section">
-                <div class="section-header">
-                    <h2><i class="fas fa-list"></i> Categories Management</h2>
-                    <button class="btn-add-category">
-                        <i class="fas fa-plus"></i> Add Category
-                    </button>
-                </div>
-                
-                <div class="categories-grid">
-                    <div class="category-card">
-                        <div class="category-header">
-                            <h3>Trending</h3>
-                            <span class="movie-count" id="trendingCount">1 movies</span>
-                        </div>
-                        <p>Most popular and trending movies</p>
-                        <div class="category-actions">
-                            <button class="btn-edit"><i class="fas fa-edit"></i> Edit</button>
-                            <button class="btn-view"><i class="fas fa-eye"></i> View</button>
-                        </div>
-                    </div>
-                    
-                    <div class="category-card">
-                        <div class="category-header">
-                            <h3>Latest Releases</h3>
-                            <span class="movie-count" id="latestCount">0 movies</span>
-                        </div>
-                        <p>Recently released movies</p>
-                        <div class="category-actions">
-                            <button class="btn-edit"><i class="fas fa-edit"></i> Edit</button>
-                            <button class="btn-view"><i class="fas fa-eye"></i> View</button>
-                        </div>
-                    </div>
-                    
-                    <div class="category-card">
-                        <div class="category-header">
-                            <h3>Telugu Movies</h3>
-                            <span class="movie-count" id="teluguCount">0 movies</span>
-                        </div>
-                        <p>Telugu language movies collection</p>
-                        <div class="category-actions">
-                            <button class="btn-edit"><i class="fas fa-edit"></i> Edit</button>
-                            <button class="btn-view"><i class="fas fa-eye"></i> View</button>
-                        </div>
-                    </div>
-                </div>
-            </section>
+      .bf-logo-icon {
+        width: 30px;
+        height: 30px;
+        border-radius: 6px;
+        background: #5bbf3b;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        color: #050505;
+        margin-right: 8px;
+      }
 
-            <!-- Settings Section -->
-            <section id="settings" class="content-section">
-                <div class="section-header">
-                    <h2><i class="fas fa-cog"></i> Settings</h2>
-                </div>
-                
-                <div class="settings-tabs">
-                    <div class="tab-buttons">
-                        <button class="tab-btn active" data-tab="general">General</button>
-                        <button class="tab-btn" data-tab="security">Security</button>
-                        <button class="tab-btn" data-tab="storage">Storage</button>
-                    </div>
-                    
-                    <div class="tab-content">
-                        <div class="tab-pane active" id="general">
-                            <form class="settings-form">
-                                <div class="form-group">
-                                    <label>Site Title</label>
-                                    <input type="text" value="Ibomma - Telugu Movies" placeholder="Site title">
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label>Site Description</label>
-                                    <textarea rows="3" placeholder="Site description">Watch Latest Telugu Movies Online in HD Quality</textarea>
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label>Max Upload Size (MB)</label>
-                                    <input type="number" value="100" min="10" max="500">
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label>Allowed Video Formats</label>
-                                    <input type="text" value="mp4, mkv, avi, mov" placeholder="Comma separated formats">
-                                </div>
-                                
-                                <button type="submit" class="btn-save">
-                                    <i class="fas fa-save"></i> Save Settings
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </section>
-        </div>
-    </div>
+      .bf-logo-text {
+        font-size: 22px;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        color: #e9ffe4;
+      }
 
-    <!-- Edit Movie Modal -->
-    <div id="editModal" class="modal">
-        <div class="modal-content">
-            <span class="close-modal">&times;</span>
-            <h2>Edit Movie</h2>
-            <form id="editForm">
-                <input type="hidden" id="editMovieId">
-                <div class="form-group">
-                    <label>Title</label>
-                    <input type="text" id="editTitle" required>
-                </div>
-                <div class="form-group">
-                    <label>Category</label>
-                    <select id="editCategory">
-                        <option value="trending">Trending</option>
-                        <option value="latest">Latest</option>
-                        <option value="telugu">Telugu</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Rating</label>
-                    <input type="text" id="editRating">
-                </div>
-                <button type="submit" class="btn-save">Save Changes</button>
-            </form>
-        </div>
-    </div>
+      .bf-nav-links a {
+        margin: 0 10px;
+        font-size: 14px;
+        text-decoration: none;
+        color: #a9b7a5;
+        transition: color 0.18s;
+      }
 
-    <script src="admin-dashboard.js"></script>
-</body>
+      .bf-nav-links a:hover {
+        color: #e9ffe4;
+      }
+
+      .bf-nav-right {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+
+      /* SEARCH BAR */
+      .bf-search {
+        display: flex;
+        align-items: center;
+        background: #111;
+        border-radius: 999px;
+        overflow: hidden;
+        border: 1px solid #1f1f1f;
+      }
+
+      .bf-search input {
+        background: transparent;
+        border: none;
+        outline: none;
+        padding: 6px 10px 6px 14px;
+        color: #f5f5f5;
+        width: 180px;
+        font-size: 13px;
+      }
+
+      .bf-search button {
+        border: none;
+        outline: none;
+        background: #5bbf3b;
+        color: #050505;
+        padding: 6px 12px;
+        cursor: pointer;
+        font-size: 13px;
+      }
+
+      .bf-search button:hover {
+        background: #6cd447;
+      }
+
+      /* HERO SECTION */
+      .bf-hero {
+        text-align: center;
+        padding: 40px 16px 10px;
+      }
+
+      .bf-hero h1 {
+        font-size: 34px;
+        font-weight: 600;
+        margin-bottom: 12px;
+      }
+
+      .bf-hero-sub1 {
+        font-size: 15px;
+        color: #d2d2d2;
+        margin-bottom: 4px;
+      }
+
+      .bf-hero-sub2 {
+        font-size: 14px;
+        color: #8f8f8f;
+      }
+
+      /* MOVIE STRIP */
+      .bf-main {
+        padding: 24px 32px 40px;
+      }
+
+      .bf-strip-title {
+        font-size: 18px;
+        margin-bottom: 14px;
+        color: #e9ffe4;
+      }
+
+      /* horizontal row */
+      .bf-movie-row {
+        display: flex;
+        gap: 14px;
+        overflow-x: auto;
+        padding-bottom: 6px;
+      }
+
+      .bf-movie-row::-webkit-scrollbar {
+        height: 6px;
+      }
+      .bf-movie-row::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      .bf-movie-row::-webkit-scrollbar-thumb {
+        background: #262626;
+        border-radius: 3px;
+      }
+
+      /* MOVIE CARD */
+      .movie-card {
+        min-width: 150px;
+        max-width: 150px;
+        background: #070707;
+        border-radius: 6px;
+        overflow: hidden;
+        cursor: pointer;
+        transition: transform 0.2s ease, box-shadow 0.2s ease, outline 0.2s;
+        outline: 1px solid #111;
+      }
+
+      .movie-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 10px 18px rgba(0, 0, 0, 0.75);
+        outline-color: #3f3f3f;
+      }
+
+      .movie-card img {
+        width: 100%;
+        height: 220px;
+        object-fit: cover;
+        display: block;
+      }
+
+      .movie-info {
+        padding: 8px;
+      }
+
+      .movie-title {
+        font-size: 13px;
+        font-weight: 500;
+        margin-bottom: 4px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .movie-meta {
+        font-size: 11px;
+        color: #9a9a9a;
+      }
+
+      /* INFO SECTIONS */
+      .bf-info-section {
+        padding: 24px 32px;
+        border-top: 1px solid #111;
+        background: #060606;
+      }
+
+      .bf-info-section h3 {
+        margin-bottom: 8px;
+        font-size: 16px;
+        color: #e9ffe4;
+      }
+
+      .bf-info-section p {
+        font-size: 13px;
+        color: #afafaf;
+        max-width: 700px;
+      }
+
+      /* FOOTER */
+      .bf-footer {
+        padding: 14px 32px 20px;
+        text-align: center;
+        font-size: 12px;
+        color: #7c7c7c;
+        border-top: 1px solid #111;
+      }
+
+      /* RESPONSIVE */
+      @media (max-width: 768px) {
+        .bf-nav {
+          padding: 10px 14px;
+        }
+
+        .bf-nav-links {
+          display: none;
+        }
+
+        .bf-search input {
+          width: 120px;
+        }
+
+        .bf-main,
+        .bf-info-section,
+        .bf-footer {
+          padding-left: 16px;
+          padding-right: 16px;
+        }
+
+        .bf-hero {
+          padding-top: 28px;
+        }
+
+        .bf-hero h1 {
+          font-size: 26px;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- TOP NAV (No Admin option) -->
+    <header class="bf-nav">
+      <div class="bf-nav-left">
+        <a href="index.html" class="bf-logo">
+          <span class="bf-logo-icon">B</span>
+          <span class="bf-logo-text">Baluflix</span>
+        </a>
+      </div>
+
+      <nav class="bf-nav-links">
+        <a href="#about">About</a>
+        <a href="#bug-report">Bug Report</a>
+        <a href="#contact">Contact</a>
+      </nav>
+
+      <div class="bf-nav-right">
+        <form id="search-form" class="bf-search">
+          <input
+            type="text"
+            id="search-input"
+            placeholder="Search..."
+            autocomplete="off"
+          />
+          <button type="submit">🔍</button>
+        </form>
+      </div>
+    </header>
+
+    <!-- HERO -->
+    <section class="bf-hero">
+      <h1>Where Quality &amp; Clarity Matters</h1>
+      <p class="bf-hero-sub1">
+        Watch movies in HD, exclusively available on Baluflix.
+      </p>
+      <p class="bf-hero-sub2">Developed for smartphones, tablets and PCs.</p>
+    </section>
+
+    <!-- MOVIES -->
+    <main class="bf-main">
+      <section class="bf-movie-strip">
+        <h2 class="bf-strip-title">Latest Movies</h2>
+        <div id="movie-list" class="bf-movie-row"></div>
+      </section>
+    </main>
+
+    <!-- INFO -->
+    <section id="about" class="bf-info-section">
+      <h3>About</h3>
+      <p>Baluflix is a demo streaming UI with a clean movie grid/row layout.</p>
+    </section>
+
+    <section id="bug-report" class="bf-info-section">
+      <h3>Bug Report</h3>
+      <p>Report issues to your-email@example.com</p>
+    </section>
+
+    <section id="contact" class="bf-info-section">
+      <h3>Contact</h3>
+      <p>Replace this with your contact details.</p>
+    </section>
+
+    <footer class="bf-footer">
+      <p>© <span id="year"></span> Baluflix. All rights reserved.</p>
+    </footer>
+
+    <script>
+      document.getElementById("year").textContent = new Date().getFullYear();
+    </script>
+
+    <!-- Keep your existing site.js for loading movies + search -->
+    <script src="site.js"></script>
+  </body>
 </html>
