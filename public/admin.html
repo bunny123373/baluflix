@@ -1,262 +1,641 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>IBOMMA Admin</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-  <style>
-    :root { --primary:#e50914; --secondary:#ff6b00; --bg:#0f0f0f; --card:rgba(20,20,20,.95); --text:#fff; --muted:#b3b3b3; }
-    *{margin:0;padding:0;box-sizing:border-box}
-    body{font-family:Poppins,sans-serif;background:var(--bg);color:var(--text);
-      background-image:radial-gradient(circle at 10% 20%, rgba(229,9,20,.15) 0%, transparent 20%),
-                       radial-gradient(circle at 90% 80%, rgba(255,107,0,.15) 0%, transparent 20%);}
-    .layout{display:flex;min-height:100vh}
-    .sidebar{width:270px;background:var(--card);border-right:1px solid rgba(255,255,255,.1);padding:26px 18px;position:fixed;inset:0 auto 0 0}
-    .brand{font-size:2rem;font-weight:900;letter-spacing:2px;text-align:center;margin-bottom:22px;
-      background:linear-gradient(135deg,var(--primary),var(--secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-    .nav a{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:12px;text-decoration:none;color:var(--muted);font-weight:600;margin-bottom:10px;transition:.25s}
-    .nav a:hover,.nav a.active{background:linear-gradient(135deg,var(--primary),var(--secondary));color:#fff;box-shadow:0 10px 25px rgba(229,9,20,.25)}
-    .main{margin-left:270px;flex:1;padding:24px}
-    .top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:18px}
-    .title{font-size:2.2rem;font-weight:800}
-    .back{color:#fff;text-decoration:none;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.12);
-      padding:10px 16px;border-radius:999px}
-    .back:hover{background:var(--primary)}
-    .grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin:18px 0}
-    .stat{background:var(--card);border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:16px;display:flex;gap:12px;align-items:center}
-    .stat i{font-size:2rem;color:var(--secondary)}
-    .stat .n{font-size:2rem;font-weight:800}
-    .stat .l{color:var(--muted);font-size:.95rem}
-    .section{display:none}
-    .section.active{display:block}
-    .card{background:var(--card);border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:18px;margin-top:14px}
-    .card h2{font-size:1.25rem;margin-bottom:12px}
-    .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-    .fg{margin-bottom:10px}
-    label{display:block;font-weight:600;margin-bottom:6px}
-    input,textarea,select{width:100%;padding:12px 12px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06);color:#fff;outline:none}
-    textarea{resize:vertical}
-    .checks{display:flex;gap:14px;flex-wrap:wrap;margin:8px 0}
-    .checks label{display:flex;gap:8px;align-items:center;font-weight:600;color:#ddd;margin:0}
-    .btn{border:none;cursor:pointer;border-radius:12px;padding:12px 14px;font-weight:800}
-    .btn.primary{width:100%;background:linear-gradient(135deg,var(--primary),var(--secondary));color:#fff}
-    .btn.primary:hover{filter:brightness(1.05)}
-    table{width:100%;border-collapse:collapse}
-    th,td{padding:12px;border-bottom:1px solid rgba(255,255,255,.1);text-align:left}
-    th{color:var(--muted);font-weight:700}
-    .poster{width:52px;height:78px;object-fit:cover;border-radius:8px;border:1px solid rgba(255,255,255,.12)}
-    .actions button{background:transparent;border:none;color:#ddd;cursor:pointer;font-size:1.05rem;margin-right:10px}
-    .actions button:hover{color:var(--secondary)}
-    .actions .danger:hover{color:var(--primary)}
-    /* Upload progress modal */
-    .pmodal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:3000;align-items:center;justify-content:center;padding:14px}
-    .pmodal.active{display:flex}
-    .pbox{width:min(520px,96vw);background:#141414;border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:18px;text-align:center}
-    .bar{height:10px;background:rgba(255,255,255,.1);border-radius:999px;overflow:hidden;margin:12px 0}
-    .fill{height:100%;width:0%;background:linear-gradient(90deg,var(--primary),var(--secondary))}
-    .small{color:var(--muted);font-size:.9rem}
-    /* Edit modal */
-    .emodal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:4000;align-items:center;justify-content:center;padding:14px}
-    .emodal.active{display:flex}
-    .ebox{width:min(640px,96vw);background:#141414;border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:18px}
-    .etop{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
-    .close{width:38px;height:38px;border-radius:999px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06);color:#fff;cursor:pointer}
-    .toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:#1f1f1f;border:1px solid rgba(255,255,255,.14);
-      padding:10px 14px;border-radius:999px;display:none;z-index:5000}
-    .toast.show{display:block}
-    @media (max-width:1000px){ .grid3{grid-template-columns:1fr} .row{grid-template-columns:1fr} }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Baluflix Admin Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #5bbf3b;
+            --dark: #1a1a1a;
+            --light: #f9f9f9;
+            --text: #333;
+            --danger: #ff6b6b;
+            --warning: #ffd166;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        body {
+            display: flex;
+            background: #f5f7fa;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 250px;
+            background: var(--dark);
+            color: white;
+            position: fixed;
+            height: 100vh;
+            padding: 20px 0;
+        }
+
+        .logo {
+            padding: 0 20px 20px;
+            font-size: 20px;
+            font-weight: bold;
+            color: var(--primary);
+            border-bottom: 1px solid #333;
+        }
+
+        .nav {
+            list-style: none;
+            padding: 20px 0;
+        }
+
+        .nav li {
+            padding: 12px 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .nav li:hover, .nav li.active {
+            background: #2c2c2c;
+            color: var(--primary);
+        }
+
+        .nav i {
+            margin-right: 10px;
+        }
+
+        /* Main Content */
+        .main {
+            margin-left: 250px;
+            flex: 1;
+            background: white;
+        }
+
+        /* Header */
+        header {
+            padding: 15px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #eee;
+        }
+
+        .search-box {
+            position: relative;
+        }
+
+        .search-box input {
+            padding: 8px 15px 8px 35px;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            width: 250px;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+        }
+
+        /* Content Area */
+        .content {
+            padding: 25px;
+        }
+
+        /* Controls Bar */
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+        }
+
+        /* Table */
+        .table-container {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            overflow: hidden;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        th {
+            background: #f9f9f9;
+            font-weight: 600;
+            color: #666;
+        }
+
+        .poster {
+            width: 50px;
+            height: 70px;
+            object-fit: cover;
+            border-radius: 4px;
+        }
+
+        .badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .badge-category {
+            background: #e2e6ea;
+            color: #444;
+        }
+
+        .badge-views {
+            background: #d1e7dd;
+            color: #0f5132;
+        }
+
+        .actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .action-btn {
+            padding: 6px 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .view-btn {
+            background: #e2e6ea;
+            color: #444;
+        }
+
+        .edit-btn {
+            background: var(--warning);
+            color: #000;
+        }
+
+        .delete-btn {
+            background: var(--danger);
+            color: white;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            width: 500px;
+            max-width: 90%;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .progress-container {
+            height: 6px;
+            background: #eee;
+            border-radius: 3px;
+            margin: 15px 0;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: var(--primary);
+            width: 0%;
+            transition: width 0.3s;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 80px;
+            }
+
+            .nav li span {
+                display: none;
+            }
+
+            .main {
+                margin-left: 80px;
+            }
+        }
+    </style>
 </head>
 <body>
-<div class="layout">
-  <aside class="sidebar">
-    <div class="brand">IBOMMA</div>
-    <nav class="nav">
-      <a href="#" class="navlink active" data-target="sec-dashboard"><i class="fa-solid fa-gauge-high"></i> Dashboard</a>
-      <a href="#" class="navlink" data-target="sec-upload"><i class="fa-solid fa-cloud-arrow-up"></i> Upload</a>
-      <a href="#" class="navlink" data-target="sec-movies"><i class="fa-solid fa-film"></i> Movies</a>
-      <a href="#" class="navlink" data-target="sec-users"><i class="fa-solid fa-users"></i> Users</a>
-      <a href="#" class="navlink" data-target="sec-settings"><i class="fa-solid fa-gear"></i> Settings</a>
-    </nav>
-  </aside>
-
-  <main class="main">
-    <div class="top">
-      <div class="title" id="pageTitle">Dashboard</div>
-      <a class="back" href="index.html"><i class="fa-solid fa-arrow-left"></i> Back</a>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo">
+            <i class="fas fa-film"></i> BALUFLIX ADMIN
+        </div>
+        <ul class="nav">
+            <li class="active"><i class="fas fa-film"></i><span>Manage Movies</span></li>
+            <li><i class="fas fa-users"></i><span>Users</span></li>
+            <li><i class="fas fa-cog"></i><span>Settings</span></li>
+            <li onclick="logout()"><i class="fas fa-sign-out-alt"></i><span>Logout</span></li>
+        </ul>
     </div>
 
-    <!-- Dashboard -->
-    <section class="section active" id="sec-dashboard">
-      <div class="grid3" id="stats"></div>
-      <div class="card">
-        <h2>Quick Tips</h2>
-        <div class="small">If videos don’t play in browser, ensure MP4 is H.264 + AAC (HEVC/H.265 can fail on some browsers).</div>
-      </div>
-    </section>
-
-    <!-- Upload -->
-    <section class="section" id="sec-upload">
-      <div class="card">
-        <h2>Upload New Movie</h2>
-        <form id="uploadForm">
-          <div class="row">
-            <div class="fg">
-              <label>Title *</label>
-              <input name="title" required />
+    <!-- Main Content -->
+    <div class="main">
+        <header>
+            <h2>Manage Movies</h2>
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" id="searchInput" placeholder="Search movies...">
             </div>
-            <div class="fg">
-              <label>Language</label>
-              <select name="language">
-                <option>Telugu</option>
-                <option>Tamil</option>
-                <option>Hindi</option>
-                <option>English</option>
-              </select>
+        </header>
+
+        <div class="content">
+            <div class="controls">
+                <button class="btn" onclick="openAddModal()">
+                    <i class="fas fa-plus"></i> ADD NEW MOVIE
+                </button>
             </div>
-          </div>
 
-          <div class="fg">
-            <label>Description</label>
-            <textarea name="description" rows="3"></textarea>
-          </div>
-
-          <div class="row">
-            <div class="fg">
-              <label>Poster Upload (optional)</label>
-              <input type="file" name="poster" accept="image/*" />
+            <div class="table-container">
+                <table id="moviesTable">
+                    <thead>
+                        <tr>
+                            <th>Poster</th>
+                            <th>Title</th>
+                            <th>Category</th>
+                            <th>Year</th>
+                            <th>Language</th>
+                            <th>Views</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="moviesTableBody">
+                        <!-- Movies will be loaded here -->
+                    </tbody>
+                </table>
             </div>
-            <div class="fg">
-              <label>Thumbnail URL (optional)</label>
-              <input name="thumbnail" placeholder="https://..." />
-            </div>
-          </div>
-
-          <div class="fg">
-            <label>Video File (MP4) *</label>
-            <input type="file" name="video" accept="video/mp4,video/*" required />
-          </div>
-
-          <div class="checks">
-            <label><input type="checkbox" name="isLatest" /> Latest</label>
-            <label><input type="checkbox" name="isTrending" /> Trending</label>
-          </div>
-
-          <button class="btn primary" type="submit"><i class="fa-solid fa-upload"></i> Upload</button>
-        </form>
-      </div>
-    </section>
-
-    <!-- Movies -->
-    <section class="section" id="sec-movies">
-      <div class="card">
-        <h2>Movies Library</h2>
-        <div style="overflow:auto">
-          <table>
-            <thead>
-              <tr>
-                <th>Poster</th><th>Title</th><th>Lang</th><th>Views</th><th>Video</th><th>Actions</th>
-              </tr>
-            </thead>
-            <tbody id="movieBody"></tbody>
-          </table>
         </div>
-      </div>
-    </section>
-
-    <!-- Users (placeholder) -->
-    <section class="section" id="sec-users">
-      <div class="card">
-        <h2>Users</h2>
-        <div class="small">User system not implemented yet (optional). You can add login/accounts later.</div>
-      </div>
-    </section>
-
-    <!-- Settings -->
-    <section class="section" id="sec-settings">
-      <div class="card">
-        <h2>Settings</h2>
-        <div class="small">Basic settings demo (localStorage). This does not affect server yet.</div>
-        <div class="row" style="margin-top:10px">
-          <div class="fg">
-            <label>Site Title</label>
-            <input id="setTitle" placeholder="IBOMMA" />
-          </div>
-          <div class="fg">
-            <label>Default Language</label>
-            <select id="setLang">
-              <option>Telugu</option><option>Tamil</option><option>Hindi</option><option>English</option>
-            </select>
-          </div>
-        </div>
-        <button class="btn primary" type="button" onclick="saveSettings()"><i class="fa-solid fa-floppy-disk"></i> Save Settings</button>
-      </div>
-    </section>
-  </main>
-</div>
-
-<!-- Upload progress modal -->
-<div class="pmodal" id="pmodal">
-  <div class="pbox">
-    <div style="font-weight:800;font-size:1.2rem" id="ptext">Uploading 0%</div>
-    <div class="bar"><div class="fill" id="pfill"></div></div>
-    <div class="small" id="pdetails">Starting...</div>
-  </div>
-</div>
-
-<!-- Edit modal -->
-<div class="emodal" id="emodal" onclick="editOutside(event)">
-  <div class="ebox">
-    <div class="etop">
-      <div style="font-weight:800;font-size:1.2rem">Edit Movie</div>
-      <button class="close" onclick="closeEdit()"><i class="fa-solid fa-xmark"></i></button>
     </div>
 
-    <form id="editForm">
-      <input type="hidden" name="id" id="eid" />
-      <div class="row">
-        <div class="fg">
-          <label>Title *</label>
-          <input name="title" id="etitle" required />
+    <!-- Add Movie Modal -->
+    <div class="modal" id="addModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Add New Movie</h3>
+                <button class="close-btn" onclick="closeAddModal()">&times;</button>
+            </div>
+            <form id="addMovieForm">
+                <div class="form-group">
+                    <label>Title</label>
+                    <input type="text" name="title" required>
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea name="description" rows="3"></textarea>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                    <div class="form-group">
+                        <label>Year</label>
+                        <input type="text" name="year">
+                    </div>
+                    <div class="form-group">
+                        <label>Language</label>
+                        <input type="text" name="language" value="Telugu">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Category</label>
+                    <input type="text" name="category">
+                </div>
+                <div class="form-group">
+                    <label>Poster Image</label>
+                    <input type="file" name="poster" accept="image/*">
+                </div>
+                <div class="form-group">
+                    <label>Movie File (.mp4)</label>
+                    <input type="file" name="movieFile" accept="video/mp4" required>
+                </div>
+                <div class="progress-container">
+                    <div class="progress-bar" id="uploadProgress"></div>
+                </div>
+                <button type="submit" class="btn">UPLOAD MOVIE</button>
+            </form>
         </div>
-        <div class="fg">
-          <label>Language</label>
-          <select name="language" id="elang">
-            <option>Telugu</option><option>Tamil</option><option>Hindi</option><option>English</option>
-          </select>
+    </div>
+
+    <!-- Edit Movie Modal -->
+    <div class="modal" id="editModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Edit Movie</h3>
+                <button class="close-btn" onclick="closeEditModal()">&times;</button>
+            </div>
+            <form id="editMovieForm">
+                <input type="hidden" name="id" id="editId">
+                <div class="form-group">
+                    <label>Title</label>
+                    <input type="text" name="title" id="editTitle" required>
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea name="description" id="editDescription" rows="3"></textarea>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                    <div class="form-group">
+                        <label>Year</label>
+                        <input type="text" name="year" id="editYear">
+                    </div>
+                    <div class="form-group">
+                        <label>Language</label>
+                        <input type="text" name="language" id="editLanguage">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Category</label>
+                    <input type="text" name="category" id="editCategory">
+                </div>
+                <button type="submit" class="btn">UPDATE MOVIE</button>
+            </form>
         </div>
-      </div>
+    </div>
 
-      <div class="fg">
-        <label>Description</label>
-        <textarea name="description" id="edesc" rows="3"></textarea>
-      </div>
+    <script>
+        // Check if logged in
+        document.addEventListener('DOMContentLoaded', function() {
+            const token = localStorage.getItem('bf_admin_token');
+            if (!token) {
+                window.location.href = 'admin.html';
+            }
+        });
 
-      <div class="row">
-        <div class="fg">
-          <label>Thumbnail URL</label>
-          <input name="thumbnail" id="ethumb" />
-        </div>
-        <div class="fg">
-          <label>New Poster Upload (optional)</label>
-          <input type="file" name="newPoster" accept="image/*" />
-        </div>
-      </div>
+        // Logout function
+        function logout() {
+            localStorage.removeItem('bf_admin_token');
+            window.location.href = 'admin.html';
+        }
 
-      <div class="checks">
-        <label><input type="checkbox" name="isLatest" id="elatest" /> Latest</label>
-        <label><input type="checkbox" name="isTrending" id="etrending" /> Trending</label>
-      </div>
+        // DOM Elements
+        const moviesTableBody = document.getElementById('moviesTableBody');
+        const searchInput = document.getElementById('searchInput');
+        const addMovieForm = document.getElementById('addMovieForm');
+        const editMovieForm = document.getElementById('editMovieForm');
+        const uploadProgress = document.getElementById('uploadProgress');
 
-      <button class="btn primary" type="submit"><i class="fa-solid fa-save"></i> Save Changes</button>
-    </form>
-  </div>
-</div>
+        // Load movies
+        async function loadMovies() {
+            try {
+                const response = await fetch('/api/movies', {
+                    headers: {
+                        'x-admin-token': localStorage.getItem('bf_admin_token')
+                    }
+                });
+                const movies = await response.json();
+                renderMovies(movies);
+            } catch (error) {
+                console.error('Error loading movies:', error);
+            }
+        }
 
-<div class="toast" id="toast"></div>
+        // Render movies in table
+        function renderMovies(movies) {
+            moviesTableBody.innerHTML = '';
+            movies.forEach(movie => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td><img src="${movie.poster || 'https://via.placeholder.com/50x70'}" class="poster"></td>
+                    <td>${movie.title}</td>
+                    <td><span class="badge badge-category">${movie.category || 'Uncategorized'}</span></td>
+                    <td>${movie.year || '-'}</td>
+                    <td>${movie.language || 'Telugu'}</td>
+                    <td><span class="badge badge-views">${movie.views || 0} views</span></td>
+                    <td class="actions">
+                        <button class="action-btn view-btn" onclick="viewMovie('${movie.id}')">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button class="action-btn edit-btn" onclick="openEditModal('${movie.id}')">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="action-btn delete-btn" onclick="deleteMovie('${movie.id}', '${movie.title}')">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                `;
+                moviesTableBody.appendChild(row);
+            });
+        }
 
-<script src="admin.js"></script>
+        // Search functionality
+        searchInput.addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            document.querySelectorAll('#moviesTableBody tr').forEach(row => {
+                const title = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
+                row.style.display = title.includes(searchTerm) ? '' : 'none';
+            });
+        });
+
+        // Open add movie modal
+        function openAddModal() {
+            document.getElementById('addModal').style.display = 'flex';
+        }
+
+        // Close add movie modal
+        function closeAddModal() {
+            document.getElementById('addModal').style.display = 'none';
+            addMovieForm.reset();
+            uploadProgress.style.width = '0%';
+        }
+
+        // Add movie form submission
+        addMovieForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+
+            try {
+                const response = await fetch('/api/movies', {
+                    method: 'POST',
+                    headers: {
+                        'x-admin-token': localStorage.getItem('bf_admin_token')
+                    },
+                    body: formData
+                });
+
+                if (response.ok) {
+                    closeAddModal();
+                    loadMovies();
+                } else {
+                    const error = await response.json();
+                    alert(error.error || 'Failed to upload movie');
+                }
+            } catch (error) {
+                console.error('Upload error:', error);
+                alert('Network error. Please try again.');
+            }
+        });
+
+        // Open edit modal
+        async function openEditModal(movieId) {
+            try {
+                const response = await fetch(`/api/movies/${movieId}`, {
+                    headers: {
+                        'x-admin-token': localStorage.getItem('bf_admin_token')
+                    }
+                });
+                const movie = await response.json();
+
+                document.getElementById('editId').value = movie.id;
+                document.getElementById('editTitle').value = movie.title;
+                document.getElementById('editDescription').value = movie.description || '';
+                document.getElementById('editYear').value = movie.year || '';
+                document.getElementById('editLanguage').value = movie.language || 'Telugu';
+                document.getElementById('editCategory').value = movie.category || '';
+
+                document.getElementById('editModal').style.display = 'flex';
+            } catch (error) {
+                console.error('Error loading movie:', error);
+                alert('Failed to load movie details');
+            }
+        }
+
+        // Close edit modal
+        function closeEditModal() {
+            document.getElementById('editModal').style.display = 'none';
+        }
+
+        // Edit movie form submission
+        editMovieForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const movieId = document.getElementById('editId').value;
+            const updatedData = {
+                title: document.getElementById('editTitle').value,
+                description: document.getElementById('editDescription').value,
+                year: document.getElementById('editYear').value,
+                language: document.getElementById('editLanguage').value,
+                category: document.getElementById('editCategory').value
+            };
+
+            try {
+                const response = await fetch(`/api/movies/${movieId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'x-admin-token': localStorage.getItem('bf_admin_token')
+                    },
+                    body: JSON.stringify(updatedData)
+                });
+
+                if (response.ok) {
+                    closeEditModal();
+                    loadMovies();
+                } else {
+                    const error = await response.json();
+                    alert(error.error || 'Failed to update movie');
+                }
+            } catch (error) {
+                console.error('Update error:', error);
+                alert('Network error. Please try again.');
+            }
+        });
+
+        // Delete movie
+        function deleteMovie(movieId, movieTitle) {
+            if (confirm(`Are you sure you want to delete "${movieTitle}"?`)) {
+                fetch(`/api/movies/${movieId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'x-admin-token': localStorage.getItem('bf_admin_token')
+                    }
+                })
+                .then(response => {
+                    if (response.ok) {
+                        loadMovies();
+                    } else {
+                        return response.json().then(error => {
+                            alert(error.error || 'Failed to delete movie');
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('Delete error:', error);
+                    alert('Network error. Please try again.');
+                });
+            }
+        }
+
+        // View movie
+        function viewMovie(movieId) {
+            window.open(`play.html?id=${movieId}`, '_blank');
+        }
+
+        // Load movies on page load
+        loadMovies();
+    </script>
 </body>
 </html>
