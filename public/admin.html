@@ -1,343 +1,262 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Baluflix – Where Quality & Clarity Matters</title>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IBOMMA Admin</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root { --primary:#e50914; --secondary:#ff6b00; --bg:#0f0f0f; --card:rgba(20,20,20,.95); --text:#fff; --muted:#b3b3b3; }
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:Poppins,sans-serif;background:var(--bg);color:var(--text);
+      background-image:radial-gradient(circle at 10% 20%, rgba(229,9,20,.15) 0%, transparent 20%),
+                       radial-gradient(circle at 90% 80%, rgba(255,107,0,.15) 0%, transparent 20%);}
+    .layout{display:flex;min-height:100vh}
+    .sidebar{width:270px;background:var(--card);border-right:1px solid rgba(255,255,255,.1);padding:26px 18px;position:fixed;inset:0 auto 0 0}
+    .brand{font-size:2rem;font-weight:900;letter-spacing:2px;text-align:center;margin-bottom:22px;
+      background:linear-gradient(135deg,var(--primary),var(--secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+    .nav a{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:12px;text-decoration:none;color:var(--muted);font-weight:600;margin-bottom:10px;transition:.25s}
+    .nav a:hover,.nav a.active{background:linear-gradient(135deg,var(--primary),var(--secondary));color:#fff;box-shadow:0 10px 25px rgba(229,9,20,.25)}
+    .main{margin-left:270px;flex:1;padding:24px}
+    .top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:18px}
+    .title{font-size:2.2rem;font-weight:800}
+    .back{color:#fff;text-decoration:none;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.12);
+      padding:10px 16px;border-radius:999px}
+    .back:hover{background:var(--primary)}
+    .grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin:18px 0}
+    .stat{background:var(--card);border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:16px;display:flex;gap:12px;align-items:center}
+    .stat i{font-size:2rem;color:var(--secondary)}
+    .stat .n{font-size:2rem;font-weight:800}
+    .stat .l{color:var(--muted);font-size:.95rem}
+    .section{display:none}
+    .section.active{display:block}
+    .card{background:var(--card);border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:18px;margin-top:14px}
+    .card h2{font-size:1.25rem;margin-bottom:12px}
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .fg{margin-bottom:10px}
+    label{display:block;font-weight:600;margin-bottom:6px}
+    input,textarea,select{width:100%;padding:12px 12px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06);color:#fff;outline:none}
+    textarea{resize:vertical}
+    .checks{display:flex;gap:14px;flex-wrap:wrap;margin:8px 0}
+    .checks label{display:flex;gap:8px;align-items:center;font-weight:600;color:#ddd;margin:0}
+    .btn{border:none;cursor:pointer;border-radius:12px;padding:12px 14px;font-weight:800}
+    .btn.primary{width:100%;background:linear-gradient(135deg,var(--primary),var(--secondary));color:#fff}
+    .btn.primary:hover{filter:brightness(1.05)}
+    table{width:100%;border-collapse:collapse}
+    th,td{padding:12px;border-bottom:1px solid rgba(255,255,255,.1);text-align:left}
+    th{color:var(--muted);font-weight:700}
+    .poster{width:52px;height:78px;object-fit:cover;border-radius:8px;border:1px solid rgba(255,255,255,.12)}
+    .actions button{background:transparent;border:none;color:#ddd;cursor:pointer;font-size:1.05rem;margin-right:10px}
+    .actions button:hover{color:var(--secondary)}
+    .actions .danger:hover{color:var(--primary)}
+    /* Upload progress modal */
+    .pmodal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:3000;align-items:center;justify-content:center;padding:14px}
+    .pmodal.active{display:flex}
+    .pbox{width:min(520px,96vw);background:#141414;border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:18px;text-align:center}
+    .bar{height:10px;background:rgba(255,255,255,.1);border-radius:999px;overflow:hidden;margin:12px 0}
+    .fill{height:100%;width:0%;background:linear-gradient(90deg,var(--primary),var(--secondary))}
+    .small{color:var(--muted);font-size:.9rem}
+    /* Edit modal */
+    .emodal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:4000;align-items:center;justify-content:center;padding:14px}
+    .emodal.active{display:flex}
+    .ebox{width:min(640px,96vw);background:#141414;border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:18px}
+    .etop{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+    .close{width:38px;height:38px;border-radius:999px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06);color:#fff;cursor:pointer}
+    .toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:#1f1f1f;border:1px solid rgba(255,255,255,.14);
+      padding:10px 14px;border-radius:999px;display:none;z-index:5000}
+    .toast.show{display:block}
+    @media (max-width:1000px){ .grid3{grid-template-columns:1fr} .row{grid-template-columns:1fr} }
+  </style>
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="brand">IBOMMA</div>
+    <nav class="nav">
+      <a href="#" class="navlink active" data-target="sec-dashboard"><i class="fa-solid fa-gauge-high"></i> Dashboard</a>
+      <a href="#" class="navlink" data-target="sec-upload"><i class="fa-solid fa-cloud-arrow-up"></i> Upload</a>
+      <a href="#" class="navlink" data-target="sec-movies"><i class="fa-solid fa-film"></i> Movies</a>
+      <a href="#" class="navlink" data-target="sec-users"><i class="fa-solid fa-users"></i> Users</a>
+      <a href="#" class="navlink" data-target="sec-settings"><i class="fa-solid fa-gear"></i> Settings</a>
+    </nav>
+  </aside>
 
-    <!-- COMBINED CSS (style.css content embedded here) -->
-    <style>
-      /* RESET */
-      * {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-      }
+  <main class="main">
+    <div class="top">
+      <div class="title" id="pageTitle">Dashboard</div>
+      <a class="back" href="index.html"><i class="fa-solid fa-arrow-left"></i> Back</a>
+    </div>
 
-      body {
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-        background: #050505;
-        color: #ffffff;
-      }
-
-      /* TOP NAVBAR */
-      .bf-nav {
-        position: sticky;
-        top: 0;
-        z-index: 50;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 14px 40px;
-        background: #050505;
-        border-bottom: 1px solid #111;
-      }
-
-      .bf-logo {
-        display: flex;
-        align-items: center;
-        text-decoration: none;
-      }
-
-      .bf-logo-icon {
-        width: 30px;
-        height: 30px;
-        border-radius: 6px;
-        background: #5bbf3b;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: 700;
-        color: #050505;
-        margin-right: 8px;
-      }
-
-      .bf-logo-text {
-        font-size: 22px;
-        font-weight: 700;
-        letter-spacing: 0.5px;
-        color: #e9ffe4;
-      }
-
-      .bf-nav-links a {
-        margin: 0 10px;
-        font-size: 14px;
-        text-decoration: none;
-        color: #a9b7a5;
-        transition: color 0.18s;
-      }
-
-      .bf-nav-links a:hover {
-        color: #e9ffe4;
-      }
-
-      .bf-nav-right {
-        display: flex;
-        align-items: center;
-        gap: 14px;
-      }
-
-      /* SEARCH BAR */
-      .bf-search {
-        display: flex;
-        align-items: center;
-        background: #111;
-        border-radius: 999px;
-        overflow: hidden;
-        border: 1px solid #1f1f1f;
-      }
-
-      .bf-search input {
-        background: transparent;
-        border: none;
-        outline: none;
-        padding: 6px 10px 6px 14px;
-        color: #f5f5f5;
-        width: 180px;
-        font-size: 13px;
-      }
-
-      .bf-search button {
-        border: none;
-        outline: none;
-        background: #5bbf3b;
-        color: #050505;
-        padding: 6px 12px;
-        cursor: pointer;
-        font-size: 13px;
-      }
-
-      .bf-search button:hover {
-        background: #6cd447;
-      }
-
-      /* HERO SECTION */
-      .bf-hero {
-        text-align: center;
-        padding: 40px 16px 10px;
-      }
-
-      .bf-hero h1 {
-        font-size: 34px;
-        font-weight: 600;
-        margin-bottom: 12px;
-      }
-
-      .bf-hero-sub1 {
-        font-size: 15px;
-        color: #d2d2d2;
-        margin-bottom: 4px;
-      }
-
-      .bf-hero-sub2 {
-        font-size: 14px;
-        color: #8f8f8f;
-      }
-
-      /* MOVIE STRIP */
-      .bf-main {
-        padding: 24px 32px 40px;
-      }
-
-      .bf-strip-title {
-        font-size: 18px;
-        margin-bottom: 14px;
-        color: #e9ffe4;
-      }
-
-      /* horizontal row */
-      .bf-movie-row {
-        display: flex;
-        gap: 14px;
-        overflow-x: auto;
-        padding-bottom: 6px;
-      }
-
-      .bf-movie-row::-webkit-scrollbar {
-        height: 6px;
-      }
-      .bf-movie-row::-webkit-scrollbar-track {
-        background: transparent;
-      }
-      .bf-movie-row::-webkit-scrollbar-thumb {
-        background: #262626;
-        border-radius: 3px;
-      }
-
-      /* MOVIE CARD */
-      .movie-card {
-        min-width: 150px;
-        max-width: 150px;
-        background: #070707;
-        border-radius: 6px;
-        overflow: hidden;
-        cursor: pointer;
-        transition: transform 0.2s ease, box-shadow 0.2s ease, outline 0.2s;
-        outline: 1px solid #111;
-      }
-
-      .movie-card:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 10px 18px rgba(0, 0, 0, 0.75);
-        outline-color: #3f3f3f;
-      }
-
-      .movie-card img {
-        width: 100%;
-        height: 220px;
-        object-fit: cover;
-        display: block;
-      }
-
-      .movie-info {
-        padding: 8px;
-      }
-
-      .movie-title {
-        font-size: 13px;
-        font-weight: 500;
-        margin-bottom: 4px;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-      }
-
-      .movie-meta {
-        font-size: 11px;
-        color: #9a9a9a;
-      }
-
-      /* INFO SECTIONS */
-      .bf-info-section {
-        padding: 24px 32px;
-        border-top: 1px solid #111;
-        background: #060606;
-      }
-
-      .bf-info-section h3 {
-        margin-bottom: 8px;
-        font-size: 16px;
-        color: #e9ffe4;
-      }
-
-      .bf-info-section p {
-        font-size: 13px;
-        color: #afafaf;
-        max-width: 700px;
-      }
-
-      /* FOOTER */
-      .bf-footer {
-        padding: 14px 32px 20px;
-        text-align: center;
-        font-size: 12px;
-        color: #7c7c7c;
-        border-top: 1px solid #111;
-      }
-
-      /* RESPONSIVE */
-      @media (max-width: 768px) {
-        .bf-nav {
-          padding: 10px 14px;
-        }
-
-        .bf-nav-links {
-          display: none;
-        }
-
-        .bf-search input {
-          width: 120px;
-        }
-
-        .bf-main,
-        .bf-info-section,
-        .bf-footer {
-          padding-left: 16px;
-          padding-right: 16px;
-        }
-
-        .bf-hero {
-          padding-top: 28px;
-        }
-
-        .bf-hero h1 {
-          font-size: 26px;
-        }
-      }
-    </style>
-  </head>
-
-  <body>
-    <!-- TOP NAV (No Admin option) -->
-    <header class="bf-nav">
-      <div class="bf-nav-left">
-        <a href="index.html" class="bf-logo">
-          <span class="bf-logo-icon">B</span>
-          <span class="bf-logo-text">Baluflix</span>
-        </a>
+    <!-- Dashboard -->
+    <section class="section active" id="sec-dashboard">
+      <div class="grid3" id="stats"></div>
+      <div class="card">
+        <h2>Quick Tips</h2>
+        <div class="small">If videos don’t play in browser, ensure MP4 is H.264 + AAC (HEVC/H.265 can fail on some browsers).</div>
       </div>
+    </section>
 
-      <nav class="bf-nav-links">
-        <a href="#about">About</a>
-        <a href="#bug-report">Bug Report</a>
-        <a href="#contact">Contact</a>
-      </nav>
+    <!-- Upload -->
+    <section class="section" id="sec-upload">
+      <div class="card">
+        <h2>Upload New Movie</h2>
+        <form id="uploadForm">
+          <div class="row">
+            <div class="fg">
+              <label>Title *</label>
+              <input name="title" required />
+            </div>
+            <div class="fg">
+              <label>Language</label>
+              <select name="language">
+                <option>Telugu</option>
+                <option>Tamil</option>
+                <option>Hindi</option>
+                <option>English</option>
+              </select>
+            </div>
+          </div>
 
-      <div class="bf-nav-right">
-        <form id="search-form" class="bf-search">
-          <input
-            type="text"
-            id="search-input"
-            placeholder="Search..."
-            autocomplete="off"
-          />
-          <button type="submit">🔍</button>
+          <div class="fg">
+            <label>Description</label>
+            <textarea name="description" rows="3"></textarea>
+          </div>
+
+          <div class="row">
+            <div class="fg">
+              <label>Poster Upload (optional)</label>
+              <input type="file" name="poster" accept="image/*" />
+            </div>
+            <div class="fg">
+              <label>Thumbnail URL (optional)</label>
+              <input name="thumbnail" placeholder="https://..." />
+            </div>
+          </div>
+
+          <div class="fg">
+            <label>Video File (MP4) *</label>
+            <input type="file" name="video" accept="video/mp4,video/*" required />
+          </div>
+
+          <div class="checks">
+            <label><input type="checkbox" name="isLatest" /> Latest</label>
+            <label><input type="checkbox" name="isTrending" /> Trending</label>
+          </div>
+
+          <button class="btn primary" type="submit"><i class="fa-solid fa-upload"></i> Upload</button>
         </form>
       </div>
-    </header>
-
-    <!-- HERO -->
-    <section class="bf-hero">
-      <h1>Where Quality &amp; Clarity Matters</h1>
-      <p class="bf-hero-sub1">
-        Watch movies in HD, exclusively available on Baluflix.
-      </p>
-      <p class="bf-hero-sub2">Developed for smartphones, tablets and PCs.</p>
     </section>
 
-    <!-- MOVIES -->
-    <main class="bf-main">
-      <section class="bf-movie-strip">
-        <h2 class="bf-strip-title">Latest Movies</h2>
-        <div id="movie-list" class="bf-movie-row"></div>
-      </section>
-    </main>
-
-    <!-- INFO -->
-    <section id="about" class="bf-info-section">
-      <h3>About</h3>
-      <p>Baluflix is a demo streaming UI with a clean movie grid/row layout.</p>
+    <!-- Movies -->
+    <section class="section" id="sec-movies">
+      <div class="card">
+        <h2>Movies Library</h2>
+        <div style="overflow:auto">
+          <table>
+            <thead>
+              <tr>
+                <th>Poster</th><th>Title</th><th>Lang</th><th>Views</th><th>Video</th><th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="movieBody"></tbody>
+          </table>
+        </div>
+      </div>
     </section>
 
-    <section id="bug-report" class="bf-info-section">
-      <h3>Bug Report</h3>
-      <p>Report issues to your-email@example.com</p>
+    <!-- Users (placeholder) -->
+    <section class="section" id="sec-users">
+      <div class="card">
+        <h2>Users</h2>
+        <div class="small">User system not implemented yet (optional). You can add login/accounts later.</div>
+      </div>
     </section>
 
-    <section id="contact" class="bf-info-section">
-      <h3>Contact</h3>
-      <p>Replace this with your contact details.</p>
+    <!-- Settings -->
+    <section class="section" id="sec-settings">
+      <div class="card">
+        <h2>Settings</h2>
+        <div class="small">Basic settings demo (localStorage). This does not affect server yet.</div>
+        <div class="row" style="margin-top:10px">
+          <div class="fg">
+            <label>Site Title</label>
+            <input id="setTitle" placeholder="IBOMMA" />
+          </div>
+          <div class="fg">
+            <label>Default Language</label>
+            <select id="setLang">
+              <option>Telugu</option><option>Tamil</option><option>Hindi</option><option>English</option>
+            </select>
+          </div>
+        </div>
+        <button class="btn primary" type="button" onclick="saveSettings()"><i class="fa-solid fa-floppy-disk"></i> Save Settings</button>
+      </div>
     </section>
+  </main>
+</div>
 
-    <footer class="bf-footer">
-      <p>© <span id="year"></span> Baluflix. All rights reserved.</p>
-    </footer>
+<!-- Upload progress modal -->
+<div class="pmodal" id="pmodal">
+  <div class="pbox">
+    <div style="font-weight:800;font-size:1.2rem" id="ptext">Uploading 0%</div>
+    <div class="bar"><div class="fill" id="pfill"></div></div>
+    <div class="small" id="pdetails">Starting...</div>
+  </div>
+</div>
 
-    <script>
-      document.getElementById("year").textContent = new Date().getFullYear();
-    </script>
+<!-- Edit modal -->
+<div class="emodal" id="emodal" onclick="editOutside(event)">
+  <div class="ebox">
+    <div class="etop">
+      <div style="font-weight:800;font-size:1.2rem">Edit Movie</div>
+      <button class="close" onclick="closeEdit()"><i class="fa-solid fa-xmark"></i></button>
+    </div>
 
-    <!-- Keep your existing site.js for loading movies + search -->
-    <script src="site.js"></script>
-  </body>
+    <form id="editForm">
+      <input type="hidden" name="id" id="eid" />
+      <div class="row">
+        <div class="fg">
+          <label>Title *</label>
+          <input name="title" id="etitle" required />
+        </div>
+        <div class="fg">
+          <label>Language</label>
+          <select name="language" id="elang">
+            <option>Telugu</option><option>Tamil</option><option>Hindi</option><option>English</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="fg">
+        <label>Description</label>
+        <textarea name="description" id="edesc" rows="3"></textarea>
+      </div>
+
+      <div class="row">
+        <div class="fg">
+          <label>Thumbnail URL</label>
+          <input name="thumbnail" id="ethumb" />
+        </div>
+        <div class="fg">
+          <label>New Poster Upload (optional)</label>
+          <input type="file" name="newPoster" accept="image/*" />
+        </div>
+      </div>
+
+      <div class="checks">
+        <label><input type="checkbox" name="isLatest" id="elatest" /> Latest</label>
+        <label><input type="checkbox" name="isTrending" id="etrending" /> Trending</label>
+      </div>
+
+      <button class="btn primary" type="submit"><i class="fa-solid fa-save"></i> Save Changes</button>
+    </form>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="admin.js"></script>
+</body>
 </html>
