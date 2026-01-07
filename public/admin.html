@@ -1,262 +1,144 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>IBOMMA Admin</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-  <style>
-    :root { --primary:#e50914; --secondary:#ff6b00; --bg:#0f0f0f; --card:rgba(20,20,20,.95); --text:#fff; --muted:#b3b3b3; }
-    *{margin:0;padding:0;box-sizing:border-box}
-    body{font-family:Poppins,sans-serif;background:var(--bg);color:var(--text);
-      background-image:radial-gradient(circle at 10% 20%, rgba(229,9,20,.15) 0%, transparent 20%),
-                       radial-gradient(circle at 90% 80%, rgba(255,107,0,.15) 0%, transparent 20%);}
-    .layout{display:flex;min-height:100vh}
-    .sidebar{width:270px;background:var(--card);border-right:1px solid rgba(255,255,255,.1);padding:26px 18px;position:fixed;inset:0 auto 0 0}
-    .brand{font-size:2rem;font-weight:900;letter-spacing:2px;text-align:center;margin-bottom:22px;
-      background:linear-gradient(135deg,var(--primary),var(--secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-    .nav a{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:12px;text-decoration:none;color:var(--muted);font-weight:600;margin-bottom:10px;transition:.25s}
-    .nav a:hover,.nav a.active{background:linear-gradient(135deg,var(--primary),var(--secondary));color:#fff;box-shadow:0 10px 25px rgba(229,9,20,.25)}
-    .main{margin-left:270px;flex:1;padding:24px}
-    .top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:18px}
-    .title{font-size:2.2rem;font-weight:800}
-    .back{color:#fff;text-decoration:none;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.12);
-      padding:10px 16px;border-radius:999px}
-    .back:hover{background:var(--primary)}
-    .grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin:18px 0}
-    .stat{background:var(--card);border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:16px;display:flex;gap:12px;align-items:center}
-    .stat i{font-size:2rem;color:var(--secondary)}
-    .stat .n{font-size:2rem;font-weight:800}
-    .stat .l{color:var(--muted);font-size:.95rem}
-    .section{display:none}
-    .section.active{display:block}
-    .card{background:var(--card);border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:18px;margin-top:14px}
-    .card h2{font-size:1.25rem;margin-bottom:12px}
-    .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-    .fg{margin-bottom:10px}
-    label{display:block;font-weight:600;margin-bottom:6px}
-    input,textarea,select{width:100%;padding:12px 12px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06);color:#fff;outline:none}
-    textarea{resize:vertical}
-    .checks{display:flex;gap:14px;flex-wrap:wrap;margin:8px 0}
-    .checks label{display:flex;gap:8px;align-items:center;font-weight:600;color:#ddd;margin:0}
-    .btn{border:none;cursor:pointer;border-radius:12px;padding:12px 14px;font-weight:800}
-    .btn.primary{width:100%;background:linear-gradient(135deg,var(--primary),var(--secondary));color:#fff}
-    .btn.primary:hover{filter:brightness(1.05)}
-    table{width:100%;border-collapse:collapse}
-    th,td{padding:12px;border-bottom:1px solid rgba(255,255,255,.1);text-align:left}
-    th{color:var(--muted);font-weight:700}
-    .poster{width:52px;height:78px;object-fit:cover;border-radius:8px;border:1px solid rgba(255,255,255,.12)}
-    .actions button{background:transparent;border:none;color:#ddd;cursor:pointer;font-size:1.05rem;margin-right:10px}
-    .actions button:hover{color:var(--secondary)}
-    .actions .danger:hover{color:var(--primary)}
-    /* Upload progress modal */
-    .pmodal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:3000;align-items:center;justify-content:center;padding:14px}
-    .pmodal.active{display:flex}
-    .pbox{width:min(520px,96vw);background:#141414;border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:18px;text-align:center}
-    .bar{height:10px;background:rgba(255,255,255,.1);border-radius:999px;overflow:hidden;margin:12px 0}
-    .fill{height:100%;width:0%;background:linear-gradient(90deg,var(--primary),var(--secondary))}
-    .small{color:var(--muted);font-size:.9rem}
-    /* Edit modal */
-    .emodal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:4000;align-items:center;justify-content:center;padding:14px}
-    .emodal.active{display:flex}
-    .ebox{width:min(640px,96vw);background:#141414;border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:18px}
-    .etop{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
-    .close{width:38px;height:38px;border-radius:999px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06);color:#fff;cursor:pointer}
-    .toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:#1f1f1f;border:1px solid rgba(255,255,255,.14);
-      padding:10px 14px;border-radius:999px;display:none;z-index:5000}
-    .toast.show{display:block}
-    @media (max-width:1000px){ .grid3{grid-template-columns:1fr} .row{grid-template-columns:1fr} }
-  </style>
+<meta charset="UTF-8">
+<title>Admin Panel</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body{margin:0;font-family:Arial;background:#0b0b0b;color:#fff;display:flex}
+.sidebar{width:220px;background:#111;padding:20px}
+.sidebar button{width:100%;padding:12px;margin-bottom:8px;background:#1a1a1a;color:#fff;border:none;cursor:pointer}
+.sidebar button.active{background:#7CFC00;color:#000}
+.main{flex:1;padding:20px;overflow:auto}
+.form{background:#111;padding:15px;border-radius:8px;max-width:500px}
+input,select,textarea,button{width:100%;padding:8px;margin:5px 0;background:#1a1a1a;border:none;color:#fff}
+button{background:#7CFC00;color:#000;font-weight:bold}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,200px);gap:15px;margin-top:20px}
+.card{background:#111;padding:8px;border-radius:6px}
+.card img{width:100%;height:260px;object-fit:cover}
+.series{background:#111;padding:10px;border-radius:6px;margin-bottom:10px}
+</style>
 </head>
 <body>
-<div class="layout">
-  <aside class="sidebar">
-    <div class="brand">IBOMMA</div>
-    <nav class="nav">
-      <a href="#" class="navlink active" data-target="sec-dashboard"><i class="fa-solid fa-gauge-high"></i> Dashboard</a>
-      <a href="#" class="navlink" data-target="sec-upload"><i class="fa-solid fa-cloud-arrow-up"></i> Upload</a>
-      <a href="#" class="navlink" data-target="sec-movies"><i class="fa-solid fa-film"></i> Movies</a>
-      <a href="#" class="navlink" data-target="sec-users"><i class="fa-solid fa-users"></i> Users</a>
-      <a href="#" class="navlink" data-target="sec-settings"><i class="fa-solid fa-gear"></i> Settings</a>
-    </nav>
-  </aside>
 
-  <main class="main">
-    <div class="top">
-      <div class="title" id="pageTitle">Dashboard</div>
-      <a class="back" href="index.html"><i class="fa-solid fa-arrow-left"></i> Back</a>
-    </div>
-
-    <!-- Dashboard -->
-    <section class="section active" id="sec-dashboard">
-      <div class="grid3" id="stats"></div>
-      <div class="card">
-        <h2>Quick Tips</h2>
-        <div class="small">If videos don’t play in browser, ensure MP4 is H.264 + AAC (HEVC/H.265 can fail on some browsers).</div>
-      </div>
-    </section>
-
-    <!-- Upload -->
-    <section class="section" id="sec-upload">
-      <div class="card">
-        <h2>Upload New Movie</h2>
-        <form id="uploadForm">
-          <div class="row">
-            <div class="fg">
-              <label>Title *</label>
-              <input name="title" required />
-            </div>
-            <div class="fg">
-              <label>Language</label>
-              <select name="language">
-                <option>Telugu</option>
-                <option>Tamil</option>
-                <option>Hindi</option>
-                <option>English</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="fg">
-            <label>Description</label>
-            <textarea name="description" rows="3"></textarea>
-          </div>
-
-          <div class="row">
-            <div class="fg">
-              <label>Poster Upload (optional)</label>
-              <input type="file" name="poster" accept="image/*" />
-            </div>
-            <div class="fg">
-              <label>Thumbnail URL (optional)</label>
-              <input name="thumbnail" placeholder="https://..." />
-            </div>
-          </div>
-
-          <div class="fg">
-            <label>Video File (MP4) *</label>
-            <input type="file" name="video" accept="video/mp4,video/*" required />
-          </div>
-
-          <div class="checks">
-            <label><input type="checkbox" name="isLatest" /> Latest</label>
-            <label><input type="checkbox" name="isTrending" /> Trending</label>
-          </div>
-
-          <button class="btn primary" type="submit"><i class="fa-solid fa-upload"></i> Upload</button>
-        </form>
-      </div>
-    </section>
-
-    <!-- Movies -->
-    <section class="section" id="sec-movies">
-      <div class="card">
-        <h2>Movies Library</h2>
-        <div style="overflow:auto">
-          <table>
-            <thead>
-              <tr>
-                <th>Poster</th><th>Title</th><th>Lang</th><th>Views</th><th>Video</th><th>Actions</th>
-              </tr>
-            </thead>
-            <tbody id="movieBody"></tbody>
-          </table>
-        </div>
-      </div>
-    </section>
-
-    <!-- Users (placeholder) -->
-    <section class="section" id="sec-users">
-      <div class="card">
-        <h2>Users</h2>
-        <div class="small">User system not implemented yet (optional). You can add login/accounts later.</div>
-      </div>
-    </section>
-
-    <!-- Settings -->
-    <section class="section" id="sec-settings">
-      <div class="card">
-        <h2>Settings</h2>
-        <div class="small">Basic settings demo (localStorage). This does not affect server yet.</div>
-        <div class="row" style="margin-top:10px">
-          <div class="fg">
-            <label>Site Title</label>
-            <input id="setTitle" placeholder="IBOMMA" />
-          </div>
-          <div class="fg">
-            <label>Default Language</label>
-            <select id="setLang">
-              <option>Telugu</option><option>Tamil</option><option>Hindi</option><option>English</option>
-            </select>
-          </div>
-        </div>
-        <button class="btn primary" type="button" onclick="saveSettings()"><i class="fa-solid fa-floppy-disk"></i> Save Settings</button>
-      </div>
-    </section>
-  </main>
+<div class="sidebar">
+  <button class="active" onclick="tab('movies')">Movies</button>
+  <button onclick="tab('series')">Series</button>
 </div>
 
-<!-- Upload progress modal -->
-<div class="pmodal" id="pmodal">
-  <div class="pbox">
-    <div style="font-weight:800;font-size:1.2rem" id="ptext">Uploading 0%</div>
-    <div class="bar"><div class="fill" id="pfill"></div></div>
-    <div class="small" id="pdetails">Starting...</div>
+<div class="main">
+
+<!-- MOVIES -->
+<div id="movies">
+  <div class="form">
+    <h3>Upload Movie</h3>
+    <input id="mtitle" placeholder="Title">
+    <input id="mcat" placeholder="Category">
+    <textarea id="mdesc" placeholder="Description"></textarea>
+    <input type="file" id="mposter">
+    <input type="file" id="mvideo">
+    <button onclick="uploadMovie()">Upload</button>
   </div>
+  <div class="grid" id="movieGrid"></div>
 </div>
 
-<!-- Edit modal -->
-<div class="emodal" id="emodal" onclick="editOutside(event)">
-  <div class="ebox">
-    <div class="etop">
-      <div style="font-weight:800;font-size:1.2rem">Edit Movie</div>
-      <button class="close" onclick="closeEdit()"><i class="fa-solid fa-xmark"></i></button>
-    </div>
-
-    <form id="editForm">
-      <input type="hidden" name="id" id="eid" />
-      <div class="row">
-        <div class="fg">
-          <label>Title *</label>
-          <input name="title" id="etitle" required />
-        </div>
-        <div class="fg">
-          <label>Language</label>
-          <select name="language" id="elang">
-            <option>Telugu</option><option>Tamil</option><option>Hindi</option><option>English</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="fg">
-        <label>Description</label>
-        <textarea name="description" id="edesc" rows="3"></textarea>
-      </div>
-
-      <div class="row">
-        <div class="fg">
-          <label>Thumbnail URL</label>
-          <input name="thumbnail" id="ethumb" />
-        </div>
-        <div class="fg">
-          <label>New Poster Upload (optional)</label>
-          <input type="file" name="newPoster" accept="image/*" />
-        </div>
-      </div>
-
-      <div class="checks">
-        <label><input type="checkbox" name="isLatest" id="elatest" /> Latest</label>
-        <label><input type="checkbox" name="isTrending" id="etrending" /> Trending</label>
-      </div>
-
-      <button class="btn primary" type="submit"><i class="fa-solid fa-save"></i> Save Changes</button>
-    </form>
+<!-- SERIES -->
+<div id="series" style="display:none">
+  <div class="form">
+    <h3>Create Series</h3>
+    <input id="stitle" placeholder="Series title">
+    <textarea id="sdesc" placeholder="Description"></textarea>
+    <button onclick="createSeries()">Create</button>
   </div>
+  <div id="seriesList"></div>
 </div>
 
-<div class="toast" id="toast"></div>
+</div>
 
-<script src="admin.js"></script>
+<script>
+const API="http://localhost:5000";
+
+function tab(t){
+  movies.style.display=t==="movies"?"block":"none";
+  series.style.display=t==="series"?"block":"none";
+}
+
+/* MOVIES */
+function uploadMovie(){
+  const f=new FormData();
+  f.append("title",mtitle.value);
+  f.append("category",mcat.value);
+  f.append("description",mdesc.value);
+  f.append("poster",mposter.files[0]);
+  f.append("video",mvideo.files[0]);
+  fetch(API+"/upload",{method:"POST",body:f}).then(loadMovies);
+}
+function loadMovies(){
+  fetch(API+"/movies").then(r=>r.json()).then(list=>{
+    movieGrid.innerHTML="";
+    list.forEach(m=>{
+      const d=document.createElement("div");
+      d.className="card";
+      d.innerHTML=`
+        <img src="${API}/${m.poster}">
+        <b>${m.title}</b>
+        <button onclick="delMovie('${m._id}')">Delete</button>
+      `;
+      movieGrid.appendChild(d);
+    });
+  });
+}
+function delMovie(id){
+  fetch(API+"/movies/"+id,{method:"DELETE"}).then(loadMovies);
+}
+
+/* SERIES */
+function createSeries(){
+  fetch(API+"/series",{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({title:stitle.value,description:sdesc.value})
+  }).then(loadSeries);
+}
+function loadSeries(){
+  fetch(API+"/series").then(r=>r.json()).then(list=>{
+    seriesList.innerHTML="";
+    list.forEach(s=>{
+      const d=document.createElement("div");
+      d.className="series";
+      d.innerHTML=`
+        <b>${s.title}</b>
+        <p>${s.description||""}</p>
+        <input type="file" onchange="uploadEp('${s._id}',this)">
+        <div id="eps-${s._id}"></div>
+      `;
+      seriesList.appendChild(d);
+      renderEps(s._id,s.episodes);
+    });
+  });
+}
+function uploadEp(id,input){
+  const f=new FormData();
+  f.append("video",input.files[0]);
+  fetch(API+"/series/"+id+"/episode",{method:"POST",body:f}).then(loadSeries);
+}
+function renderEps(id,eps){
+  const box=document.getElementById("eps-"+id);
+  box.innerHTML="";
+  eps.forEach((e,i)=>{
+    box.innerHTML+=`
+      <div>
+        Episode ${i+1}
+        <button onclick="delEp('${id}',${i})">Delete</button>
+      </div>`;
+  });
+}
+function delEp(id,i){
+  fetch(API+"/series/"+id+"/episode/"+i,{method:"DELETE"}).then(loadSeries);
+}
+
+loadMovies();
+loadSeries();
+</script>
 </body>
 </html>
