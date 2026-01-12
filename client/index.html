@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BaluFlix - Watch Movies & TV Shows</title>
+    <link rel="stylesheet" href="app.css">
+    <link rel="icon" href="favicon.ico">
+    <link href="https://fonts.googleapis.com/css2?family=Netflix+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="netflix-header">
+        <a href="#" class="logo">BaluFlix</a>
+        <nav class="nav-menu">
+            <a href="#" class="nav-link active">Home</a>
+            <a href="#" class="nav-link">TV Shows</a>
+            <a href="#" class="nav-link">Movies</a>
+            <a href="#" class="nav-link">New & Popular</a>
+            <a href="#" class="nav-link">My List</a>
+            <a href="#" class="nav-link">Browse by Languages</a>
+        </nav>
+        <div class="header-right">
+            <div class="search-container">
+                <input type="text" class="search-input" placeholder="Search movies, TV shows...">
+                <div class="search-icon">🔍</div>
+            </div>
+            <div class="profile-wrapper">
+                <div class="profile-avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="profile-menu">
+                    <div class="profile-name">User</div>
+                    <a href="profile.html" class="profile-link">Account</a>
+                    <a href="#" class="profile-link">Settings</a>
+                    <button id="logout-btn" class="logout-btn">Sign out</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="hero">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h1 class="hero-title" id="hero-title">Loading...</h1>
+            <div class="hero-meta">
+                <span class="hero-year" id="hero-year"></span>
+                <span class="hero-category" id="hero-category"></span>
+            </div>
+            <p class="hero-description" id="hero-description">Loading description...</p>
+            <div class="hero-buttons">
+                <button class="play-btn" id="play-btn">
+                    <span>▶</span> Play
+                </button>
+                <button class="info-btn" id="info-btn">
+                    <span>ℹ</span> More Info
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Movie Rows -->
+    <div id="rows-container">
+        <!-- Rows will be dynamically generated here -->
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

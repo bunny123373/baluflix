@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - BaluFlix</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="profile.css">
+    <link rel="icon" href="favicon.ico">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <h1><a href="index.html">BaluFlix</a></h1>
+            </div>
+            <nav class="nav">
+                <a href="index.html">Home</a>
+                <a href="watch.html">Watch</a>
+                <div class="profile-dropdown">
+                    <img src="https://via.placeholder.com/40x40/333/fff?text=P" alt="Profile" class="profile-avatar">
+                    <div class="dropdown-content">
+                        <span class="profile-name">User</span>
+                        <span class="profile-email">profile-email-display</span>
+                        <a href="profile.html" class="profile-link">Account</a>
+                        <a href="#" class="profile-link">Settings</a>
+                        <a href="#" id="header-logout-btn">Logout</a>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="profile-container">
+        <div class="profile-header">
+            <div class="profile-photo-container">
+                <img id="profile-photo" src="https://via.placeholder.com/120x120/333/fff?text=Profile" alt="Profile Photo">
+                <div class="photo-upload-controls">
+                    <button id="upload-btn" title="Upload Photo">+</button>
+                    <button id="remove-btn" title="Remove Photo">×</button>
+                </div>
+                <input type="file" id="photo-input" accept="image/*" style="display: none;">
+            </div>
+            <div class="profile-info">
+                <h1 id="profile-display-name">User</h1>
+                <p id="profile-email-display">user@example.com</p>
+            </div>
+        </div>
+
+        <form id="profile-form" class="profile-form">
+            <div class="form-group">
+                <label for="displayName">Display Name</label>
+                <input type="text" id="displayName" name="displayName" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" readonly>
+            </div>
+            <div class="form-group">
+                <label for="profileLevel">Subscription Level</label>
+                <input type="text" id="profileLevel" name="profileLevel" readonly>
+            </div>
+            <div class="form-group">
+                <label for="subscriptionEndDate">Subscription End Date</label>
+                <input type="text" id="subscriptionEndDate" name="subscriptionEndDate" readonly>
+            </div>
+            <button type="submit" class="save-btn">Save Changes</button>
+        </form>
+
+        <section class="subscription-plans">
+            <h2>Subscription Plans</h2>
+            <div class="plans-grid">
+                <div class="plan-card basic active">
+                    <h3>Basic</h3>
+                    <div class="price">Free</div>
+                    <ul>
+                        <li>Watch on 1 device</li>
+                        <li>SD quality</li>
+                        <li>Limited movies</li>
+                    </ul>
+                    <button class="upgrade-btn" disabled>Current Plan</button>
+                </div>
+                <div class="plan-card premium">
+                    <h3>Premium</h3>
+                    <div class="price">$9.99/month</div>
+                    <ul>
+                        <li>Watch on 2 devices</li>
+                        <li>HD quality</li>
+                        <li>Unlimited movies</li>
+                        <li>Priority support</li>
+                    </ul>
+                    <button class="upgrade-btn" data-plan="premium" data-duration="1">Upgrade</button>
+                </div>
+                <div class="plan-card vip">
+                    <h3>VIP</h3>
+                    <div class="price">$19.99/month</div>
+                    <ul>
+                        <li>Watch on unlimited devices</li>
+                        <li>4K quality</li>
+                        <li>Early access to new movies</li>
+                        <li>Exclusive content</li>
+                        <li>24/7 VIP support</li>
+                    </ul>
+                    <button class="upgrade-btn" data-plan="vip" data-duration="1">Upgrade</button>
+                </div>
+            </div>
+        </section>
+
+        <div class="logout-section">
+            <button id="logout-btn" class="logout-btn">Logout</button>
+        </div>
+    </main>
+
+    <!-- Upgrade Modal -->
+    <div id="upgrade-modal" class="upgrade-modal">
+        <div class="upgrade-modal-content">
+            <h2>Confirm Upgrade</h2>
+            <div id="upgrade-summary" class="upgrade-summary">
+                <p>Upgrade to <span id="upgrade-plan-name">Premium</span> for <span id="upgrade-duration">1</span> month(s)</p>
+                <p>Total cost: $<span id="upgrade-cost">9.99</span></p>
+            </div>
+            <div id="upgrade-benefits" class="upgrade-benefits">
+                <h4>What you'll get:</h4>
+                <ul>
+                    <li>Watch on 2 devices</li>
+                    <li>HD quality</li>
+                    <li>Unlimited movies</li>
+                    <li>Priority support</li>
+                </ul>
+            </div>
+            <div class="modal-buttons">
+                <button id="cancel-upgrade" class="modal-btn cancel-upgrade">Cancel</button>
+                <button id="confirm-upgrade" class="modal-btn confirm-upgrade">Confirm Upgrade</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="profile.js"></script>
+</body>
+</html>

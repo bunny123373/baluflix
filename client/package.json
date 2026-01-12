@@ -1,0 +1,21 @@
+{
+  "name": "baluflix-client",
+  "version": "1.0.0",
+  "private": true,
+  "description": "BaluFlix Movie Streaming Frontend",
+  "scripts": {
+    "start": "live-server --port=3000",
+    "dev": "vite",
+    "build": "vite build"
+  },
+  "dependencies": {
+    "axios": "^1.6.2",
+    "firebase": "^12.7.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "live-server": "^1.2.2",
+    "vite": "^5.0.0"
+  }
+}

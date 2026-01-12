@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Watch - BaluFlix</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Netflix Watch CSS -->
+  <link rel="stylesheet" href="app.css" />
+  <style>
+    /* ======================
+       NETFLIX VIDEO PLAYER
+    ======================= */
+    .video-container {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      background: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .video-player {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      background: #000;
+    }
+
+    /* ======================
+       NETFLIX HEADER OVERLAY
+    ======================= */
+    .player-header {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background: linear-gradient(
+        to bottom,
+        rgba(0,0,0,0.7) 0%,
+        rgba(0,0,0,0.4) 70%,
+        transparent 100%
+      );
+      padding: 20px 40px;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .video-container:hover .player-header {
+      opacity: 1;
+    }
+
+    .back-btn {
+      background: rgba(0,0,0,0.7);
+      border: 1px solid rgba(255,255,255,0.2);
+      color: #fff;
+      padding: 10px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+      backdrop-filter: blur(10px);
+    }
+
+    .back-btn:hover {
+      background: rgba(0,0,0,0.9);
+      border-color: rgba(255,255,255,0.4);
+      transform: scale(1.05);
+    }
+
+    .back-btn span {
+      font-size: 18px;
+      margin-top: -2px;
+    }
+
+    /* ======================
+       NETFLIX CONTROLS OVERLAY
+    ======================= */
+    .controls-overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(
+        to top,
+        rgba(0,0,0,0.9) 0%,
+        rgba(0,0,0,0.6) 50%,
+        rgba(0,0,0,0.2) 80%,
+        transparent 100%
+      );
+      padding: 30px 40px 40px;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .video-container:hover .controls-overlay {
+      opacity: 1;
+    }
+
+    /* ======================
+       PROGRESS BAR
+    ======================= */
+    .progress-container {
+      width: 100%;
+      margin-bottom: 20px;
+      position: relative;
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 6px;
+      background: rgba(255,255,255,0.3);
+      border-radius: 3px;
+      cursor: pointer;
+      position: relative;
+      transition: height 0.2s ease;
+    }
+
+    .progress-bar:hover {
+      height: 8px;
+    }
+
+    .progress-filled {
+      height: 100%;
+      background: #e50914;
+      border-radius: 3px;
+      width: 0%;
+      transition: width 0.1s ease;
+      position: relative;
+    }
+
+    .progress-filled::after {
+      content: '';
+      position: absolute;
+      right: -6px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 12px;
+      height: 12px;
+      background: #e50914;
+      border-radius: 50%;
+      box-shadow: 0 0 10px rgba(229, 9, 20, 0.5);
+    }
+
+    /* ======================
+       CONTROL BUTTONS
+    ======================= */
+    .controls {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .left-controls {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .right-controls {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .control-btn {
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 20px;
+      cursor: pointer;
+      padding: 12px;
+      border-radius: 50%;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 48px;
+      height: 48px;
+    }
+
+    .control-btn:hover {
+      background: rgba(255,255,255,0.1);
+      transform: scale(1.1);
+    }
+
+    .control-btn:active {
+      transform: scale(0.95);
+    }
+
+    .play-btn {
+      font-size: 24px;
+      background: rgba(255,255,255,0.1);
+      border: 2px solid rgba(255,255,255,0.3);
+    }
+
+    .play-btn:hover {
+      background: rgba(255,255,255,0.2);
+      border-color: rgba(255,255,255,0.5);
+    }
+
+    /* ======================
+       VOLUME CONTROLS
+    ======================= */
+    .volume-container {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      position: relative;
+    }
+
+    .volume-btn {
+      font-size: 18px;
+      padding: 8px;
+      width: 36px;
+      height: 36px;
+    }
+
+    .volume-slider {
+      width: 0px;
+      height: 4px;
+      background: rgba(255,255,255,0.3);
+      border-radius: 2px;
+      cursor: pointer;
+      transition: width 0.3s ease;
+      overflow: hidden;
+    }
+
+    .volume-container:hover .volume-slider {
+      width: 100px;
+    }
+
+    .volume-filled {
+      height: 100%;
+      background: #fff;
+      border-radius: 2px;
+      width: 50%;
+      transition: width 0.1s ease;
+    }
+
+    /* ======================
+       TIME DISPLAY
+    ======================= */
+    .time-display {
+      color: #fff;
+      font-size: 14px;
+      font-weight: 500;
+      font-variant-numeric: tabular-nums;
+      min-width: 80px;
+      text-align: center;
+    }
+
+    /* ======================
+       LOADING SPINNER
+    ======================= */
+    .loading {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      z-index: 50;
+    }
+
+    .loading-spinner {
+      width: 60px;
+      height: 60px;
+      border: 4px solid rgba(255, 255, 255, 0.1);
+      border-top: 4px solid #e50914;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    .loading-text {
+      color: #fff;
+      font-size: 16px;
+      font-weight: 500;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* ======================
+       NEXT EPISODE PREVIEW
+    ======================= */
+    .next-episode {
+      position: absolute;
+      right: 40px;
+      bottom: 120px;
+      background: rgba(0,0,0,0.8);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 8px;
+      padding: 16px;
+      width: 280px;
+      opacity: 0;
+      transform: translateX(100%);
+      transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
+    }
+
+    .video-container.show-next .next-episode {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .next-episode h4 {
+      color: #fff;
+      font-size: 16px;
+      margin-bottom: 8px;
+    }
+
+    .next-episode p {
+      color: #ccc;
+      font-size: 14px;
+      margin-bottom: 12px;
+    }
+
+    .next-btn {
+      background: #e50914;
+      color: #fff;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      width: 100%;
+      transition: background 0.2s ease;
+    }
+
+    .next-btn:hover {
+      background: #b20710;
+    }
+
+    /* ======================
+       RESPONSIVE DESIGN
+    ======================= */
+    @media (max-width: 1024px) {
+      .player-header,
+      .controls-overlay {
+        padding-left: 30px;
+        padding-right: 30px;
+      }
+
+      .next-episode {
+        right: 30px;
+        width: 240px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .player-header,
+      .controls-overlay {
+        padding: 20px;
+      }
+
+      .back-btn {
+        padding: 8px 12px;
+        font-size: 13px;
+      }
+
+      .controls {
+        flex-direction: column;
+        gap: 20px;
+        align-items: center;
+      }
+
+      .left-controls,
+      .right-controls {
+        gap: 15px;
+      }
+
+      .control-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 18px;
+        padding: 10px;
+      }
+
+      .play-btn {
+        font-size: 22px;
+      }
+
+      .time-display {
+        font-size: 13px;
+        min-width: 70px;
+      }
+
+      .next-episode {
+        right: 20px;
+        bottom: 100px;
+        width: 200px;
+        padding: 12px;
+      }
+
+      .next-episode h4 {
+        font-size: 14px;
+      }
+
+      .next-episode p {
+        font-size: 13px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .player-header,
+      .controls-overlay {
+        padding: 15px;
+      }
+
+      .left-controls,
+      .right-controls {
+        gap: 10px;
+      }
+
+      .control-btn {
+        width: 36px;
+        height: 36px;
+        font-size: 16px;
+        padding: 8px;
+      }
+
+      .play-btn {
+        font-size: 20px;
+      }
+
+      .volume-container:hover .volume-slider {
+        width: 80px;
+      }
+
+      .next-episode {
+        display: none; /* Hide on very small screens */
+      }
+    }
+
+    /* ======================
+       FULLSCREEN STYLES
+    ======================= */
+    .video-container:fullscreen {
+      background: #000;
+    }
+
+    .video-container:fullscreen .player-header,
+    .video-container:fullscreen .controls-overlay {
+      opacity: 1;
+    }
+
+    .fullscreen-btn {
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+  <header class="netflix-header">
+    <div class="logo" onclick="window.location.href='index.html'">BaluFlix</div>
+
+    <div class="profile-wrapper">
+      <img
+        src="https://i.imgur.com/6VBx3io.png"
+        class="profile-avatar"
+        id="profileBtn"
+        alt="User"
+      />
+
+      <div class="profile-menu" id="profileMenu">
+        <p class="profile-name">Hi, BaluFlix User</p>
+        <button onclick="logout()">Logout</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="video-container" id="videoContainer">
+    <!-- Header Overlay -->
+    <div class="player-header">
+      <button class="back-btn" onclick="window.location.href='index.html'">
+        <span>←</span> Back to Browse
+      </button>
+    </div>
+
+    <!-- Video Player -->
+    <video class="video-player" id="videoPlayer">
+      Your browser does not support the video tag.
+    </video>
+
+    <!-- Controls Overlay -->
+    <div class="controls-overlay">
+      <!-- Progress Bar -->
+      <div class="progress-container">
+        <div class="progress-bar" id="progressBar">
+          <div class="progress-filled" id="progressFilled"></div>
+        </div>
+      </div>
+
+      <!-- Control Buttons -->
+      <div class="controls">
+        <div class="left-controls">
+          <button class="control-btn play-btn" id="playBtn">
+            <span id="playIcon">▶</span>
+          </button>
+
+          <div class="volume-container">
+            <button class="control-btn volume-btn" id="volumeBtn">
+              <span id="volumeIcon">🔊</span>
+            </button>
+            <div class="volume-slider" id="volumeSlider">
+              <div class="volume-filled" id="volumeFilled"></div>
+            </div>
+          </div>
+
+          <div class="time-display" id="timeDisplay">
+            0:00 / 0:00
+          </div>
+        </div>
+
+        <div class="right-controls">
+          <button class="control-btn" id="fullscreenBtn">
+            <span class="fullscreen-btn">⛶</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Next Episode Preview -->
+    <div class="next-episode" id="nextEpisode">
+      <h4>Next Episode</h4>
+      <p>Coming up next...</p>
+      <button class="next-btn" onclick="playNextEpisode()">Play Next</button>
+    </div>
+
+    <!-- Loading Spinner -->
+    <div class="loading" id="loading">
+      <div class="loading-spinner"></div>
+      <div class="loading-text">Loading video...</div>
+    </div>
+  </div>
+
+  <!-- Firebase Auth Protect -->
+  <script type="module">
+    import { auth } from "./firebase.js";
+    import { onAuthStateChanged }
+    from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
+
+    onAuthStateChanged(auth, user => {
+      if (!user) window.location.href = "login.html";
+    });
+  </script>
+
+  <script>
+    const API = "http://localhost:5000";
+    const videoPlayer = document.getElementById('videoPlayer');
+    const videoContainer = document.getElementById('videoContainer');
+    const loading = document.getElementById('loading');
+    const profileBtn = document.getElementById("profileBtn");
+    const profileMenu = document.getElementById("profileMenu");
+
+    // Control elements
+    const playBtn = document.getElementById('playBtn');
+    const playIcon = document.getElementById('playIcon');
+    const volumeBtn = document.getElementById('volumeBtn');
+    const volumeIcon = document.getElementById('volumeIcon');
+    const volumeSlider = document.getElementById('volumeSlider');
+    const volumeFilled = document.getElementById('volumeFilled');
+    const progressBar = document.getElementById('progressBar');
+    const progressFilled = document.getElementById('progressFilled');
+    const timeDisplay = document.getElementById('timeDisplay');
+    const fullscreenBtn = document.getElementById('fullscreenBtn');
+    const nextEpisode = document.getElementById('nextEpisode');
+
+    // Profile menu toggle
+    if (profileBtn) {
+      profileBtn.addEventListener("click", () => {
+        profileMenu.style.display =
+          profileMenu.style.display === "block" ? "none" : "block";
+      });
+    }
+
+    document.addEventListener("click", e => {
+      if (!e.target.closest(".profile-wrapper")) {
+        profileMenu.style.display = "none";
+      }
+    });
+
+    function logout() {
+      window.location.href = "login.html";
+    }
+
+    // Get video from URL params
+    const urlParams = new URLSearchParams(window.location.search);
+    const videoPath = urlParams.get('video');
+
+    console.log('Video path from URL:', videoPath);
+
+    if (videoPath) {
+      // Construct the video URL properly
+      const videoUrl = videoPath.startsWith('http') ? videoPath : `${API}/${videoPath.replace(/^\/+/, '')}`;
+      console.log('Constructed video URL:', videoUrl);
+
+      videoPlayer.src = videoUrl;
+
+      videoPlayer.addEventListener('loadstart', () => {
+        console.log('Video load started');
+        loading.style.display = 'flex';
+      });
+
+      videoPlayer.addEventListener('canplay', () => {
+        console.log('Video can play');
+        loading.style.display = 'none';
+      });
+
+      videoPlayer.addEventListener('error', (e) => {
+        console.error('Video load error:', e);
+        loading.innerHTML = '<div class="loading-text">Error loading video. Check console for details.</div>';
+      });
+
+      videoPlayer.addEventListener('loadedmetadata', () => {
+        console.log('Video metadata loaded, duration:', videoPlayer.duration);
+      });
+    } else {
+      console.error('No video parameter in URL');
+      loading.innerHTML = '<div class="loading-text">No video specified</div>';
+    }
+
+    // Auto-play when loaded
+    videoPlayer.addEventListener('canplaythrough', () => {
+      videoPlayer.play();
+    });
+
+    // ======================
+    // NETFLIX VIDEO CONTROLS
+    // ======================
+
+    // Play/Pause functionality
+    function togglePlay() {
+      if (videoPlayer.paused) {
+        videoPlayer.play();
+        playIcon.textContent = '⏸';
+      } else {
+        videoPlayer.pause();
+        playIcon.textContent = '▶';
+      }
+    }
+
+    playBtn.addEventListener('click', togglePlay);
+    videoPlayer.addEventListener('click', togglePlay);
+
+    // Update play button on video state change
+    videoPlayer.addEventListener('play', () => {
+      playIcon.textContent = '⏸';
+    });
+
+    videoPlayer.addEventListener('pause', () => {
+      playIcon.textContent = '▶';
+    });
+
+    // Progress bar functionality
+    function updateProgress() {
+      const progress = (videoPlayer.currentTime / videoPlayer.duration) * 100;
+      progressFilled.style.width = `${progress}%`;
+      updateTimeDisplay();
+    }
+
+    videoPlayer.addEventListener('timeupdate', updateProgress);
+
+    // Click on progress bar to seek
+    progressBar.addEventListener('click', (e) => {
+      const rect = progressBar.getBoundingClientRect();
+      const clickX = e.clientX - rect.left;
+      const percentage = clickX / rect.width;
+      const newTime = percentage * videoPlayer.duration;
+      videoPlayer.currentTime = newTime;
+    });
+
+    // Time display
+    function updateTimeDisplay() {
+      const current = formatTime(videoPlayer.currentTime);
+      const duration = formatTime(videoPlayer.duration);
+      timeDisplay.textContent = `${current} / ${duration}`;
+    }
+
+    function formatTime(seconds) {
+      if (isNaN(seconds)) return '0:00';
+      const mins = Math.floor(seconds / 60);
+      const secs = Math.floor(seconds % 60);
+      return `${mins}:${secs.toString().padStart(2, '0')}`;
+    }
+
+    // Volume controls
+    function toggleMute() {
+      if (videoPlayer.muted) {
+        videoPlayer.muted = false;
+        volumeIcon.textContent = '🔊';
+        updateVolumeSlider();
+      } else {
+        videoPlayer.muted = true;
+        volumeIcon.textContent = '🔇';
+        volumeFilled.style.width = '0%';
+      }
+    }
+
+    volumeBtn.addEventListener('click', toggleMute);
+
+    // Volume slider
+    function updateVolumeSlider() {
+      if (!videoPlayer.muted) {
+        const volume = videoPlayer.volume * 100;
+        volumeFilled.style.width = `${volume}%`;
+      }
+    }
+
+    volumeSlider.addEventListener('click', (e) => {
+      const rect = volumeSlider.getBoundingClientRect();
+      const clickX = e.clientX - rect.left;
+      const percentage = clickX / rect.width;
+      videoPlayer.volume = percentage;
+      videoPlayer.muted = false;
+      volumeIcon.textContent = '🔊';
+      updateVolumeSlider();
+    });
+
+    // Fullscreen functionality
+    function toggleFullscreen() {
+      if (!document.fullscreenElement) {
+        videoContainer.requestFullscreen();
+      } else {
+        document.exitFullscreen();
+      }
+    }
+
+    fullscreenBtn.addEventListener('click', toggleFullscreen);
+
+    // Fullscreen change detection
+    document.addEventListener('fullscreenchange', () => {
+      if (document.fullscreenElement) {
+        fullscreenBtn.innerHTML = '<span class="fullscreen-btn">⛶</span>';
+      } else {
+        fullscreenBtn.innerHTML = '<span class="fullscreen-btn">⛶</span>';
+      }
+    });
+
+    // Next episode functionality (placeholder)
+    function playNextEpisode() {
+      // This would be implemented based on your episode data
+      console.log('Playing next episode...');
+      // You can implement logic to load the next episode
+    }
+
+    // Show next episode preview near end of video
+    videoPlayer.addEventListener('timeupdate', () => {
+      if (videoPlayer.duration - videoPlayer.currentTime < 30) { // 30 seconds before end
+        videoContainer.classList.add('show-next');
+      } else {
+        videoContainer.classList.remove('show-next');
+      }
+    });
+
+    // Keyboard shortcuts
+    document.addEventListener('keydown', (e) => {
+      switch(e.code) {
+        case 'Space':
+          e.preventDefault();
+          togglePlay();
+          break;
+        case 'KeyF':
+          toggleFullscreen();
+          break;
+        case 'KeyM':
+          toggleMute();
+          break;
+        case 'ArrowLeft':
+          e.preventDefault();
+          videoPlayer.currentTime -= 10;
+          break;
+        case 'ArrowRight':
+          e.preventDefault();
+          videoPlayer.currentTime += 10;
+          break;
+      }
+    });
+
+    // Hide controls when mouse is inactive
+    let controlsTimeout;
+    function showControls() {
+      clearTimeout(controlsTimeout);
+      videoContainer.style.cursor = 'default';
+
+      controlsTimeout = setTimeout(() => {
+        if (!videoPlayer.paused) {
+          videoContainer.style.cursor = 'none';
+        }
+      }, 3000);
+    }
+
+    videoContainer.addEventListener('mousemove', showControls);
+    videoContainer.addEventListener('mouseleave', () => {
+      if (!videoPlayer.paused) {
+        videoContainer.style.cursor = 'none';
+      }
+    });
+
+    // Show controls when video is paused
+    videoPlayer.addEventListener('pause', () => {
+      videoContainer.style.cursor = 'default';
+      clearTimeout(controlsTimeout);
+    });
+
+    videoPlayer.addEventListener('play', () => {
+      showControls();
+    });
+
+    // Initialize volume
+    videoPlayer.addEventListener('loadedmetadata', () => {
+      updateVolumeSlider();
+      updateTimeDisplay();
+    });
+  </script>
+</body>
+</html>
