@@ -1,0 +1,21 @@
+{
+  "name": "baluflix-server",
+  "version": "1.0.0",
+  "description": "BaluFlix OTT Backend Server",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.1",
+    "express": "^4.22.1",
+    "mongoose": "^8.21.0",
+    "multer": "^1.4.5-lts.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  }
+}
