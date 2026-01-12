@@ -1,1 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - BaluFlix</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><style>.cls-1{fill:%23374151;}.cls-2{fill:%23fff;}</style></defs><rect class='cls-1' width='100' height='100' rx='15'/><text class='cls-2' x='50' y='70' text-anchor='middle' font-family='Arial, sans-serif' font-size='60' font-weight='bold'>B</text></svg>">
+    <link rel="stylesheet" href="/admin/admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body data-theme="light">
+    <!-- Sidebar -->
+    <div id="sidebar" class="sidebar">
+        <div class="sidebar-header">
+            <h2><i class="fas fa-film"></i> BaluFlix Admin</h2>
+            <button id="sidebarToggle" class="sidebar-toggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="#" class="nav-link active" data-section="dashboard">
+                <i class="fas fa-tachometer-alt"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="#" class="nav-link" data-section="movies">
+                <i class="fas fa-film"></i>
+                <span>Movies</span>
+            </a>
+            <a href="#" class="nav-link" data-section="popular">
+                <i class="fas fa-star"></i>
+                <span>Popular</span>
+            </a>
+            <a href="#" class="nav-link" data-section="users">
+                <i class="fas fa-users"></i>
+                <span>Users</span>
+            </a>
+            <a href="#" class="nav-link" data-section="upload">
+                <i class="fas fa-upload"></i>
+                <span>Upload</span>
+            </a>
+            <a href="#" class="nav-link" data-section="settings">
+                <i class="fas fa-cog"></i>
+                <span>Settings</span>
+            </a>
+            <a href="/index.html" class="nav-link" target="_blank">
+                <i class="fas fa-home"></i>
+                <span>Main App</span>
+            </a>
+        </nav>
+        <div class="sidebar-footer">
+            <button id="themeToggle" class="theme-toggle">
+                <i class="fas fa-moon"></i>
+            </button>
+            <button onclick="logout()" class="logout-btn">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Logout</span>
+            </button>
+        </div>
+    </div>
 
+    <!-- Main Content -->
+    <div id="mainContent" class="main-content">
+        <!-- Header -->
+        <header class="header">
+            <button id="mobileMenuToggle" class="mobile-menu-toggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <h1 id="pageTitle">Dashboard</h1>
+            <div class="header-actions">
+                <div class="stats-overview">
+                    <div class="stat-item">
+                        <i class="fas fa-film"></i>
+                        <span id="total-movies">0</span>
+                        <small>Movies</small>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-users"></i>
+                        <span id="total-users">0</span>
+                        <small>Users</small>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-eye"></i>
+                        <span id="total-views">0</span>
+                        <small>Views</small>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Dashboard Section -->
+        <section id="dashboard-section" class="content-section active">
+            <div class="dashboard-grid">
+                <div class="dashboard-card animate-on-scroll">
+                    <h3>Recent Activity</h3>
+                    <div id="recent-activity" class="activity-list">
+                        <!-- Activity items will be populated by JS -->
+                    </div>
+                </div>
+                <div class="dashboard-card animate-on-scroll">
+                    <h3>Category Statistics</h3>
+                    <div id="category-stats" class="category-stats">
+                        <!-- Category stats will be populated by JS -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Movies Section -->
+        <section id="movies-section" class="content-section">
+            <div class="section-header">
+                <h2>Movie Management</h2>
+                <div class="filters">
+                    <input type="text" id="movie-search" placeholder="Search movies..." class="search-input">
+                    <select id="genre-filter" class="filter-select">
+                        <option value="">All Genres</option>
+                    </select>
+                    <select id="year-filter" class="filter-select">
+                        <option value="">All Years</option>
+                    </select>
+                    <select id="rating-filter" class="filter-select">
+                        <option value="">All Ratings</option>
+                        <option value="G">G</option>
+                        <option value="PG">PG</option>
+                        <option value="PG-13">PG-13</option>
+                        <option value="R">R</option>
+                    </select>
+                    <button id="clear-filters" class="btn-secondary">Clear Filters</button>
+                </div>
+                <div class="movies-count">
+                    <span id="movies-count">0</span> movies found
+                </div>
+            </div>
+            <div id="movies-grid" class="movies-grid">
+                <!-- Movie cards will be populated by JS -->
+            </div>
+        </section>
+
+        <!-- Users Section -->
+        <section id="users-section" class="content-section">
+            <div class="section-header">
+                <h2>User Management</h2>
+            </div>
+            <div id="users-list" class="users-list">
+                <!-- User items will be populated by JS -->
+            </div>
+        </section>
+
+        <!-- Upload Section -->
+        <section id="upload-section" class="content-section">
+            <div class="section-header">
+                <h2>Upload New Movie</h2>
+            </div>
+            <form id="upload-form" class="upload-form">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="title">Title *</label>
+                        <input type="text" id="title" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="year">Year</label>
+                        <input type="number" id="year">
+                    </div>
+                    <div class="form-group">
+                        <label for="category">Category *</label>
+                        <select id="category" required>
+                            <option value="">Select Category</option>
+                            <option value="movie">Movie</option>
+                            <option value="series">TV Series</option>
+                            <option value="documentary">Documentary</option>
+                            <option value="short-film">Short Film</option>
+                            <option value="web-series">Web Series</option>
+                            <option value="anime">Anime</option>
+                            <option value="animation">Animation</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="genre">Genre</label>
+                        <input type="text" id="genre" placeholder="Comma-separated">
+                    </div>
+                    <div class="form-group">
+                        <label for="language">Language</label>
+                        <select id="language">
+                            <option value="">Select Language</option>
+                            <option value="Hindi">Hindi</option>
+                            <option value="English">English</option>
+                            <option value="Telugu">Telugu</option>
+                            <option value="Tamil">Tamil</option>
+                            <option value="Kannada">Kannada</option>
+                            <option value="Malayalam">Malayalam</option>
+                            <option value="Bengali">Bengali</option>
+                            <option value="Marathi">Marathi</option>
+                            <option value="Gujarati">Gujarati</option>
+                            <option value="Punjabi">Punjabi</option>
+                            <option value="Urdu">Urdu</option>
+                            <option value="Odia">Odia</option>
+                            <option value="Assamese">Assamese</option>
+                            <option value="Bhojpuri">Bhojpuri</option>
+                            <option value="Rajasthani">Rajasthani</option>
+                            <option value="Maithili">Maithili</option>
+                            <option value="Nepali">Nepali</option>
+                            <option value="Sanskrit">Sanskrit</option>
+                            <option value="Sindhi">Sindhi</option>
+                            <option value="Konkani">Konkani</option>
+                            <option value="Manipuri">Manipuri</option>
+                            <option value="Dogri">Dogri</option>
+                            <option value="Kashmiri">Kashmiri</option>
+                            <option value="Santali">Santali</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="director">Director</label>
+                        <input type="text" id="director">
+                    </div>
+                    <div class="form-group">
+                        <label for="rating">Rating</label>
+                        <select id="rating">
+                            <option value="">Select Rating</option>
+                            <option value="G">G</option>
+                            <option value="PG">PG</option>
+                            <option value="PG-13">PG-13</option>
+                            <option value="R">R</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="duration">Duration</label>
+                        <input type="text" id="duration" placeholder="e.g., 2h 30m">
+                    </div>
+                    <div class="form-group">
+                        <label for="releaseDate">Release Date</label>
+                        <input type="date" id="releaseDate">
+                    </div>
+                    <div class="form-group full-width">
+                        <label for="description">Description</label>
+                        <textarea id="description" rows="3"></textarea>
+                    </div>
+                    <div class="form-group full-width">
+                        <label for="cast">Cast</label>
+                        <input type="text" id="cast" placeholder="Comma-separated">
+                    </div>
+                    <div class="form-group full-width">
+                        <label for="crew">Crew</label>
+                        <input type="text" id="crew" placeholder="Comma-separated">
+                    </div>
+                    <div class="form-group">
+                        <label for="poster">Poster Image *</label>
+                        <input type="file" id="poster" accept="image/*" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="video">Video File *</label>
+                        <input type="file" id="video" accept="video/*" required>
+                    </div>
+                    <div class="form-group checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="trending">
+                            <span class="checkmark"></span>
+                            Trending
+                        </label>
+                    </div>
+                    <div class="form-group checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="isHero">
+                            <span class="checkmark"></span>
+                            Hero Movie
+                        </label>
+                    </div>
+                </div>
+                <div id="upload-progress" class="upload-progress" style="display: none;">
+                    <div class="progress-bar">
+                        <div id="progress-fill" class="progress-fill"></div>
+                    </div>
+                    <p id="progress-text">Uploading... 0%</p>
+                </div>
+                <div class="upload-actions">
+                    <button type="button" id="preview-btn" class="btn-secondary">
+                        <i class="fas fa-eye"></i> Preview Details
+                    </button>
+                    <button type="submit" class="btn-primary">Upload Movie</button>
+                </div>
+            </form>
+        </section>
+
+        <!-- Popular Section -->
+        <section id="popular-section" class="content-section">
+            <div class="section-header">
+                <h2>Popular Content Management</h2>
+                <div class="popular-actions">
+                    <button id="refresh-popular" class="btn-secondary">
+                        <i class="fas fa-sync"></i> Refresh Rankings
+                    </button>
+                </div>
+            </div>
+            <div class="popular-grid">
+                <div class="popular-card animate-on-scroll">
+                    <h3><i class="fas fa-star"></i> Trending Movies</h3>
+                    <div id="trending-movies" class="popular-list">
+                        <!-- Trending movies will be populated by JS -->
+                    </div>
+                </div>
+                <div class="popular-card animate-on-scroll">
+                    <h3><i class="fas fa-trophy"></i> Top Rated</h3>
+                    <div id="top-rated-movies" class="popular-list">
+                        <!-- Top rated movies will be populated by JS -->
+                    </div>
+                </div>
+                <div class="popular-card animate-on-scroll">
+                    <h3><i class="fas fa-eye"></i> Most Viewed</h3>
+                    <div id="most-viewed-movies" class="popular-list">
+                        <!-- Most viewed movies will be populated by JS -->
+                    </div>
+                </div>
+                <div class="popular-card animate-on-scroll">
+                    <h3><i class="fas fa-calendar-alt"></i> Recent Hits</h3>
+                    <div id="recent-hits" class="popular-list">
+                        <!-- Recent hits will be populated by JS -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Settings Section -->
+        <section id="settings-section" class="content-section">
+            <div class="section-header">
+                <h2>System Settings</h2>
+            </div>
+            <div class="settings-grid">
+                <div class="settings-card animate-on-scroll">
+                    <h3><i class="fas fa-globe"></i> General Settings</h3>
+                    <form id="general-settings" class="settings-form">
+                        <div class="form-group">
+                            <label for="site-title">Site Title</label>
+                            <input type="text" id="site-title" value="BaluFlix">
+                        </div>
+                        <div class="form-group">
+                            <label for="site-description">Site Description</label>
+                            <textarea id="site-description" rows="3">Your ultimate streaming destination</textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="max-upload-size">Max Upload Size (MB)</label>
+                            <input type="number" id="max-upload-size" value="500">
+                        </div>
+                        <div class="form-group checkbox-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="maintenance-mode" checked>
+                                <span class="checkmark"></span>
+                                Maintenance Mode
+                            </label>
+                        </div>
+                        <button type="submit" class="btn-primary">Save General Settings</button>
+                    </form>
+                </div>
+
+                <div class="settings-card animate-on-scroll">
+                    <h3><i class="fas fa-shield-alt"></i> Security Settings</h3>
+                    <form id="security-settings" class="settings-form">
+                        <div class="form-group checkbox-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="enable-registration" checked>
+                                <span class="checkmark"></span>
+                                Allow New Registrations
+                            </label>
+                        </div>
+                        <div class="form-group checkbox-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="require-email-verification">
+                                <span class="checkmark"></span>
+                                Require Email Verification
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label for="session-timeout">Session Timeout (minutes)</label>
+                            <input type="number" id="session-timeout" value="1440">
+                        </div>
+                        <div class="form-group">
+                            <label for="max-login-attempts">Max Login Attempts</label>
+                            <input type="number" id="max-login-attempts" value="5">
+                        </div>
+                        <button type="submit" class="btn-primary">Save Security Settings</button>
+                    </form>
+                </div>
+
+                <div class="settings-card animate-on-scroll">
+                    <h3><i class="fas fa-database"></i> Database Management</h3>
+                    <div class="db-actions">
+                        <button id="backup-db" class="btn-secondary">
+                            <i class="fas fa-download"></i> Create Backup
+                        </button>
+                        <button id="optimize-db" class="btn-secondary">
+                            <i class="fas fa-wrench"></i> Optimize Database
+                        </button>
+                        <button id="clear-cache" class="btn-warning">
+                            <i class="fas fa-trash"></i> Clear Cache
+                        </button>
+                    </div>
+                    <div class="db-stats">
+                        <div class="stat-item">
+                            <span class="stat-label">Database Size:</span>
+                            <span id="db-size">Calculating...</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Last Backup:</span>
+                            <span id="last-backup">Never</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="settings-card animate-on-scroll">
+                    <h3><i class="fas fa-chart-line"></i> Analytics Settings</h3>
+                    <form id="analytics-settings" class="settings-form">
+                        <div class="form-group checkbox-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="enable-analytics" checked>
+                                <span class="checkmark"></span>
+                                Enable Analytics
+                            </label>
+                        </div>
+                        <div class="form-group checkbox-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="track-user-behavior" checked>
+                                <span class="checkmark"></span>
+                                Track User Behavior
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label for="analytics-retention">Data Retention (days)</label>
+                            <input type="number" id="analytics-retention" value="365">
+                        </div>
+                        <button type="submit" class="btn-primary">Save Analytics Settings</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Preview Modal -->
+    <div id="preview-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Movie Preview</h3>
+                <span class="close" onclick="closePreviewModal()">&times;</span>
+            </div>
+            <div class="preview-content">
+                <div class="preview-poster">
+                    <img id="preview-poster" src="https://via.placeholder.com/300x450?text=No+Image" alt="Movie Poster">
+                </div>
+                <div class="preview-details">
+                    <h2 id="preview-title">Movie Title</h2>
+                    <div class="preview-meta">
+                        <span id="preview-year"></span>
+                        <span id="preview-category"></span>
+                        <span id="preview-rating"></span>
+                    </div>
+                    <div class="preview-badges">
+                        <span id="preview-trending" class="badge trending" style="display: none;">Trending</span>
+                        <span id="preview-hero" class="badge hero" style="display: none;">Hero</span>
+                    </div>
+                    <div class="preview-info">
+                        <p><strong>Director:</strong> <span id="preview-director"></span></p>
+                        <p><strong>Genre:</strong> <span id="preview-genre"></span></p>
+                        <p><strong>Language:</strong> <span id="preview-language"></span></p>
+                        <p><strong>Duration:</strong> <span id="preview-duration"></span></p>
+                        <p><strong>Release Date:</strong> <span id="preview-releaseDate"></span></p>
+                        <p><strong>Cast:</strong> <span id="preview-cast"></span></p>
+                        <p><strong>Crew:</strong> <span id="preview-crew"></span></p>
+                    </div>
+                    <div class="preview-description">
+                        <h4>Description</h4>
+                        <p id="preview-description"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Modal -->
+    <div id="edit-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Edit Movie</h3>
+                <span class="close" onclick="closeModal()">&times;</span>
+            </div>
+            <form id="edit-form" class="edit-form">
+                <input type="hidden" id="edit-movie-id">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="edit-title">Title *</label>
+                        <input type="text" id="edit-title" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-year">Year</label>
+                        <input type="number" id="edit-year">
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-category">Category *</label>
+                        <select id="edit-category" required>
+                            <option value="movie">Movie</option>
+                            <option value="series">TV Series</option>
+                            <option value="documentary">Documentary</option>
+                            <option value="short-film">Short Film</option>
+                            <option value="web-series">Web Series</option>
+                            <option value="anime">Anime</option>
+                            <option value="animation">Animation</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-genre">Genre</label>
+                        <input type="text" id="edit-genre" placeholder="Comma-separated">
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-director">Director</label>
+                        <input type="text" id="edit-director">
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-rating">Rating</label>
+                        <select id="edit-rating">
+                            <option value="">Select Rating</option>
+                            <option value="G">G</option>
+                            <option value="PG">PG</option>
+                            <option value="PG-13">PG-13</option>
+                            <option value="R">R</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-duration">Duration</label>
+                        <input type="text" id="edit-duration" placeholder="e.g., 2h 30m">
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-language">Language</label>
+                        <select id="edit-language">
+                            <option value="">Select Language</option>
+                            <option value="Hindi">Hindi</option>
+                            <option value="English">English</option>
+                            <option value="Telugu">Telugu</option>
+                            <option value="Tamil">Tamil</option>
+                            <option value="Kannada">Kannada</option>
+                            <option value="Malayalam">Malayalam</option>
+                            <option value="Bengali">Bengali</option>
+                            <option value="Marathi">Marathi</option>
+                            <option value="Gujarati">Gujarati</option>
+                            <option value="Punjabi">Punjabi</option>
+                            <option value="Urdu">Urdu</option>
+                            <option value="Odia">Odia</option>
+                            <option value="Assamese">Assamese</option>
+                            <option value="Bhojpuri">Bhojpuri</option>
+                            <option value="Rajasthani">Rajasthani</option>
+                            <option value="Maithili">Maithili</option>
+                            <option value="Nepali">Nepali</option>
+                            <option value="Sanskrit">Sanskrit</option>
+                            <option value="Sindhi">Sindhi</option>
+                            <option value="Konkani">Konkani</option>
+                            <option value="Manipuri">Manipuri</option>
+                            <option value="Dogri">Dogri</option>
+                            <option value="Kashmiri">Kashmiri</option>
+                            <option value="Santali">Santali</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-releaseDate">Release Date</label>
+                        <input type="date" id="edit-releaseDate">
+                    </div>
+                    <div class="form-group full-width">
+                        <label for="edit-description">Description</label>
+                        <textarea id="edit-description" rows="3"></textarea>
+                    </div>
+                    <div class="form-group full-width">
+                        <label for="edit-cast">Cast</label>
+                        <input type="text" id="edit-cast" placeholder="Comma-separated">
+                    </div>
+                    <div class="form-group full-width">
+                        <label for="edit-crew">Crew</label>
+                        <input type="text" id="edit-crew" placeholder="Comma-separated">
+                    </div>
+                    <div class="form-group checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="edit-trending">
+                            <span class="checkmark"></span>
+                            Trending
+                        </label>
+                    </div>
+                    <div class="form-group checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="edit-isHero">
+                            <span class="checkmark"></span>
+                            Hero Movie
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-poster">New Poster (optional)</label>
+                        <input type="file" id="edit-poster" accept="image/*">
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-video">New Video (optional)</label>
+                        <input type="file" id="edit-video" accept="video/*">
+                    </div>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" onclick="closeModal()" class="btn-secondary">Cancel</button>
+                    <button type="submit" class="btn-primary">Update Movie</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="/admin/admin.js" defer></script>
+</body>
+</html>
