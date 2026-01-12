@@ -1,0 +1,4 @@
+- [x] Modify loadMovies function in client/app.js to fetch movies from /api/movies instead of /api/categories
+- [x] Set heroMovie to the first movie (most recent upload)
+- [x] Group remaining movies by category for rows
+- [x] Test the changes to ensure hero shows latest upload poster

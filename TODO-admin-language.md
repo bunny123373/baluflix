@@ -1,0 +1,2 @@
+- [x] Add language dropdown to movie upload form in admin.html
+- [x] Change edit-language field to select dropdown in edit modal in admin.html

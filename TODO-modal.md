@@ -1,0 +1,7 @@
+- [ ] Add modal functionality to app.js
+- [ ] Create openModal function with movie data population
+- [ ] Create closeModal function
+- [ ] Add language selector functionality
+- [ ] Update showInfo function to open modal
+- [ ] Add event listeners for modal buttons
+- [ ] Test modal responsiveness
